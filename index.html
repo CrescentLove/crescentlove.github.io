@@ -154,6 +154,7 @@
     <i class="fa fa-arrow-up"></i>
     <span>0%</span>
   </div>
+  <div class="reading-progress-bar"></div>
 
 
     <main class="main">
@@ -163,124 +164,6 @@
 
           <div class="content index posts-expand">
             
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2021/10/06/%E4%B8%AA%E4%BA%BA%E5%90%91%E6%90%AD%E5%BB%BAhexo%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="DCyan">
-      <meta itemprop="description" content="想做FPGA的硬件dog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DCyan的小站">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/06/%E4%B8%AA%E4%BA%BA%E5%90%91%E6%90%AD%E5%BB%BAhexo%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/" class="post-title-link" itemprop="url">基于hexo的静态博客搭建</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-10-06 11:25:23" itemprop="dateCreated datePublished" datetime="2021-10-06T11:25:23+08:00">2021-10-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%85%A5%E9%97%A8/" itemprop="url" rel="index"><span itemprop="name">入门</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="基于hexo的静态博客搭建"><a href="#基于hexo的静态博客搭建" class="headerlink" title="基于hexo的静态博客搭建"></a>基于hexo的静态博客搭建</h1><h2 id="一、安装依赖库"><a href="#一、安装依赖库" class="headerlink" title="一、安装依赖库"></a>一、安装依赖库</h2><ul>
-<li><p><a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn/">node.js</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://git-scm.com/">git</a></p>
-</li>
-</ul>
-<p>git初始配置及常用命令行可以查阅菜鸟教程的手册：<a target="_blank" rel="noopener" href="https://www.runoob.com/git/git-tutorial.html">git</a></p>
-<p>另外需要注意的是，npm尽量添加镜像源加速，不然后面下载hexo会非常非常令人捉急。</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 终端输入</span><br><span class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</span><br><span class="line">#查看安装版本</span><br><span class="line">cnpm -v</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="二、安装hexo"><a href="#二、安装hexo" class="headerlink" title="二、安装hexo"></a>二、安装hexo</h2><ul>
-<li><p>创建本地文件夹作为博客源，比如<code>C:\Users\RAM\crescentBlog</code>，日后hexo配置文件以及个人文章都将放入其中</p>
-</li>
-<li><p>用<code>cmd</code>一路cd到你创建的文件夹之中，之后所有命令均需要在此路径下</p>
-</li>
-<li><p>在该文件路径下安装hexo，使用命令行<code>npm install hexo-cli -g</code></p>
-<p><strong>PS：</strong>一定要在该文件夹下安装hexo，网上很多教程都先安装后建文件夹，在init初始化的时候就会报错提示<code>node_modules</code>找不到</p>
-<p><img src="assets/image-20211006112736852.png" alt="image-20211006112736852"></p>
-</li>
-<li><p>初始化hexo博客，使用命令行<code>hexo init</code></p>
-<p><img src="assets/image-20211006112708490.png" alt="image-20211006112708490"></p>
-</li>
-<li><p>可以使用<code>hexo s</code>并访问<a href="http://localhost:4000来初步浏览生成的静态博客">http://localhost:4000来初步浏览生成的静态博客</a></p>
-</li>
-</ul>
-<h2 id="三、推送到gitee"><a href="#三、推送到gitee" class="headerlink" title="三、推送到gitee"></a>三、推送到gitee</h2><ul>
-<li><p>在gitee创建一个仓库名和用户地址一致的仓库，比如<a target="_blank" rel="noopener" href="https://gitee.com/crescentlove/crescentlove">https://gitee.com/crescentlove/crescentlove</a></p>
-</li>
-<li><p>具体gitee食用请查阅gitee指南</p>
-</li>
-<li><p>打开文件夹根目录下的<code>_config.yml</code>文件，修改deploy配置以及网站地址（即<u><em>https://仓库名.gitee.io</em></u>）</p>
-<p><img src="assets/image-20211006130137100.png" alt="image-20211006130137100"></p>
-<p><img src="assets/image-20211006130711156.png" alt="image-20211006130711156"></p>
-</li>
-<li><p>文件夹根目录打开cmd，安装部署插件并推送博客到gitee。</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br><span class="line">hexo g  ##生成静态文件</span><br><span class="line">hexo d  ##推送到gitee</span><br></pre></td></tr></table></figure>
-
-<p>步骤截图</p>
-<p><img src="assets/image-20211006112800505.png" alt="image-20211006112800505"></p>
-</li>
-</ul>
-<p><img src="assets/image-20211006112928853.png" alt="image-20211006112928853"></p>
-<p>推送到gitee</p>
-<p><img src="assets/image-20211006113115203.png" alt="image-20211006113115203"></p>
-<ul>
-<li><p>接下来打开gitee仓库，在服务项打开GiteePages服务。</p>
-</li>
-<li><p>之后基本就只需要以下三条操作，然后在page页手动更新。</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean #不需要每次都清理缓存</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="四、主题配置及使用"><a href="#四、主题配置及使用" class="headerlink" title="四、主题配置及使用"></a>四、主题配置及使用</h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
       
   
   
@@ -303,6 +186,7 @@
         </h2>
 
         <div class="post-meta">
+          
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
@@ -344,6 +228,81 @@
 
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2020/06/19/%E4%B8%AA%E4%BA%BA%E5%90%91%E6%90%AD%E5%BB%BAhexo%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="DCyan">
+      <meta itemprop="description" content="想做FPGA的硬件dog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCyan的小站">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/19/%E4%B8%AA%E4%BA%BA%E5%90%91%E6%90%AD%E5%BB%BAhexo%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/" class="post-title-link" itemprop="url">基于hexo的静态博客搭建</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-06-19 20:46:32" itemprop="dateCreated datePublished" datetime="2020-06-19T20:46:32+08:00">2020-06-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%85%A5%E9%97%A8/" itemprop="url" rel="index"><span itemprop="name">入门</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>个人向手册</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/19/%E4%B8%AA%E4%BA%BA%E5%90%91%E6%90%AD%E5%BB%BAhexo%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -433,7 +392,7 @@
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">1</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -449,6 +408,10 @@
 
 
 
+      </div>
+
+      <div id= "music163player">
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=386538&auto=1&height=66"></iframe>
       </div>
 
     </div>
