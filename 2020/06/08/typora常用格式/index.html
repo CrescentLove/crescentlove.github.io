@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"crescentlove.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"percent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="typora常用格式块元素标题书写一级标题ctrl+1 二级标题ctrl+2 …以此类推，注意上面代码块用两个&#96;中间写code实现 或者用#####（级别数量） +空格的方法  段落enter或者shift+enter  列表 无序列表用* + -这三个符号+空格生成，如   时空  穿梭  送  东     *        阳 马生       有序列表直接数字+.+空格，如  注意退出列表生">
+  <meta name="description" content="typora常用格式块元素标题书写一级标题ctrl+1 二级标题ctrl+2 …  列表 无序列表用* + -这三个符号，如   时空  穿梭  送  东     *        阳 马生       有序列表3.4...  shift+tab来退格  任务表  今天要吃早饭   - [ ] space    -[x]有x表示打对勾  代码块用&#96;&#96;生成多行代码，热键ctrl+shift+K 1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Typora常用格式">
 <meta property="og:url" content="https://crescentlove.gitee.io/2020/06/08/typora%E5%B8%B8%E7%94%A8%E6%A0%BC%E5%BC%8F/index.html">
 <meta property="og:site_name" content="DCyan的小站">
-<meta property="og:description" content="typora常用格式块元素标题书写一级标题ctrl+1 二级标题ctrl+2 …以此类推，注意上面代码块用两个&#96;中间写code实现 或者用#####（级别数量） +空格的方法  段落enter或者shift+enter  列表 无序列表用* + -这三个符号+空格生成，如   时空  穿梭  送  东     *        阳 马生       有序列表直接数字+.+空格，如  注意退出列表生">
+<meta property="og:description" content="typora常用格式块元素标题书写一级标题ctrl+1 二级标题ctrl+2 …  列表 无序列表用* + -这三个符号，如   时空  穿梭  送  东     *        阳 马生       有序列表3.4...  shift+tab来退格  任务表  今天要吃早饭   - [ ] space    -[x]有x表示打对勾  代码块用&#96;&#96;生成多行代码，热键ctrl+shift+K 1">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://crescentlove.gitee.io/2020/06/08/typora%E5%B8%B8%E7%94%A8%E6%A0%BC%E5%BC%8F/Users/RAM/Pictures/sky.jpg">
 <meta property="article:published_time" content="2020-06-08T13:44:02.000Z">
@@ -218,13 +218,10 @@
       
         <h1 id="typora常用格式"><a href="#typora常用格式" class="headerlink" title="typora常用格式"></a>typora常用格式</h1><h2 id="块元素"><a href="#块元素" class="headerlink" title="块元素"></a>块元素</h2><h4 id="标题书写"><a href="#标题书写" class="headerlink" title="标题书写"></a>标题书写</h4><p>一级标题<code>ctrl+1</code></p>
 <p>二级标题<code>ctrl+2</code></p>
-<p>…以此类推，注意上面代码块用两个`中间写code实现</p>
-<p>或者用#####（级别数量） +空格的方法</p>
-<hr>
-<h4 id="段落"><a href="#段落" class="headerlink" title="段落"></a>段落</h4><p><code>enter</code>或者<code>shift+enter</code></p>
+<p>…</p>
 <hr>
 <h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><ol>
-<li>无序列表用<code>* + -</code>这三个符号+空格生成，如</li>
+<li>无序列表用<code>* + -</code>这三个符号，如</li>
 </ol>
 <ul>
 <li><p>时空</p>
@@ -253,26 +250,26 @@
 </li>
 </ul>
 <ol start="2">
-<li>有序列表直接数字+.+空格，如</li>
+<li>有序列表<code>3.4...</code></li>
 </ol>
-<p>注意退出列表生成用<code>shift+tab</code>来退格</p>
+<p><code>shift+tab</code>来退格</p>
 <hr>
 <h4 id="任务表"><a href="#任务表" class="headerlink" title="任务表"></a>任务表</h4><ul>
-<li><input checked disabled type="checkbox"> 今天吃早饭</li>
+<li><input checked disabled type="checkbox"> 今天要吃早饭</li>
 </ul>
-<p>这里用 <code>- [ ] space   </code>来表示</p>
+<p> <code>- [ ] space   </code></p>
 <p>-[x]有x表示打对勾</p>
 <hr>
-<h4 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h4><p>````+语言+enter<code>生成多行代码，或者</code>ctrl+shift+K`</p>
+<h4 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h4><p>用``生成多行代码，热键ctrl+shift+K</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>或者在两个`中间插入少量代码文字，如</p>
+<p>或者如</p>
 <p><code>这里是代码文字</code></p>
 <hr>
-<h4 id="函数公式"><a href="#函数公式" class="headerlink" title="函数公式"></a>函数公式</h4><p>内联函数<code>$公式$</code>，``$$+enter<code>触发生成，或者</code>ctrl+shift+M<code>生成，下标~上标^，</code>如<br>$$<br>ax_1^2+bx_1+c=y_1<br>$$</p>
+<h4 id="函数公式"><a href="#函数公式" class="headerlink" title="函数公式"></a>函数公式</h4><p>内联函数$$生成，热键<code>ctrl+shift+M</code>，下标~上标^，如<br>$$<br>ax_1^2+bx_1+c=y_1<br>$$</p>
 <p>$$<br>\mathbf{V}_1 \times \mathbf{V}_2 =  \begin{vmatrix}<br>\mathbf{i} &amp; \mathbf{j} &amp; \mathbf{k} \<br>\frac{\partial X}{\partial u} &amp;  \frac{\partial Y}{\partial u} &amp; 0 \<br>\frac{\partial X}{\partial v} &amp;  \frac{\partial Y}{\partial v} &amp; 0 \<br>\end{vmatrix}<br>$$</p>
 <hr>
-<h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><p>用<code>|标题1|标题2|标题...|</code>，或者使用<code>ctrl+T</code>快速生成</p>
+<h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><p>用<code>|标题1|标题2|标题...|</code>，热键<code>ctrl+T</code></p>
 <table>
 <thead>
 <tr>
@@ -288,30 +285,23 @@
 <hr>
 <h4 id="脚注"><a href="#脚注" class="headerlink" title="脚注"></a>脚注</h4><p>使用<a href="qwq">^1</a>生成，下面即用法<code>[^footnote]</code></p>
 <hr>
-<h4 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h4><p><code>***</code>或者<code>---</code>然后<code>enter</code></p>
+<h4 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h4><p><code>---</code></p>
 <hr>
-<h4 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h4><p>使用<code>[toc]</code>即可快速生成</p>
+<h4 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h4><p>使用<code>[toc]</code>快速生成</p>
 <hr>
-<h2 id="引用元素"><a href="#引用元素" class="headerlink" title="引用元素"></a>引用元素</h2><h4 id="in-line-link"><a href="#in-line-link" class="headerlink" title="in-line link"></a>in-line link</h4><p>使用<code>[外部文字](&#39;http://www.baidu.com&#39;&quot;Title&quot;)</code>,或者<code>ctrl+K</code></p>
+<h2 id="引用元素"><a href="#引用元素" class="headerlink" title="引用元素"></a>引用元素</h2><h4 id="in-line-link"><a href="#in-line-link" class="headerlink" title="in-line link"></a>in-line link</h4><p>使用<code>[外部文字](&#39;http://www.baidu.com&#39;&quot;Title&quot;)</code>,热键<code>ctrl+K</code></p>
 <p><a href="'https://www.baidu.com'">点我</a></p>
-<p>或者使用<code>&lt;url&gt;</code>来插入超链接，如<a href="mailto:&#x31;&#53;&#x39;&#x32;&#x32;&#x31;&#51;&#x32;&#x31;&#48;&#49;&#x40;&#x31;&#54;&#x33;&#x2e;&#x63;&#111;&#x6d;">&#x31;&#53;&#x39;&#x32;&#x32;&#x31;&#51;&#x32;&#x31;&#48;&#49;&#x40;&#x31;&#54;&#x33;&#x2e;&#x63;&#111;&#x6d;</a></p>
+<p>使用<code>&lt;url&gt;</code>来插入超链接，如<a href="mailto:&#49;&#53;&#57;&#50;&#50;&#49;&#51;&#50;&#49;&#48;&#x31;&#x40;&#49;&#x36;&#51;&#x2e;&#x63;&#x6f;&#x6d;">&#49;&#53;&#57;&#50;&#50;&#49;&#51;&#50;&#49;&#48;&#x31;&#x40;&#49;&#x36;&#51;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
 <hr>
-<h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><p>使用<code>[外部文字][id]</code>，论文结尾处列参考链接</p>
+<h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><p>使用<code>[外部文字][id]</code>，尾注参考链接</p>
 <p><code>[id]:http://blabla...</code></p>
 <p>如<a target="_blank" rel="noopener" href="http://support.typora.io/Markdown-Reference">参考文献</a></p>
 <hr>
-<h4 id="书签跳转"><a href="#书签跳转" class="headerlink" title="书签跳转"></a>书签跳转</h4><p>使用<code>[外部文字](#标题名)</code>，按住<code>ctrl</code>跳转</p>
+<h4 id="书签跳转"><a href="#书签跳转" class="headerlink" title="书签跳转"></a>书签跳转</h4><p>使用<code>[外部文字](#标题名)</code></p>
 <p><a href="#%E5%87%BD%E6%95%B0%E5%85%AC%E5%BC%8F">点击跳转函数公式</a></p>
 <hr>
-<h4 id="图片插入"><a href="#图片插入" class="headerlink" title="图片插入"></a>图片插入</h4><p>暴力一点直接拖拽进来，或者<code>ctrl+shift+I</code></p>
+<h4 id="图片插入"><a href="#图片插入" class="headerlink" title="图片插入"></a>图片插入</h4><p>热键<code>ctrl+shift+I</code></p>
 <p>如<img src="/2020/06/08/typora%E5%B8%B8%E7%94%A8%E6%A0%BC%E5%BC%8F/Users\RAM\Pictures\sky.jpg" alt="天空"></p>
-<hr>
-<h4 id="重点标记"><a href="#重点标记" class="headerlink" title="重点标记"></a>重点标记</h4><p>**加粗 **        <code>ctrl+B</code></p>
-<p><em>斜体</em>         <code>ctrl+I</code></p>
-<p><u>下划线</u>     <code>ctrl+U</code></p>
-<p><del>删除线</del>    <code>~~文字~~</code></p>
-<p>==高亮==        <code>==文字==</code></p>
-<p>:arrow_down_small::kissing_smiling_eyes::artificial_satellite:等emoji    <code>:+特定名</code></p>
 
     </div>
 
@@ -395,7 +385,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#typora%E5%B8%B8%E7%94%A8%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">typora常用格式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9D%97%E5%85%83%E7%B4%A0"><span class="nav-number">1.1.</span> <span class="nav-text">块元素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%87%E9%A2%98%E4%B9%A6%E5%86%99"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">标题书写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AE%B5%E8%90%BD"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">段落</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%97%E8%A1%A8"><span class="nav-number">1.1.0.3.</span> <span class="nav-text">列表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E8%A1%A8"><span class="nav-number">1.1.0.4.</span> <span class="nav-text">任务表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="nav-number">1.1.0.5.</span> <span class="nav-text">代码块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%85%AC%E5%BC%8F"><span class="nav-number">1.1.0.6.</span> <span class="nav-text">函数公式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A8%E6%A0%BC"><span class="nav-number">1.1.0.7.</span> <span class="nav-text">表格</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%84%9A%E6%B3%A8"><span class="nav-number">1.1.0.8.</span> <span class="nav-text">脚注</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E5%89%B2%E7%BA%BF"><span class="nav-number">1.1.0.9.</span> <span class="nav-text">分割线</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">1.1.0.10.</span> <span class="nav-text">目录</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E5%85%83%E7%B4%A0"><span class="nav-number">1.2.</span> <span class="nav-text">引用元素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#in-line-link"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">in-line link</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">参考链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B9%A6%E7%AD%BE%E8%B7%B3%E8%BD%AC"><span class="nav-number">1.2.0.3.</span> <span class="nav-text">书签跳转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E6%8F%92%E5%85%A5"><span class="nav-number">1.2.0.4.</span> <span class="nav-text">图片插入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E7%82%B9%E6%A0%87%E8%AE%B0"><span class="nav-number">1.2.0.5.</span> <span class="nav-text">重点标记</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#typora%E5%B8%B8%E7%94%A8%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">typora常用格式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9D%97%E5%85%83%E7%B4%A0"><span class="nav-number">1.1.</span> <span class="nav-text">块元素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%87%E9%A2%98%E4%B9%A6%E5%86%99"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">标题书写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%97%E8%A1%A8"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">列表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E8%A1%A8"><span class="nav-number">1.1.0.3.</span> <span class="nav-text">任务表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="nav-number">1.1.0.4.</span> <span class="nav-text">代码块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%85%AC%E5%BC%8F"><span class="nav-number">1.1.0.5.</span> <span class="nav-text">函数公式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A8%E6%A0%BC"><span class="nav-number">1.1.0.6.</span> <span class="nav-text">表格</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%84%9A%E6%B3%A8"><span class="nav-number">1.1.0.7.</span> <span class="nav-text">脚注</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E5%89%B2%E7%BA%BF"><span class="nav-number">1.1.0.8.</span> <span class="nav-text">分割线</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">1.1.0.9.</span> <span class="nav-text">目录</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E5%85%83%E7%B4%A0"><span class="nav-number">1.2.</span> <span class="nav-text">引用元素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#in-line-link"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">in-line link</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">参考链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B9%A6%E7%AD%BE%E8%B7%B3%E8%BD%AC"><span class="nav-number">1.2.0.3.</span> <span class="nav-text">书签跳转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E6%8F%92%E5%85%A5"><span class="nav-number">1.2.0.4.</span> <span class="nav-text">图片插入</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
