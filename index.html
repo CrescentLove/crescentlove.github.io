@@ -211,7 +211,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>个人向手册</p>
+          <p>个人向记录手册，详细还是看官方文档吧</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/06/19/%E5%9F%BA%E4%BA%8Ehexo%E6%90%AD%E5%BB%BA%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/">
@@ -286,93 +286,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="typora常用格式"><a href="#typora常用格式" class="headerlink" title="typora常用格式"></a>typora常用格式</h1><h2 id="块元素"><a href="#块元素" class="headerlink" title="块元素"></a>块元素</h2><h4 id="标题书写"><a href="#标题书写" class="headerlink" title="标题书写"></a>标题书写</h4><p>一级标题<code>ctrl+1</code></p>
-<p>二级标题<code>ctrl+2</code></p>
-<p>…</p>
-<hr>
-<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><ol>
-<li>无序列表用<code>* + -</code>这三个符号，如</li>
-</ol>
-<ul>
-<li><p>时空</p>
-</li>
-<li><p>穿梭</p>
-<ul>
-<li><p>送</p>
-</li>
-<li><p>东</p>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li>* </li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>阳</li>
-<li>马生</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ol start="2">
-<li>有序列表<code>3.4...</code></li>
-</ol>
-<p><code>shift+tab</code>来退格</p>
-<hr>
-<h4 id="任务表"><a href="#任务表" class="headerlink" title="任务表"></a>任务表</h4><ul>
-<li><input checked disabled type="checkbox"> 今天要吃早饭</li>
-</ul>
-<p> <code>- [ ] space   </code></p>
-<p>-[x]有x表示打对勾</p>
-<hr>
-<h4 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h4><p>用``生成多行代码，热键ctrl+shift+K</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>或者如</p>
-<p><code>这里是代码文字</code></p>
-<hr>
-<h4 id="函数公式"><a href="#函数公式" class="headerlink" title="函数公式"></a>函数公式</h4><p>内联函数$$生成，热键<code>ctrl+shift+M</code>，下标~上标^，如<br>$$<br>ax_1^2+bx_1+c=y_1<br>$$</p>
-<p>$$<br>\mathbf{V}_1 \times \mathbf{V}_2 =  \begin{vmatrix}<br>\mathbf{i} &amp; \mathbf{j} &amp; \mathbf{k} \<br>\frac{\partial X}{\partial u} &amp;  \frac{\partial Y}{\partial u} &amp; 0 \<br>\frac{\partial X}{\partial v} &amp;  \frac{\partial Y}{\partial v} &amp; 0 \<br>\end{vmatrix}<br>$$</p>
-<hr>
-<h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><p>用<code>|标题1|标题2|标题...|</code>，热键<code>ctrl+T</code></p>
-<table>
-<thead>
-<tr>
-<th align="center">first</th>
-<th align="center">second</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<hr>
-<h4 id="脚注"><a href="#脚注" class="headerlink" title="脚注"></a>脚注</h4><p>使用<a href="qwq">^1</a>生成，下面即用法<code>[^footnote]</code></p>
-<hr>
-<h4 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h4><p><code>---</code></p>
-<hr>
-<h4 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h4><p>使用<code>[toc]</code>快速生成</p>
-<hr>
-<h2 id="引用元素"><a href="#引用元素" class="headerlink" title="引用元素"></a>引用元素</h2><h4 id="in-line-link"><a href="#in-line-link" class="headerlink" title="in-line link"></a>in-line link</h4><p>使用<code>[外部文字](&#39;http://www.baidu.com&#39;&quot;Title&quot;)</code>,热键<code>ctrl+K</code></p>
-<p><a href="'https://www.baidu.com'">点我</a></p>
-<p>使用<code>&lt;url&gt;</code>来插入超链接，如<a href="mailto:&#49;&#53;&#57;&#50;&#50;&#49;&#51;&#50;&#49;&#48;&#x31;&#x40;&#49;&#x36;&#51;&#x2e;&#x63;&#x6f;&#x6d;">&#49;&#53;&#57;&#50;&#50;&#49;&#51;&#50;&#49;&#48;&#x31;&#x40;&#49;&#x36;&#51;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
-<hr>
-<h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><p>使用<code>[外部文字][id]</code>，尾注参考链接</p>
-<p><code>[id]:http://blabla...</code></p>
-<p>如<a target="_blank" rel="noopener" href="http://support.typora.io/Markdown-Reference">参考文献</a></p>
-<hr>
-<h4 id="书签跳转"><a href="#书签跳转" class="headerlink" title="书签跳转"></a>书签跳转</h4><p>使用<code>[外部文字](#标题名)</code></p>
-<p><a href="#%E5%87%BD%E6%95%B0%E5%85%AC%E5%BC%8F">点击跳转函数公式</a></p>
-<hr>
-<h4 id="图片插入"><a href="#图片插入" class="headerlink" title="图片插入"></a>图片插入</h4><p>热键<code>ctrl+shift+I</code></p>
-<p>如<img src="/2020/06/08/typora%E5%B8%B8%E7%94%A8%E6%A0%BC%E5%BC%8F/Users\RAM\Pictures\sky.jpg" alt="天空"></p>
-
+          <p>个人常用的一些热键或语法</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/06/08/typora%E5%B8%B8%E7%94%A8%E6%A0%BC%E5%BC%8F/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
