@@ -289,7 +289,7 @@
 <hr>
 <h2 id="引用元素"><a href="#引用元素" class="headerlink" title="引用元素"></a>引用元素</h2><h4 id="in-line-link"><a href="#in-line-link" class="headerlink" title="in-line link"></a>in-line link</h4><p>使用<code>[外部文字](&#39;http://www.baidu.com&#39;&quot;Title&quot;)</code>,热键<code>ctrl+K</code></p>
 <p><a href="'https://www.baidu.com'">点我</a></p>
-<p>使用<code>&lt;url&gt;</code>来插入超链接，如<a href="mailto:&#x31;&#x35;&#x39;&#50;&#x32;&#x31;&#x33;&#50;&#49;&#48;&#49;&#64;&#x31;&#x36;&#51;&#46;&#x63;&#x6f;&#x6d;">&#x31;&#x35;&#x39;&#50;&#x32;&#x31;&#x33;&#50;&#49;&#48;&#49;&#64;&#x31;&#x36;&#51;&#46;&#x63;&#x6f;&#x6d;</a></p>
+<p>使用<code>&lt;url&gt;</code>来插入超链接，如<a href="mailto:&#49;&#53;&#57;&#50;&#x32;&#49;&#51;&#x32;&#x31;&#48;&#49;&#x40;&#x31;&#x36;&#51;&#x2e;&#x63;&#x6f;&#109;">&#49;&#53;&#57;&#50;&#x32;&#49;&#51;&#x32;&#x31;&#48;&#49;&#x40;&#x31;&#x36;&#51;&#x2e;&#x63;&#x6f;&#109;</a></p>
 <hr>
 <h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><p>使用<code>[外部文字][id]</code>，尾注参考链接</p>
 <p><code>[id]:http://blabla...</code></p>
@@ -297,16 +297,14 @@
 <hr>
 <h4 id="书签跳转"><a href="#书签跳转" class="headerlink" title="书签跳转"></a>书签跳转</h4><p>使用<code>[外部文字](#标题名)</code></p>
 <p><a href="#%E5%87%BD%E6%95%B0%E5%85%AC%E5%BC%8F">点击跳转函数公式</a></p>
+<hr>
 <h2 id="绘图"><a href="#绘图" class="headerlink" title="绘图"></a>绘图</h2><h4 id="个人最常用的流程图"><a href="#个人最常用的流程图" class="headerlink" title="个人最常用的流程图"></a>个人最常用的流程图</h4><p>语法````mermaid开启<code>，布局方法</code>graph LR<code>,</code>graph TB`分别表示自左向右/自上而下</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">fir[点击看方框用法] -.-&gt; sec(点击看圆角矩用法) --&quot;如何插入流程线批注&quot;--&gt; thi&#123;点击看菱形用法&#125;</span><br><span class="line">for((点击看圆框用法)) --&gt; |第二种批注插入用法|fif[dd]</span><br><span class="line">fir ==&gt; for</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h4 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h4><p>语法同上，，固定开头<code>sequenceDiagram</code>，用法点时序图</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line"># participant不是必须声明的，默认从左至右</span><br><span class="line">participant A</span><br><span class="line">participant B</span><br><span class="line">A -&gt;&gt; B:发送请求</span><br><span class="line">A -x B:异步请求</span><br><span class="line">B --&gt;&gt; A:响应请求</span><br><span class="line"># 下面是处理时间</span><br><span class="line">A -&gt;&gt; +B:尝试时间响应</span><br><span class="line">B --&gt;&gt; -A:时间获取</span><br><span class="line"># 下面是批注</span><br><span class="line">Note left of A:A左批注</span><br><span class="line">Note over A,B:跨步批注</span><br><span class="line"># 下面是判断</span><br><span class="line">alt 时间获取&gt;20</span><br><span class="line">	A -&gt;&gt; B:可</span><br><span class="line">else 时间获取&gt;10</span><br><span class="line">	A -&gt;&gt; B:不可</span><br><span class="line">end</span><br><span class="line">A -&gt;&gt; A:广播</span><br></pre></td></tr></table></figure>
 
-
-
-
-
+<hr>
 <h2 id="文字效果"><a href="#文字效果" class="headerlink" title="文字效果"></a>文字效果</h2><table>
 <thead>
 <tr>
@@ -443,7 +441,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
