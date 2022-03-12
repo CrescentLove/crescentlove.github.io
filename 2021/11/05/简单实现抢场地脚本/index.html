@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"crescentlove.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"percent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="个人常用的一些热键或语法">
+  <meta name="description" content="谁能拒绝运动呢？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="简单实现抢场地脚本">
 <meta property="og:url" content="https://crescentlove.gitee.io/2021/11/05/%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0%E6%8A%A2%E5%9C%BA%E5%9C%B0%E8%84%9A%E6%9C%AC/index.html">
 <meta property="og:site_name" content="DCyan的小站">
-<meta property="og:description" content="个人常用的一些热键或语法">
+<meta property="og:description" content="谁能拒绝运动呢？">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-11-05T06:03:55.000Z">
 <meta property="article:modified_time" content="2021-11-05T06:03:55.000Z">
@@ -210,7 +210,7 @@
             </span>
 
           
-            <div class="post-description">个人常用的一些热键或语法</div>
+            <div class="post-description">谁能拒绝运动呢？</div>
 
         </div>
       </header>
@@ -221,7 +221,67 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="如何写一个简单的抢场馆脚本"><a href="#如何写一个简单的抢场馆脚本" class="headerlink" title="如何写一个简单的抢场馆脚本"></a>如何写一个简单的抢场馆脚本</h1>
+        <h1 id="如何写一个简单的抢场馆脚本"><a href="#如何写一个简单的抢场馆脚本" class="headerlink" title="如何写一个简单的抢场馆脚本"></a>如何写一个简单的抢场馆脚本</h1><p>[toc]</p>
+<p>需要的技能点</p>
+<ul>
+<li>requests库</li>
+<li>json库</li>
+<li>time和datetime库</li>
+<li>logger重定向</li>
+<li>？？？没了</li>
+</ul>
+<h2 id="简易流程"><a href="#简易流程" class="headerlink" title="简易流程"></a>简易流程</h2><h3 id="登录账号"><a href="#登录账号" class="headerlink" title="登录账号"></a>登录账号</h3><p>通过浏览器F12打开开发者模式，进行一次登录获得登录所需url和请求头。</p>
+<p>调用requests库的get方法<code>requests.get(url,headers=xxx,params=xxx)</code>，获得的响应体可以通过查询status_code来确定是否获得响应。</p>
+<p><code>reponse.status_code == 200</code>代表响应成功</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">loGin</span>(<span class="params">usag</span>):</span></span><br><span class="line">    st_log = <span class="number">0</span></span><br><span class="line">    localUrl = <span class="string">&#x27;https://sports.sjtu.edu.cn/pc/?&#x27;</span></span><br><span class="line">    localParam = &#123;<span class="string">&#x27;locale&#x27;</span>: <span class="string">&#x27;zh&#x27;</span>&#125;</span><br><span class="line">    </span><br><span class="line">    UserAgent = usag</span><br><span class="line">    localHeader = &#123;</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: UserAgent</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">    	loginRes = requests.get(localUrl, headers=localHeader, params=localParam)</span><br><span class="line">    	<span class="keyword">if</span> loginRes.status_code == <span class="number">200</span>:</span><br><span class="line">        	<span class="built_in">print</span>(<span class="string">&#x27;Successful--login&#x27;</span>)</span><br><span class="line">        	st_log = <span class="number">1</span></span><br><span class="line">    <span class="keyword">except</span> ConnectionError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;login.py--&#x27;</span>,e)</span><br><span class="line">    <span class="keyword">return</span> st_log</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="发送请求"><a href="#发送请求" class="headerlink" title="发送请求"></a>发送请求</h3><p>模拟名为confirmOrder的post请求，查看发现请求负载为json串：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">&quot;venTypeId&quot;</span>:<span class="string">&quot;29942202-d2ac-448e-90b7-14d3c6be19ff&quot;</span>,<span class="attr">&quot;venueId&quot;</span>:<span class="string">&quot;3b10ff47-7e83-4c21-816c-5edc257168c1&quot;</span>,<span class="attr">&quot;fieldType&quot;</span>:<span class="string">&quot;羽毛球&quot;</span>,<span class="attr">&quot;returnUrl&quot;</span>:<span class="string">&quot;https://sports.sjtu.edu.cn/#/paymentResult/1&quot;</span>,<span class="attr">&quot;scheduleDate&quot;</span>:<span class="string">&quot;2021-12-02&quot;</span>,<span class="attr">&quot;week&quot;</span>:<span class="string">&quot;4&quot;</span>,<span class="attr">&quot;spaces&quot;</span>:[&#123;<span class="attr">&quot;count&quot;</span>:<span class="number">1</span>,<span class="attr">&quot;venuePrice&quot;</span>:<span class="string">&quot;9&quot;</span>,<span class="attr">&quot;status&quot;</span>:<span class="number">1</span>,<span class="attr">&quot;scheduleTime&quot;</span>:<span class="string">&quot;21:00-22:00&quot;</span>,<span class="attr">&quot;subSitename&quot;</span>:<span class="string">&quot;场地5&quot;</span>,<span class="attr">&quot;tensity&quot;</span>:<span class="string">&quot;1&quot;</span>,<span class="attr">&quot;venueNum&quot;</span>:<span class="number">1</span>&#125;],<span class="attr">&quot;tenSity&quot;</span>:<span class="string">&quot;紧张&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么只需要模拟post请求的请求头把负载发出去即可。</p>
+<p>此处调用requests库的post方法<code>requests.post(url,headers=xxx,data=xxx)</code>，获得的响应体可以通过查询status_code来确定是否获得响应。</p>
+<p>【注】查看accept-type可以知道请求负载为json类型，得注意转换。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Confirmdata = json.dumps(data)</span><br><span class="line">ConfirmUrl = <span class="string">&#x27;https://sports.sjtu.edu.cn/venue/personal/ConfirmOrder&#x27;</span></span><br><span class="line">ConHeader = &#123;</span><br><span class="line">    <span class="string">&#x27;User-Agent&#x27;</span>: UserAgent,</span><br><span class="line">    <span class="string">&#x27;Cookie&#x27;</span>: ConfirmCookie,</span><br><span class="line">    <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;application/json, text/plain, */*&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json;charset=UTF-8&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	ConRes = requests.post(ConfirmUrl, headers=FilHeader, data=Confirmdata)</span><br><span class="line">    <span class="keyword">if</span>(ConRes.json()[<span class="string">&quot;code&quot;</span>] == <span class="number">0</span>):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;success&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(e)</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="邮件提醒"><a href="#邮件提醒" class="headerlink" title="邮件提醒"></a>邮件提醒</h3><p>主要依靠smtplib和MIMEText这两个库</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    smtpObj = smtplib.SMTP()</span><br><span class="line">    <span class="comment">#连接到服务器</span></span><br><span class="line">    smtpObj.connect(mail_host,<span class="number">25</span>)</span><br><span class="line">    <span class="comment">#登录到服务器</span></span><br><span class="line">    smtpObj.login(user,_password)</span><br><span class="line">    <span class="comment">#发送</span></span><br><span class="line">    smtpObj.sendmail(</span><br><span class="line">    sender,recr,mass.as_string())</span><br><span class="line">    <span class="comment">#退出</span></span><br><span class="line">    smtpObj.quit()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;success&#x27;</span>)</span><br><span class="line"><span class="keyword">except</span> smtplib.SMTPException <span class="keyword">as</span> e:</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">&#x27;error&#x27;</span>,e) <span class="comment">#打印错误</span></span><br></pre></td></tr></table></figure>
+
+<p>用MIMEText库设定邮件体内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">message = MIMEText(<span class="string">&#x27;xxxx&#x27;</span>,<span class="string">&#x27;plain&#x27;</span>,<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"><span class="comment">#邮件主题</span></span><br><span class="line">message[<span class="string">&#x27;Subject&#x27;</span>] = Subj</span><br><span class="line"><span class="comment">#发送方信息</span></span><br><span class="line">message[<span class="string">&#x27;From&#x27;</span>] = sender</span><br><span class="line"><span class="comment">#接受方信息</span></span><br><span class="line">message[<span class="string">&#x27;To&#x27;</span>] = receivers[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="定时执行"><a href="#定时执行" class="headerlink" title="定时执行"></a>定时执行</h3><p>考虑到每天中午12点更新新日期场次，所以我们的post请求只需要在12点开始发送即可，发送太过于频繁可能会被墙。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime,time</span><br><span class="line">start = datetime.datetime.replace(datetime.datetime.now()+datetime.timedelta(days=<span class="number">0</span>), </span><br><span class="line">       hour=<span class="number">12</span>, minute=<span class="number">0</span>, second=<span class="number">0</span>)</span><br><span class="line"> delta = start - datetime.datetime.now()</span><br><span class="line"> time.sleep(delta.seconds-<span class="number">0.3</span>)</span><br></pre></td></tr></table></figure>
+
+<p>为什么是0.3呢。。。。8说了,问就是python效率低</p>
+<h2 id="用到的库"><a href="#用到的库" class="headerlink" title="用到的库"></a>用到的库</h2><h3 id="datetime"><a href="#datetime" class="headerlink" title="datetime"></a>datetime</h3><p>包含date/time/datetime三个核心类，分别用于日期，时间，日期&amp;时间。</p>
+<p><strong>基础的日期、时间及延迟计算</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line">datetime.date.today()</span><br><span class="line"><span class="comment"># print会显示诸如2022-02-02</span></span><br><span class="line">datetime.timedelta(days=<span class="number">7</span>)</span><br><span class="line"><span class="comment"># print会显示7days,0:00:00</span></span><br><span class="line">datetime.date.today() + datetime.timedelta(days=<span class="number">7</span>)</span><br><span class="line"><span class="comment"># print会显示2022-02-09,但是任然是一个date对象，可以通过str(datetime.date.today()+datetime.timedelta(days=7))或(xxx+xxdeltaxxx).strftime()来转字符串</span></span><br></pre></td></tr></table></figure>
+
+<p>基础的格式化方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">datetime.datetime.now().strftime(<span class="string">&quot;%Y-%m-%d&quot;</span>)</span><br><span class="line"><span class="comment"># print会显示xxxx-xx-xx,str类型</span></span><br><span class="line">datetime.datetime.now().strftime(<span class="string">&quot;%H:%M:%S&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="time"><a href="#time" class="headerlink" title="time"></a>time</h3><p>可以执行和datetime一样的显示时间功能</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">tn = time.gmtime()	<span class="comment"># 获得当前时间元组</span></span><br><span class="line">timestr = time.strftime(<span class="string">&quot;%Y%m%d %H%M%S&quot;</span>, tn)	<span class="comment"># 格式化输出字符串</span></span><br><span class="line">tn = time.strftime(timestr, <span class="string">&quot;%Y%m%d %H%M%S&quot;</span>)	<span class="comment"># 字符串转时间对象</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">time.sleep(xxx) <span class="comment"># 暂停xxx秒，可以是浮点数，如random.random()产生01之间随机数</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="json"><a href="#json" class="headerlink" title="json"></a>json</h3><p><code>json.dumps(xx:dict)</code>将dict类型转换为json字符串（str类型）</p>
+<p><code>json.loads(xx:str)</code>将json字符串转换为dict类型</p>
+<p>post请求的负载需要是json类型，因此通过以上两个函数实现字典和json字符串的转换。</p>
+<p>【补】json另外两个常用的函数是IO操作，<code>json.dump(xx:json, xxx:file)</code> 和 <code>json.load(xx:file)</code></p>
+
     </div>
 
     
@@ -305,7 +365,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%8A%A2%E5%9C%BA%E9%A6%86%E8%84%9A%E6%9C%AC"><span class="nav-number">1.</span> <span class="nav-text">如何写一个简单的抢场馆脚本</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%8A%A2%E5%9C%BA%E9%A6%86%E8%84%9A%E6%9C%AC"><span class="nav-number">1.</span> <span class="nav-text">如何写一个简单的抢场馆脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E6%98%93%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">简易流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%99%BB%E5%BD%95%E8%B4%A6%E5%8F%B7"><span class="nav-number">1.1.1.</span> <span class="nav-text">登录账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82"><span class="nav-number">1.1.2.</span> <span class="nav-text">发送请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%82%AE%E4%BB%B6%E6%8F%90%E9%86%92"><span class="nav-number">1.1.3.</span> <span class="nav-text">邮件提醒</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E6%89%A7%E8%A1%8C"><span class="nav-number">1.1.4.</span> <span class="nav-text">定时执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E5%88%B0%E7%9A%84%E5%BA%93"><span class="nav-number">1.2.</span> <span class="nav-text">用到的库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#datetime"><span class="nav-number">1.2.1.</span> <span class="nav-text">datetime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#time"><span class="nav-number">1.2.2.</span> <span class="nav-text">time</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#json"><span class="nav-number">1.2.3.</span> <span class="nav-text">json</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
