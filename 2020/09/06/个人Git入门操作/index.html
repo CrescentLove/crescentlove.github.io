@@ -227,13 +227,16 @@
 </ul>
 <h3 id="2-本地库操作"><a href="#2-本地库操作" class="headerlink" title=".2 本地库操作"></a>.2 本地库操作</h3><ul>
 <li><p>在你的项目文件夹里右键打开git bash，并新建仓库，此时这才算是一个<strong>本地库</strong>而不只是一个本地文件夹。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure></li>
-</ul>
-<ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
 <li><p>接下来需要将项目文件夹中的文件都添加到本地库中，上一步虽然在文件夹里新建了.git文件，但是他们貌合神离需要再次整合。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br><span class="line">git add --all</span><br></pre></td></tr></table></figure></li>
-</ul>
-<ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br><span class="line">git add --all</span><br></pre></td></tr></table></figure>
+
+
+</li>
 <li><p>接下来需要将文件提交到本地库中</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m <span class="string">&quot;/*此处即自己编出来的提交描述*/&quot;</span></span><br></pre></td></tr></table></figure></li>
 </ul>
@@ -243,7 +246,8 @@
 <li><p>新建项目仓库，并获取仓库地址</p>
 </li>
 <li><p>将本地仓库与远程仓库进行关联</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin https://gitee.com/xxx/xxx.git</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin https://gitee.com/xxx/xxx.git</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>最后，将本地仓库里的文件push到远程仓库，这样你的轮子也能在网上滚动了。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure></li>
 </ul>
@@ -257,12 +261,14 @@
 
 
 
-<h2 id="git流程（归档）"><a href="#git流程（归档）" class="headerlink" title="git流程（归档）"></a>git流程（归档）</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">a[工作区] --&quot;add命令&quot;--&gt; b(暂存区) --&quot;commit命令&quot;--&gt; c(git分支)</span><br></pre></td></tr></table></figure>
+<h2 id="git流程（归档）"><a href="#git流程（归档）" class="headerlink" title="git流程（归档）"></a>git流程（归档）</h2><pre class="mermaid">graph LR
+a[工作区] --"add"--> b(暂存区) --"commit"--> c(git分支) -->|push| d[远程仓库]
+d --"pull"--> c -->|git reset HEAD file|b --"git checkout --file"-->a</pre>
 
 <h3 id="版本控制"><a href="#版本控制" class="headerlink" title="版本控制"></a>版本控制</h3><table>
 <thead>
 <tr>
-<th>git log –pretty=oneline</th>
+<th>git log –pretty&#x3D;oneline</th>
 <th>查看提交历史</th>
 </tr>
 </thead>
@@ -445,6 +451,8 @@
 </div>
 <!--
 -->
+
+
 
         
 
