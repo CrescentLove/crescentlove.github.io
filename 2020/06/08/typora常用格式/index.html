@@ -287,7 +287,7 @@
 <hr>
 <h2 id="引用元素"><a href="#引用元素" class="headerlink" title="引用元素"></a>引用元素</h2><h4 id="in-line-link"><a href="#in-line-link" class="headerlink" title="in-line link"></a>in-line link</h4><p>使用<code>[外部文字](&#39;http://www.baidu.com&#39;&quot;Title&quot;)</code>,热键<code>ctrl+K</code></p>
 <p><a href="'https://www.baidu.com'">点我</a></p>
-<p>使用<code>&lt;url&gt;</code>来插入超链接，如<a href="mailto:&#49;&#53;&#x39;&#50;&#x32;&#49;&#x33;&#x32;&#x31;&#48;&#x31;&#64;&#49;&#54;&#x33;&#46;&#x63;&#111;&#x6d;">&#49;&#53;&#x39;&#50;&#x32;&#49;&#x33;&#x32;&#x31;&#48;&#x31;&#64;&#49;&#54;&#x33;&#46;&#x63;&#111;&#x6d;</a></p>
+<p>使用<code>&lt;url&gt;</code>来插入超链接，如<a href="mailto:&#49;&#53;&#x39;&#50;&#x32;&#x31;&#x33;&#50;&#49;&#48;&#49;&#x40;&#49;&#x36;&#x33;&#46;&#x63;&#x6f;&#x6d;">&#49;&#53;&#x39;&#50;&#x32;&#x31;&#x33;&#50;&#49;&#48;&#49;&#x40;&#49;&#x36;&#x33;&#46;&#x63;&#x6f;&#x6d;</a></p>
 <hr>
 <h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><p>使用<code>[外部文字][id]</code>，尾注参考链接</p>
 <p><code>[id]:http://blabla...</code></p>
@@ -589,6 +589,63 @@ if (document.querySelectorAll('pre.mermaid').length) {
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
