@@ -225,27 +225,65 @@
       
         <h1 id="如何写一个简单的抢场馆脚本-二"><a href="#如何写一个简单的抢场馆脚本-二" class="headerlink" title="如何写一个简单的抢场馆脚本(二)"></a>如何写一个简单的抢场馆脚本(二)</h1><p>惨烈，趁着居家检测想要封装逻辑写个GUI给615同胞用，逻辑写差不多了，分块调试都没毛病了，最后链起来gg了。。。。。</p>
 <p>发现是场馆预约系统升级了，请求负载加密了。。。。。【风中凌乱】</p>
+<ul>
+<li><input disabled type="checkbox"> 主体在【2.0实现】和【用到的库】中，相当于手册存档</li>
+<li><input disabled type="checkbox"> 【我需要了解什么】是个人在实现过程中觉得有用的基础知识</li>
+</ul>
 <h2 id="摸索ing"><a href="#摸索ing" class="headerlink" title="摸索ing"></a>摸索ing</h2><p>在此之前一点加密相关的知识都没接触过，所以起步有点痛苦</p>
 <pre class="mermaid">graph LR
 second[尝试了解网络传输数据加密]-->result2[发现了新大陆]-->res1["md5(不可逆，排除)"]
 result2 --> res2[urlencode/eval] --> emo2[尝试发现不对]
 result2 ==> res3[DES/AES/RSA/RC4/Rabbit]</pre>
 
-<p>终于，了解到对称加密和非对称加密的知识之后，想起了古早配置github时用过的公钥私钥，正是通过rsa加密算法实现的。</p>
+
+
+
+
 <h2 id="2-0实现"><a href="#2-0实现" class="headerlink" title="2.0实现"></a>2.0实现</h2><p>贴几个当时学习流程的博文</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_30877493/article/details/98574518">在Python中用Request库模拟登录（四）：哔哩哔哩（有加密，有验证码）</a></p>
-<h2 id="我需要了解什么？"><a href="#我需要了解什么？" class="headerlink" title="我需要了解什么？"></a>我需要了解什么？</h2><p>请求安全性： 服务器端在接收到请求的时候，要主动鉴别该请求是否有效，是否可接受。</p>
-<p>　　<strong>token</strong>:已登陆用户的识别码<br>　　　　解决的问题:用户调用接口时，不用每次都带上用户名和密码，避免了频繁在网络中传输密码被截获的风险。<br>　　　　使用场景:用户登录系统时传入用户名和密码，服务器校验成功之后，根据uuid等参数生成token返回给客户端，同时把该token和该用户的对应关系缓存在服务器端。客户端在后续的请求接口中不用每次都传入用户名和密码，只需要传入token即可。服务器会根据token确定客户端的身份。<br>　　　　注意:token可设置生效时间，token失效之后，客户端重新请求token。</p>
-<p>　　<strong>sign</strong>:请求参数的签名<br>　　　　解决问题:避免请求参数被恶意修改。保证了请求数据的一致性。<br>　　　　使用场景:客户端和服务端约定一个签名生成算法。客户端在请求接口之前调用签名算法，根据参数生成sign值。然后把sign和请求参数一并传给服务器。<br>　　　　服务器收到到参数和签名之后，根据请求参数，调用签名算法计算出签名，然后比较该签名和客户端传过来的签名是否一致，如果一致，则说明请求参数未被修改过，如果不一致，则说明请求参数被修改过。</p>
-<p>　　<strong>nonce</strong>：请求中附带的随机数<br>　　　　解决问题:防止恶意程序重复向服务器重复发送相同的请求。<br>　　　　使用场景：客服端在向服务器发出请求之前，随机生成nonce参数。服务器在接收到请求之后，取出nonce参数，然后去缓存中查找是否已存在nonce的值。如果存在，则说明该请求已经收到过，则 拒绝本次请求，如果不存在，则说明首次接收到该请求，正常进行处理。</p>
-<p>　　<strong>timestamp</strong>：客服端发送请求的时间戳(timestamp一般和nonce组合使用)<br>　　　　解决的问题:防止服务器端缓存nonce数据量过大的问题。当服务器缓存的nonce较多时，每次查找nonce就会耗费大量时间。通过添加请求时间戳，判断请求时间到服务器接收到请求的时间差是否在有效处理时间内（例如5分钟），如果在5分钟之内则进行处理，如果超出五分钟则拒绝该请求。这样，服务器端在缓存nonce的时候，可以设置nonce的缓存时间为5分钟，超出5分钟之后，自动清除掉缓存中的nonce，这样就避免了缓存大量nonce的问题。</p>
-<p>　　　　使用场景:客服端在发出请求时，附带timestamp，记录下当前的请求时间。服务器接收到请求时，取出timestamp，判断和当前的时间差，如果超出一定的时间(例如5分钟)，则放弃该请求。<strong>如果在5分钟之内，则取出nonce，去缓存中查找nonce，如果已存在则拒绝掉，如果不存在则正常处理。</strong></p>
-<p>数据保密性： http请求的数据无论是GET还是POST都可能会被抓包获取到数据。为了避免用户的敏感数据被窃取，则需要对数据进行加密处理。</p>
-<p>　　<strong>AES</strong>:对称加密算法<br>　　　　使用方式:客服端和服务器端共同确定一个用来加密和解密的秘钥。然后客服端在请求服务器是通过该秘钥对数据进行加密，服务器端在接收到请求之后使用该秘钥对数据进行解密。<br>　　　　优势：加密效率高<br>　　　　缺点:秘钥需要共享给客户端，具有泄露的风险</p>
-<p>　　<strong>RSA</strong>:非对称加密算法<br>　　　　使用方式:服务器端生成公钥和私钥，把私钥发送给客户端。客服端在请求服务器是，通过公钥对数据进行加密。服务器端接收到请求之后，使用私钥对加密的数据进行解密。<br>　　　　优势:不需要共享私钥，避免了私钥泄露的风险。<br>　　　　劣势：加密效率低，数据量大是较为耗时</p>
-<p>　　实际场景中，一般使用如下策略进行加密：<br>　　　　　　服务器端通过RSA生成公钥，然后把公钥给客户端。客服端在请求服务器前， 随机生成AES秘钥，然后用AES秘钥加密请求数据。之后用RSA公钥对AES秘钥进行加密，然后把加密之后的AES秘钥和加密后的请求数据一起发送给服务器。服务器收到请求之后，先用RSA私钥解密出AES秘钥，然后用AES秘钥对请求数据进行解密，获取请求数据。</p>
-<p>其他常见算法说明：<br>　　　<strong>MD5</strong>:信息摘要算法,不是加密算法。<br>　　　　　　加密算法需要能够解密出原始数据的。MD5是不可逆的，不存在解密的说法。MD5的目的是用来校验文件&#x2F;数据是否和原始数据一致，是否被修改过。只要文件&#x2F;数据被修改过，则计算出的MD5就不一致。SHA-1类似,可以从来文件校验和计算数字签名。<br>　　　　　　应用场景:作为计算sign签名的算法，校验数据的一致性</p>
-<p>　　<strong>Base64</strong>:编码规范，不是加密算法。<br>　　　　　　其存在的目的是为了解决部分网络传输不支持不可见字符的问题。通过Base64编码把数据流转化为可打印显示的字符，之后通过网络进行传输。既然是编码，那么就可以被解码还原的。其类似于URL编码,为了把一些特殊字符转化为安全字符。<br>　　　　　　应用场景:RSA的公钥为byte数组，在传给客户端的时候 ，就可以通过Base64编码把byte数组转换为字符串，然后传给客户端。</p>
+<h2 id="我需要了解什么？"><a href="#我需要了解什么？" class="headerlink" title="我需要了解什么？"></a>我需要了解什么？</h2><h3 id="一：tkinter简单GUI"><a href="#一：tkinter简单GUI" class="headerlink" title="一：tkinter简单GUI"></a>一：tkinter简单GUI</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3 id="三：网络安全"><a href="#三：网络安全" class="headerlink" title="三：网络安全"></a>三：网络安全</h3><h4 id="请求安全性"><a href="#请求安全性" class="headerlink" title="请求安全性"></a>请求安全性</h4><h5 id="token-已登陆用户的识别码"><a href="#token-已登陆用户的识别码" class="headerlink" title="token:已登陆用户的识别码"></a>token:已登陆用户的识别码</h5><p>解决的问题: 用户调用接口时，不用每次都带上用户名和密码，避免了频繁在网络中传输密码被截获的风险。<br>　　使用场景：用户登录系统时传入用户名和密码，服务器校验成功之后，根据uuid等参数生成token返回给客户端，同时把该token和该用户的对应关系缓存在服务器端。客户端在后续的请求接口中不用每次都传入用户名和密码，只需要传入token即可。服务器会根据token确定客户端的身份。<br>　　注意：token可设置生效时间，token失效之后，客户端重新请求token。</p>
+<h5 id="sign-请求参数的签名"><a href="#sign-请求参数的签名" class="headerlink" title="sign:请求参数的签名"></a>sign:请求参数的签名</h5><p>解决问题：避免请求参数被恶意修改。保证了请求数据的一致性。<br>　　使用场景：客户端和服务端约定一个签名生成算法。客户端在请求接口之前调用签名算法，根据参数生成sign值。然后把sign和请求参数一并传给服务器。<br>　　服务器收到到参数和签名之后，根据请求参数，调用签名算法计算出签名，然后比较该签名和客户端传过来的签名是否一致，如果一致，则说明请求参数未被修改过，如果不一致，则说明请求参数被修改过。</p>
+<h5 id="nonce-请求中附带的随机数"><a href="#nonce-请求中附带的随机数" class="headerlink" title="nonce:请求中附带的随机数"></a>nonce:请求中附带的随机数</h5><p>解决问题：防止恶意程序重复向服务器重复发送相同的请求。<br>　　使用场景：客服端在向服务器发出请求之前，随机生成nonce参数。服务器在接收到请求之后，取出nonce参数，然后去缓存中查找是否已存在nonce的值。如果存在，则说明该请求已经收到过，则 拒绝本次请求，如果不存在，则说明首次接收到该请求，正常进行处理。</p>
+<h5 id="timestamp-客服端发送请求的时间戳"><a href="#timestamp-客服端发送请求的时间戳" class="headerlink" title="timestamp:客服端发送请求的时间戳"></a>timestamp:客服端发送请求的时间戳</h5><p>解决问题：防止服务器端缓存nonce数据量过大的问题。当服务器缓存的nonce较多时，每次查找nonce就会耗费大量时间。通过添加请求时间戳，判断请求时间到服务器接收到请求的时间差是否在有效处理时间内（例如5分钟），如果在5分钟之内则进行处理，如果超出五分钟则拒绝该请求。这样，服务器端在缓存nonce的时候，可以设置nonce的缓存时间为5分钟，超出5分钟之后，自动清除掉缓存中的nonce，这样就避免了缓存大量nonce的问题。         使用场景：客服端在发出请求时，附带timestamp，记录下当前的请求时间。服务器接收到请求时，取出timestamp，判断和当前的时间差，如果超出一定的时间(例如5分钟)，则放弃该请求。<strong>如果在5分钟之内，则取出nonce，去缓存中查找nonce，如果已存在则拒绝掉，如果不存在则正常处理。</strong></p>
+<hr>
+<h4 id="数据保密性"><a href="#数据保密性" class="headerlink" title="数据保密性"></a>数据保密性</h4><p> HTTP请求的数据无论是GET还是POST都可能会被抓包获取到数据。为了避免用户的敏感数据被窃取，则需要对数据进行加密处理。</p>
+<h5 id="AES-对称加密算法"><a href="#AES-对称加密算法" class="headerlink" title="AES:对称加密算法"></a>AES:对称加密算法</h5><p>使用方式：客服端和服务器端共同确定一个用来加密和解密的秘钥。然后客服端在请求服务器是通过该秘钥对数据进行加密，服务器端在接收到请求之后使用该秘钥对数据进行解密。
+　　</p>
+<h5 id="RSA-非对称加密算法"><a href="#RSA-非对称加密算法" class="headerlink" title="RSA:非对称加密算法"></a>RSA:非对称加密算法</h5><p>使用方式：服务器端生成公钥和私钥，把公钥发送给客户端。客服端在请求服务器时，通过公钥对数据进行加密。服务器端接收到请求之后，使用私钥对加密的数据进行解密。
+　　</p>
+<h5 id="实际场景加密"><a href="#实际场景加密" class="headerlink" title="实际场景加密"></a>实际场景加密</h5><p>服务器端通过RSA生成公钥，然后把公钥给客户端。客服端在请求服务器前， 随机生成AES秘钥，然后用AES秘钥加密请求数据。之后用RSA公钥对AES秘钥进行加密，然后把加密之后的AES秘钥和加密后的请求数据一起发送给服务器。服务器收到请求之后，先用RSA私钥解密出AES秘钥，然后用AES秘钥对请求数据进行解密，获取请求数据。</p>
+<hr>
+<h4 id="其他常见算法"><a href="#其他常见算法" class="headerlink" title="其他常见算法"></a>其他常见算法</h4><h5 id="MD5：信息摘要算法"><a href="#MD5：信息摘要算法" class="headerlink" title="MD5：信息摘要算法"></a>MD5：信息摘要算法</h5><p>加密算法需要能够解密出原始数据的。MD5是不可逆的，不存在解密的说法。MD5的目的是用来校验文件&#x2F;数据是否和原始数据一致，是否被修改过。只要文件&#x2F;数据被修改过，则计算出的MD5就不一致。SHA-1类似,可以从来文件校验和计算数字签名。<br>　　应用场景：作为计算sign签名的算法，校验数据的一致性</p>
+<h5 id="Base64：编码规范"><a href="#Base64：编码规范" class="headerlink" title="Base64：编码规范"></a>Base64：编码规范</h5><p>其存在的目的是为了解决部分网络传输不支持不可见字符的问题。通过Base64编码把数据流转化为可打印显示的字符，之后通过网络进行传输。既然是编码，那么就可以被解码还原的。其类似于URL编码,为了把一些特殊字符转化为安全字符。<br>　　应用场景：RSA的公钥为byte数组，在传给客户端的时候 ，就可以通过Base64编码把byte数组转换为字符串，然后传给客户端。</p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>至此又解决了改造后的场馆预约问题，GUI考虑到功能较少所以采用了tkinter，实验室的小伙伴再也不担心抢不到场地了，在抗击气膜脚本的道路上迈出了以暴制暴的关键一步。</p>
+<p>加入了版本自动检测更新，之后慢慢添加功能的日志会在github-releases上发布，这篇文章就到此为止了。</p>
+<p>bye~</p>
 
     </div>
 
@@ -332,7 +370,7 @@ result2 ==> res3[DES/AES/RSA/RC4/Rabbit]</pre>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%8A%A2%E5%9C%BA%E9%A6%86%E8%84%9A%E6%9C%AC-%E4%BA%8C"><span class="nav-number">1.</span> <span class="nav-text">如何写一个简单的抢场馆脚本(二)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%B8%E7%B4%A2ing"><span class="nav-number">1.1.</span> <span class="nav-text">摸索ing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-0%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.</span> <span class="nav-text">2.0实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">我需要了解什么？</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%8A%A2%E5%9C%BA%E9%A6%86%E8%84%9A%E6%9C%AC-%E4%BA%8C"><span class="nav-number">1.</span> <span class="nav-text">如何写一个简单的抢场馆脚本(二)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%B8%E7%B4%A2ing"><span class="nav-number">1.1.</span> <span class="nav-text">摸索ing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-0%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.</span> <span class="nav-text">2.0实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">我需要了解什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%EF%BC%9Atkinter%E7%AE%80%E5%8D%95GUI"><span class="nav-number">1.3.1.</span> <span class="nav-text">一：tkinter简单GUI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%EF%BC%9A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8"><span class="nav-number">1.3.2.</span> <span class="nav-text">三：网络安全</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E5%AE%89%E5%85%A8%E6%80%A7"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">请求安全性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#token-%E5%B7%B2%E7%99%BB%E9%99%86%E7%94%A8%E6%88%B7%E7%9A%84%E8%AF%86%E5%88%AB%E7%A0%81"><span class="nav-number">1.3.2.1.1.</span> <span class="nav-text">token:已登陆用户的识别码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#sign-%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0%E7%9A%84%E7%AD%BE%E5%90%8D"><span class="nav-number">1.3.2.1.2.</span> <span class="nav-text">sign:请求参数的签名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nonce-%E8%AF%B7%E6%B1%82%E4%B8%AD%E9%99%84%E5%B8%A6%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0"><span class="nav-number">1.3.2.1.3.</span> <span class="nav-text">nonce:请求中附带的随机数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#timestamp-%E5%AE%A2%E6%9C%8D%E7%AB%AF%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82%E7%9A%84%E6%97%B6%E9%97%B4%E6%88%B3"><span class="nav-number">1.3.2.1.4.</span> <span class="nav-text">timestamp:客服端发送请求的时间戳</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%BF%9D%E5%AF%86%E6%80%A7"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">数据保密性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#AES-%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.2.2.1.</span> <span class="nav-text">AES:对称加密算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RSA-%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.2.2.2.</span> <span class="nav-text">RSA:非对称加密算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%9C%BA%E6%99%AF%E5%8A%A0%E5%AF%86"><span class="nav-number">1.3.2.2.3.</span> <span class="nav-text">实际场景加密</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">其他常见算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#MD5%EF%BC%9A%E4%BF%A1%E6%81%AF%E6%91%98%E8%A6%81%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.2.3.1.</span> <span class="nav-text">MD5：信息摘要算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Base64%EF%BC%9A%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83"><span class="nav-number">1.3.2.3.2.</span> <span class="nav-text">Base64：编码规范</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-number">1.4.</span> <span class="nav-text">Summary</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
