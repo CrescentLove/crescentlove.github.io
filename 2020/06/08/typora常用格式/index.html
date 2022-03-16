@@ -290,7 +290,7 @@
 <hr>
 <h2 id="引用元素"><a href="#引用元素" class="headerlink" title="引用元素"></a>引用元素</h2><h4 id="in-line-link"><a href="#in-line-link" class="headerlink" title="in-line link"></a>in-line link</h4><p>使用<code>[外部文字](&#39;http://www.baidu.com&#39;&quot;Title&quot;)</code>,热键<code>ctrl+K</code></p>
 <p><a href="'https://www.baidu.com'">点我</a></p>
-<p>使用<code>&lt;url&gt;</code>来插入超链接，如<a href="mailto:&#49;&#53;&#57;&#50;&#x32;&#49;&#51;&#x32;&#49;&#48;&#49;&#64;&#x31;&#54;&#x33;&#46;&#x63;&#x6f;&#x6d;">&#49;&#53;&#57;&#50;&#x32;&#49;&#51;&#x32;&#49;&#48;&#49;&#64;&#x31;&#54;&#x33;&#46;&#x63;&#x6f;&#x6d;</a></p>
+<p>使用<code>&lt;url&gt;</code>来插入超链接，如<a href="mailto:&#x31;&#53;&#57;&#50;&#50;&#49;&#x33;&#x32;&#x31;&#48;&#49;&#64;&#x31;&#54;&#x33;&#x2e;&#99;&#111;&#x6d;">&#x31;&#53;&#57;&#50;&#50;&#49;&#x33;&#x32;&#x31;&#48;&#49;&#64;&#x31;&#54;&#x33;&#x2e;&#99;&#111;&#x6d;</a></p>
 <hr>
 <h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><p>使用<code>[外部文字][id]</code>，尾注参考链接</p>
 <p><code>[id]:http://blabla...</code></p>
@@ -304,6 +304,8 @@
 fir[点击看方框用法] -.-&gt; sec(点击看圆角矩用法) --&quot;如何插入流程线批注&quot;--&gt; thi&#123;点击看菱形用法&#125;
 for((点击看圆框用法)) --&gt; |第二种批注插入用法|fif[dd]
 fir ==&gt; for&lt;/pre&gt;
+
+【更新几种新用到的图型】⬇⬇⬇⬇⬇⬇⬇⬇
 
 #### 时序图
 
@@ -332,9 +334,35 @@ else 时间获取&gt;10
 end
 A -&gt;&gt; A:广播&lt;/pre&gt;
 
----
+#### 类图
 
+语法同上，以`classDiagram`开头
 
+&lt;pre class=&quot;mermaid&quot;&gt;classDiagram
+      Animal &lt;|-- Duck
+      Animal &lt;|-- Fish
+      Animal &lt;|-- Zebra
+      
+      Animal : +int age
+      Animal : +String gender
+      Animal: +isMammal()
+      Animal: +mate()
+ 
+      class Duck&#123;
+          +String beakColor
+          +swim()
+          +quack()
+      &#125;
+      class Fish&#123;
+          -int sizeInFeet
+          -canEat()
+      &#125;
+      class Zebra&#123;
+          +bool is_wild
+          +run()
+      &#125;&lt;/pre&gt;
+
+更多的可以看这篇文章[使用 Typora 画图（类图、流程图、时序图） - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/172635547)
 
 ## 文字效果
 
@@ -343,6 +371,7 @@ A -&gt;&gt; A:广播&lt;/pre&gt;
 | 高亮   | == ==    |        |
 | 斜体   | * *      | ctrl+I |
 | 下划线 | &lt;u&gt; &lt;/u&gt; | ctrl+U |
+| emoji  | :        |        |
 </code></pre>
 
     </div>
