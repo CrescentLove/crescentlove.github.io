@@ -222,7 +222,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>需要的技能点</p>
+        <ul>
+<li><input disabled type="checkbox"> 主体在【简易流程】和【用到的库】中，作为手册存档</li>
+<li><input disabled type="checkbox"> 【我需要了解什么】是个人在实现过程中觉得有用的基础知识</li>
+</ul>
+<p>需要的技能点</p>
 <ul>
 <li>requests库</li>
 <li>json库</li>
@@ -276,10 +280,58 @@
 
 
 
-<h4 id="json"><a href="#json" class="headerlink" title="json"></a>json</h4><p><code>json.dumps(xx:dict)</code>将dict类型转换为json字符串（str类型）</p>
+<h4 id="json"><a href="#json" class="headerlink" title="json"></a>json</h4><p>json模块主要有四个比较重要的函数，分别是：</p>
+<ul>
+<li><code>dump</code> - 将Python对象按照JSON格式序列化到文件中</li>
+<li><code>dumps</code> - 将Python对象处理成JSON格式的字符串</li>
+<li><code>load</code> - 将文件中的JSON数据反序列化成对象</li>
+<li><code>loads</code> - 将字符串的内容反序列化成Python对象</li>
+</ul>
+<p><code>json.dumps(xx:dict)</code>将dict类型转换为json字符串（str类型）</p>
 <p><code>json.loads(xx:str)</code>将json字符串转换为dict类型</p>
 <p>post请求的负载需要是json类型，因此通过以上两个函数实现字典和json字符串的转换。</p>
 <p>【补】json另外两个常用的函数是IO操作，<code>json.dump(xx:json, xxx:file)</code> 和 <code>json.load(xx:file)</code></p>
+<h2 id="我需要了解什么"><a href="#我需要了解什么" class="headerlink" title="我需要了解什么"></a>我需要了解什么</h2><h4 id="一：文件操作"><a href="#一：文件操作" class="headerlink" title="一：文件操作"></a>一：文件操作</h4><p>通过Python内置的<code>open</code>函数，我们可以指定文件名、操作模式、编码信息等来获得操作文件的对象，接下来就可以对文件进行读写操作了。</p>
+<table>
+<thead>
+<tr>
+<th>操作模式</th>
+<th>具体含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&#39;r&#39;</code></td>
+<td>读取 （默认）</td>
+</tr>
+<tr>
+<td><code>&#39;w&#39;</code></td>
+<td>写入（会先截断之前的内容）</td>
+</tr>
+<tr>
+<td><code>&#39;x&#39;</code></td>
+<td>写入，如果文件已经存在会产生异常</td>
+</tr>
+<tr>
+<td><code>&#39;a&#39;</code></td>
+<td>追加，将内容写入到已有文件的末尾</td>
+</tr>
+<tr>
+<td><code>&#39;b&#39;</code></td>
+<td>二进制模式</td>
+</tr>
+<tr>
+<td><code>&#39;t&#39;</code></td>
+<td>文本模式（默认）</td>
+</tr>
+<tr>
+<td><code>&#39;+&#39;</code></td>
+<td>更新（既可以读又可以写）</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;xxxx.json&#x27;</span>,mode=<span class="string">&#x27;r+&#x27;</span>,enconding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> xx:</span><br><span class="line">	info = xx.read()</span><br><span class="line">	info2 = xx.readline()</span><br><span class="line">	info3 = json.load(xx)</span><br><span class="line">    xx.write(dd)</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>通过拼凑上面几步，就可以稳定获得新鲜的气膜羽毛球场地了，实现极其简单粗暴，复用性极差。</p>
 <p>下一步当然是封装起来，实现自定义配置，坠吼还是能有个GUI :happy:</p>
 <p>至于服务器是否会不堪其扰，招来邪恶的程序员紧急改造场馆预定系统，那就是以后的事了。</p>
@@ -372,7 +424,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E6%98%93%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">简易流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%99%BB%E5%BD%95%E8%B4%A6%E5%8F%B7"><span class="nav-number">1.0.1.</span> <span class="nav-text">登录账号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82"><span class="nav-number">1.0.2.</span> <span class="nav-text">发送请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%82%AE%E4%BB%B6%E6%8F%90%E9%86%92"><span class="nav-number">1.0.3.</span> <span class="nav-text">邮件提醒</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E6%89%A7%E8%A1%8C"><span class="nav-number">1.0.4.</span> <span class="nav-text">定时执行</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E5%88%B0%E7%9A%84%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">用到的库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#datetime"><span class="nav-number">2.0.1.</span> <span class="nav-text">datetime</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#time"><span class="nav-number">2.0.2.</span> <span class="nav-text">time</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#json"><span class="nav-number">2.0.3.</span> <span class="nav-text">json</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-number">3.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E6%98%93%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">简易流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%99%BB%E5%BD%95%E8%B4%A6%E5%8F%B7"><span class="nav-number">1.0.1.</span> <span class="nav-text">登录账号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82"><span class="nav-number">1.0.2.</span> <span class="nav-text">发送请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%82%AE%E4%BB%B6%E6%8F%90%E9%86%92"><span class="nav-number">1.0.3.</span> <span class="nav-text">邮件提醒</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E6%89%A7%E8%A1%8C"><span class="nav-number">1.0.4.</span> <span class="nav-text">定时执行</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E5%88%B0%E7%9A%84%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">用到的库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#datetime"><span class="nav-number">2.0.1.</span> <span class="nav-text">datetime</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#time"><span class="nav-number">2.0.2.</span> <span class="nav-text">time</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#json"><span class="nav-number">2.0.3.</span> <span class="nav-text">json</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%E4%BB%80%E4%B9%88"><span class="nav-number">3.</span> <span class="nav-text">我需要了解什么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%EF%BC%9A%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">3.0.1.</span> <span class="nav-text">一：文件操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-number">4.</span> <span class="nav-text">Summary</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -388,7 +440,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -401,7 +453,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
