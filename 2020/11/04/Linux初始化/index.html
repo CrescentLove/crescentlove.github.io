@@ -20,19 +20,23 @@
     var CONFIG = {"hostname":"crescentlove.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"percent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="应用">
-<meta property="og:url" content="https://crescentlove.gitee.io/demo/index.html">
+  <meta name="description" content="linux&amp;server">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux初始化">
+<meta property="og:url" content="https://crescentlove.gitee.io/2020/11/04/Linux%E5%88%9D%E5%A7%8B%E5%8C%96/index.html">
 <meta property="og:site_name" content="DCyan的小站">
+<meta property="og:description" content="linux&amp;server">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gitee.com/crescentlove/picgo-base/raw/master/img/logo.png">
-<meta property="article:published_time" content="2020-06-19T12:51:07.000Z">
-<meta property="article:modified_time" content="2020-06-19T12:51:07.000Z">
+<meta property="og:image" content="https://gitee.com/crescentlove/picgo-base/raw/master/img/202203242153538.png">
+<meta property="article:published_time" content="2020-11-04T14:21:53.000Z">
+<meta property="article:modified_time" content="2020-11-04T14:21:53.000Z">
 <meta property="article:author" content="DCyan">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="CentOS">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/crescentlove/picgo-base/raw/master/img/logo.png">
+<meta name="twitter:image" content="https://gitee.com/crescentlove/picgo-base/raw/master/img/202203242153538.png">
 
-<link rel="canonical" href="https://crescentlove.gitee.io/demo/">
+<link rel="canonical" href="https://crescentlove.gitee.io/2020/11/04/Linux%E5%88%9D%E5%A7%8B%E5%8C%96/">
 
 
 <script id="page-configurations">
@@ -40,13 +44,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>应用 | DCyan的小站
-</title>
+  <title>Linux初始化 | DCyan的小站</title>
   
 
 
@@ -164,45 +167,126 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
-          <div class="content page posts-expand">
+          <div class="content post posts-expand">
             
 
     
-    
-    
-    <div class="post-block" lang="zh-CN">
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2020/11/04/Linux%E5%88%9D%E5%A7%8B%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="DCyan">
+      <meta itemprop="description" content="做FPGA的硬件dog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCyan的小站">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux初始化
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">应用
-</h1>
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
 
-<div class="post-meta">
+              <time title="创建时间：2020-11-04 22:21:53" itemprop="dateCreated datePublished" datetime="2020-11-04T22:21:53+08:00">2020-11-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">linux&server</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Linux初始化"><a href="#Linux初始化" class="headerlink" title="Linux初始化"></a>Linux初始化</h2><p><img src="https://gitee.com/crescentlove/picgo-base/raw/master/img/202203242153538.png"></p>
+<p>Linux环境自带了Python 2.x版本，但是如果要更新到3.x的版本，可以在<a target="_blank" rel="noopener" href="https://www.python.org/">Python的官方网站</a>下载Python的源代码并通过源代码构建安装的方式进行安装，具体的步骤如下所示（以CentOS为例）。</p>
+<ol>
+<li>安装依赖库（因为没有这些依赖库可能在源代码构件安装时因为缺失底层依赖库而失败）。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget gcc zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>下载Python源代码并解压缩到指定目录。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tar.xz</span><br><span class="line">xz -d Python-3.7.6.tar.xz</span><br><span class="line">tar -xvf Python-3.7.6.tar</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>切换至Python源代码目录并执行下面的命令进行配置和安装。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd Python-3.7.6</span><br><span class="line">./configure --prefix=/usr/local/python37 --enable-optimizations</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>修改用户主目录下名为.bash_profile的文件，配置PATH环境变量并使其生效。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">vim .bash_profile</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ... 此处省略上面的代码 ...</span></span><br><span class="line"></span><br><span class="line">export PATH=$PATH:/usr/local/python37/bin</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> ... 此处省略下面的代码 ...</span></span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>激活环境变量。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source .bash_profile</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i> linux</a>
+              <a href="/tags/CentOS/" rel="tag"><i class="fa fa-tag"></i> CentOS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/06/%E4%B8%AA%E4%BA%BAGit%E5%85%A5%E9%97%A8%E6%93%8D%E4%BD%9C/" rel="prev" title="Git入门">
+      <i class="fa fa-chevron-left"></i> Git入门
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/05/%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0%E6%8A%A2%E5%9C%BA%E5%9C%B0%E8%84%9A%E6%9C%AC/" rel="next" title="气膜脚本的简单实现">
+      气膜脚本的简单实现 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
-          <hr>
-<p><img src="https://gitee.com/crescentlove/picgo-base/raw/master/img/logo.png"></p>
-
-      </div>
-      
-      
-      
-    </div>
-    
-
-    
-    
-    
 
 
           </div>
@@ -255,6 +339,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">Linux初始化</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
