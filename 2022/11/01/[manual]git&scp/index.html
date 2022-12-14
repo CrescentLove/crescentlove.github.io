@@ -234,10 +234,10 @@ Remote--"pull"-->Workspace</pre>
 
 
 
-<h4 id="我的流程"><a href="#我的流程" class="headerlink" title="我的流程"></a>我的流程</h4><ul>
-<li>查看各区状态</li>
+<h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><ul>
+<li>查看各区文件状态</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br><span class="line">git diff [commitID]</span><br><span class="line"></span><br><span class="line"><span class="comment">#show commit history</span></span><br><span class="line">git <span class="built_in">log</span></span><br><span class="line">/* mostly used option</span><br><span class="line">* --graph			:show branch/merge info</span><br><span class="line">* --author=ydc		:show commit by specific author</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br><span class="line">git diff [commitID]</span><br><span class="line"></span><br><span class="line"><span class="comment">#show commit history(local / remote),current branch default.</span></span><br><span class="line">git <span class="built_in">log</span> [branch]</span><br><span class="line"><span class="comment">#xmpl:git log origin/backup; git log branch2</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>提交修改</li>
@@ -249,7 +249,7 @@ Remote--"pull"-->Workspace</pre>
 <ul>
 <li>合并远程的更改</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#pull changes from remote. commit before fetch best.</span></span><br><span class="line">git fetch [remote-repo] [remote-branch]</span><br><span class="line"></span><br><span class="line"><span class="comment">#create new branch on remote branch fetched just now, reduce the damage caused by &quot;rebase&quot;.(not a critical step)</span></span><br><span class="line">git checkout -b newB origin/main</span><br><span class="line"></span><br><span class="line">git rebase -i [remote-repo]/[remote-branch]</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#fetch changes from remote. commit before fetch best.</span></span><br><span class="line">git branch -r	<span class="comment">#comfirm remote branch info</span></span><br><span class="line">git remote -v	<span class="comment">#remote info</span></span><br><span class="line">git fetch [remote-repo] [remote-branch]</span><br><span class="line"></span><br><span class="line"><span class="comment">#create new branch on remote branch fetched just now, reduce the damage caused by &quot;rebase&quot;.(not a critical step)</span></span><br><span class="line">git checkout -b newB origin/main</span><br><span class="line"></span><br><span class="line">git rebase -i [remote-repo]/[remote-branch]</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>推到远程</li>
@@ -259,26 +259,50 @@ Remote--"pull"-->Workspace</pre>
 
 
 <h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><p>查看git配置，主要是remote远程仓库和分支的信息。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat .git/config</span><br><span class="line"></span><br><span class="line"><span class="comment">#or use the following command</span></span><br><span class="line">git remote -v	<span class="comment">#remote info</span></span><br><span class="line">git branch -vv	<span class="comment">#branch info[ahead/behind],通过ahead/behind信息去看各分支和远程之间的进度情况</span></span><br></pre></td></tr></table></figure>
-
-<p>分支</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git branch [branch-name]	<span class="comment">#create</span></span><br><span class="line">git checkout [branch-name]	<span class="comment">#change current branch</span></span><br><span class="line">git branch -d [branch-name]	<span class="comment">#delete</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git config --list</span><br><span class="line">git config -e --global	<span class="comment">#modify git config(global)</span></span><br><span class="line">git branch -vv	<span class="comment">#branch info[ahead/behind],通过ahead/behind信息去看各分支和远程之间的进度情况</span></span><br><span class="line">git checkout .	<span class="comment">#frequently used, equal to &quot;git clean -f&quot;</span></span><br></pre></td></tr></table></figure>
 
 
 
-<p>整理patch时用到的一些git操作</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit --amend</span><br></pre></td></tr></table></figure>
+<h4 id="star-修改log历史里的某一条commit"><a href="#star-修改log历史里的某一条commit" class="headerlink" title=":star: 修改log历史里的某一条commit"></a>:star: 修改log历史里的某一条commit</h4><p>先把版本回退到待修改的commit处，修改后提交commit</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git branch [new branch name]    <span class="comment">#新建分支用来保存修改点后面的commit，方便一会合进来</span></span><br><span class="line">git <span class="built_in">log</span>     <span class="comment">#查看commit信息，选择对应commit号</span></span><br><span class="line">git reset --hard [commit号]     <span class="comment">#回退到此处然后开始修改</span></span><br><span class="line">git add [changed file]</span><br><span class="line">git commit -s --amend       <span class="comment">#使用amend修改commit，保持简洁</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>用来修改最新的一次commit（不会再创建一条commit信息），这样能够在做微小的调整时保持commit log的简洁整齐</p>
-<h4 id="修改log历史里的某一条commit"><a href="#修改log历史里的某一条commit" class="headerlink" title="修改log历史里的某一条commit"></a>修改log历史里的某一条commit</h4><ul>
-<li>在和后面commmit没有冲突的情况下我们可以用下面的方法 先把版本回退到待修改的commit处</li>
+<ul>
+<li>不冲突的话</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git branch [new branch name]    <span class="comment">#新建分支用来保存修改点后面的commit，方便一会合进来</span></span><br><span class="line">git <span class="built_in">log</span>     <span class="comment">#查看commit信息，选择对应commit号</span></span><br><span class="line">git reset --hard [commit号]     <span class="comment">#回退到此处然后开始修改</span></span><br><span class="line">git add [changed file]</span><br><span class="line">git commit -s --amend       <span class="comment">#使用amend修改commit，保持简洁</span></span><br><span class="line"><span class="comment">#下面开始把该处修改后面的commit合进来</span></span><br><span class="line">git <span class="built_in">log</span> [new branch name]   <span class="comment">#从刚才备份的branch里找到后面的所有commit号</span></span><br><span class="line">git cherry-pick [commit号]</span><br><span class="line">git push [remote repo] [localB]:[remoteB] --force   <span class="comment">#和remote会有冲突所以直接-f强制覆盖吧</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#下面开始把该处修改后面的commit合进来</span></span><br><span class="line">git <span class="built_in">log</span> [new branch name]   <span class="comment">#从刚才备份的branch里找到后面的所有commit号</span></span><br><span class="line">git cherry-pick [commit号]</span><br><span class="line">git push [remote repo] [localB]:[remoteB] --force   <span class="comment">#和remote会有冲突所以直接-f强制覆盖吧</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>冲突的话</li>
 </ul>
-<h2 id="ssh-tool"><a href="#ssh-tool" class="headerlink" title="ssh-tool"></a>ssh-tool</h2><h4 id="MobaXterm"><a href="#MobaXterm" class="headerlink" title="MobaXterm"></a>MobaXterm</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#将后面的commit打成patch</span></span><br><span class="line">git format-patch -p1 [commit号]</span><br><span class="line">patch -p1 &lt; [patch file]</span><br><span class="line"><span class="comment">#此时会生成冲突提示文件.orig &amp; .rej,手动修改后git add &amp; commit即可</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="tool"><a href="#tool" class="headerlink" title="tool"></a>tool</h2><h4 id="MobaXterm"><a href="#MobaXterm" class="headerlink" title="MobaXterm"></a>MobaXterm</h4><h4 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h4><p>即使大多数coding在VSC上完成，仍不可避免有一些轻量化编辑工作要使用到Vim。</p>
+<p>四种模式，关键是操作完后多按<code>esc</code>确保进入Normal-mode</p>
+<table>
+<thead>
+<tr>
+<th>Normal</th>
+<th>Insert</th>
+<th>Command</th>
+<th>Visual</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>默认，或多按几下<code>esc</code>进入</td>
+<td>按<code>i</code>进入(还有I&#x2F;A&#x2F;a等等)</td>
+<td>按<code>:</code>或<code>/</code>进入</td>
+<td>按<code>v</code>或<code>V</code>进入</td>
+</tr>
+</tbody></table>
+<h5 id="一般流程"><a href="#一般流程" class="headerlink" title="一般流程"></a>一般流程</h5><ul>
+<li><p><code>vim file </code>打开文件</p>
+</li>
+<li><p><code>:q!</code>不保存退出，<code>:x</code>保存退出，<code>:wq</code>保存退出</p>
+</li>
+</ul>
+
     </div>
 
     
@@ -302,7 +326,10 @@ Remote--"pull"-->Workspace</pre>
     <a href="/2022/05/02/%5Bleetcode%5Drandnum/" rel="prev" title="【刷刷LeetCode】随机数">
       <i class="fa fa-chevron-left"></i> 【刷刷LeetCode】随机数
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/12/14/%5Bother%5Dhell_joke/" rel="next" title="雷所笑话大全">
+      雷所笑话大全 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -363,7 +390,7 @@ Remote--"pull"-->Workspace</pre>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#scp"><span class="nav-number">1.</span> <span class="nav-text">scp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git"><span class="nav-number">2.</span> <span class="nav-text">git</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-number">2.0.1.</span> <span class="nav-text">我的流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">2.0.2.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9log%E5%8E%86%E5%8F%B2%E9%87%8C%E7%9A%84%E6%9F%90%E4%B8%80%E6%9D%A1commit"><span class="nav-number">2.0.3.</span> <span class="nav-text">修改log历史里的某一条commit</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ssh-tool"><span class="nav-number">3.</span> <span class="nav-text">ssh-tool</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MobaXterm"><span class="nav-number">3.0.1.</span> <span class="nav-text">MobaXterm</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#scp"><span class="nav-number">1.</span> <span class="nav-text">scp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git"><span class="nav-number">2.</span> <span class="nav-text">git</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">2.0.1.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">2.0.2.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#star-%E4%BF%AE%E6%94%B9log%E5%8E%86%E5%8F%B2%E9%87%8C%E7%9A%84%E6%9F%90%E4%B8%80%E6%9D%A1commit"><span class="nav-number">2.0.3.</span> <span class="nav-text">:star: 修改log历史里的某一条commit</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tool"><span class="nav-number">3.</span> <span class="nav-text">tool</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MobaXterm"><span class="nav-number">3.0.1.</span> <span class="nav-text">MobaXterm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vim"><span class="nav-number">3.0.2.</span> <span class="nav-text">Vim</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E6%B5%81%E7%A8%8B"><span class="nav-number">3.0.2.1.</span> <span class="nav-text">一般流程</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -379,20 +406,20 @@ Remote--"pull"-->Workspace</pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
