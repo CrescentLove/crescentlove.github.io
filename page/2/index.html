@@ -168,223 +168,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[acm]meituan/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header.jpg">
-      <meta itemprop="name" content="DCyan">
-      <meta itemprop="description" content="做FPGA的硬件dog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DCyan的小站">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/03/27/%5Bacm%5Dmeituan/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>美团实习笔试</p>
-<hr>
-<h3 id="第五题"><a href="#第五题" class="headerlink" title="第五题"></a>第五题</h3><p>简化一下题目。n个糖果每天发放一颗，有各自的美味值nums[i]，不能连续两天吃糖果，但有k次破例机会，求能吃到的最大美味值。</p>
-<h4 id="DP"><a href="#DP" class="headerlink" title="DP"></a>DP</h4><p>很显然是一道动态规划题，用<code>dp[i][j][0]</code>来表示第i天破例j次情况下该天不吃糖的最大美味值，<code>dp[i][j][1]</code>来表示第i天破例j次情况下该天吃糖的最大美味值。</p>
-<p>首先确定初始化和遍历范围：习惯外层物品内层背包，<code>i&lt;n</code>从第0天到第n-1天；<code>j&lt;=k</code>破例机会有0~k次；</p>
-<p>接下来确定转移方程：</p>
-<p>当天不吃糖果，那美味值只取决于前一天吃&#x2F;不吃糖果的最大美味值；</p>
-<p>当天吃糖果，那有可能昨天没吃，或者是昨天吃了需要破例<br>$$<br>dp[i][j][0] &#x3D; max(dp[i-1][j][1], dp[i-1][j][0])<br>$$</p>
-<p>$$<br>dp[i][j][1] &#x3D; max(dp[i-1][j][0], dp[i-1][j-1][1])+nums[i]<br>$$</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> n,k;</span><br><span class="line">    cin&gt;&gt;n&gt;&gt;k;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">nums</span><span class="params">(n)</span></span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">        cin&gt;&gt;nums[i];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    vector&lt;vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&gt; <span class="built_in">dp</span>(n,vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;(k+<span class="number">1</span>,vector&lt;<span class="keyword">int</span>&gt;(<span class="number">2</span>,<span class="number">0</span>)));</span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>][<span class="number">1</span>]=nums[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;n;i++)&#123;</span><br><span class="line">        dp[i][<span class="number">0</span>][<span class="number">0</span>]=<span class="built_in">max</span>(dp[i<span class="number">-1</span>][<span class="number">0</span>][<span class="number">0</span>],dp[i<span class="number">-1</span>][<span class="number">0</span>][<span class="number">1</span>]);</span><br><span class="line">        dp[i][<span class="number">0</span>][<span class="number">1</span>]=dp[i<span class="number">-1</span>][<span class="number">0</span>][<span class="number">0</span>]+nums[i];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=k;j++)&#123;</span><br><span class="line">            dp[i][j][<span class="number">0</span>]=<span class="built_in">max</span>(dp[i<span class="number">-1</span>][j][<span class="number">0</span>],dp[i<span class="number">-1</span>][j][<span class="number">1</span>]);</span><br><span class="line">            dp[i][j][<span class="number">1</span>]=<span class="built_in">max</span>(dp[i<span class="number">-1</span>][j<span class="number">-1</span>][<span class="number">1</span>],dp[i<span class="number">-1</span>][j][<span class="number">0</span>])+nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cout&lt;&lt;<span class="built_in">max</span>(dp[n<span class="number">-1</span>][k][<span class="number">0</span>],dp[n<span class="number">-1</span>][k][<span class="number">1</span>])&lt;&lt;endl;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/01/02/[leetcode]priority_queue/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header.jpg">
-      <meta itemprop="name" content="DCyan">
-      <meta itemprop="description" content="做FPGA的硬件dog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DCyan的小站">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/01/02/%5Bleetcode%5Dpriority_queue/" class="post-title-link" itemprop="url">【刷刷LeetCode】优先级队列</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-01-02 14:12:23" itemprop="dateCreated datePublished" datetime="2023-01-02T14:12:23+08:00">2023-01-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>priority_queue,大顶堆与小顶堆</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/01/02/%5Bleetcode%5Dpriority_queue/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/11/01/[manual]git&scp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header.jpg">
-      <meta itemprop="name" content="DCyan">
-      <meta itemprop="description" content="做FPGA的硬件dog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DCyan的小站">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/11/01/%5Bmanual%5Dgit&scp/" class="post-title-link" itemprop="url">远程开发的一点使用</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-11-01 11:07:27" itemprop="dateCreated datePublished" datetime="2022-11-01T11:07:27+08:00">2022-11-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>layman</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/11/01/%5Bmanual%5Dgit&scp/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/05/02/[leetcode]randnum/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -460,81 +243,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/04/24/[c++]move_semantics/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header.jpg">
-      <meta itemprop="name" content="DCyan">
-      <meta itemprop="description" content="做FPGA的硬件dog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DCyan的小站">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/24/%5Bc++%5Dmove_semantics/" class="post-title-link" itemprop="url">move函数和左值右值</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-04-24 14:48:52" itemprop="dateCreated datePublished" datetime="2022-04-24T14:48:52+08:00">2022-04-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/c/" itemprop="url" rel="index"><span itemprop="name">c++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>左值右值与move函数</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/04/24/%5Bc++%5Dmove_semantics/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/04/24/[OS]general/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -587,6 +295,81 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/04/24/%5BOS%5Dgeneral/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/04/24/[c++]move_semantics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="DCyan">
+      <meta itemprop="description" content="做FPGA的硬件dog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCyan的小站">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/24/%5Bc++%5Dmove_semantics/" class="post-title-link" itemprop="url">move函数和左值右值</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-24 14:48:52" itemprop="dateCreated datePublished" datetime="2022-04-24T14:48:52+08:00">2022-04-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index"><span itemprop="name">c++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>左值右值与move函数</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/04/24/%5Bc++%5Dmove_semantics/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -737,6 +520,231 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/01/24/gymSeizor-2/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/01/02/[os]tcp&kernel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="DCyan">
+      <meta itemprop="description" content="做FPGA的硬件dog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCyan的小站">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/02/%5Bos%5Dtcp&kernel/" class="post-title-link" itemprop="url">Archive</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-02 00:00:00" itemprop="dateCreated datePublished" datetime="2022-01-02T00:00:00+08:00">2022-01-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index"><span itemprop="name">c++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>还没整理</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/01/02/%5Bos%5Dtcp&kernel/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/01/02/[acm]meituan/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="DCyan">
+      <meta itemprop="description" content="做FPGA的硬件dog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCyan的小站">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/02/%5Bacm%5Dmeituan/" class="post-title-link" itemprop="url">笔试题汇总</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-02 00:00:00" itemprop="dateCreated datePublished" datetime="2022-01-02T00:00:00+08:00">2022-01-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index"><span itemprop="name">c++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>近期笔试汇总</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/01/02/%5Bacm%5Dmeituan/">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/01/02/[leetcode]slideWindow/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="DCyan">
+      <meta itemprop="description" content="做FPGA的硬件dog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCyan的小站">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/02/%5Bleetcode%5DslideWindow/" class="post-title-link" itemprop="url">滑动窗口</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-01-02 00:00:00" itemprop="dateCreated datePublished" datetime="2022-01-02T00:00:00+08:00">2022-01-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index"><span itemprop="name">c++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>no</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/01/02/%5Bleetcode%5DslideWindow/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -992,7 +1000,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
