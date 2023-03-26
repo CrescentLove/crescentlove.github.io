@@ -168,7 +168,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/11/01/[manual]git&scp/">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[OS]TDX/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/header.jpg">
@@ -182,7 +182,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/11/01/%5Bmanual%5Dgit&scp/" class="post-title-link" itemprop="url">远程开发的一点使用</a>
+            <a href="/2023/03/27/%5BOS%5DTDX/" class="post-title-link" itemprop="url">TDX</a>
         </h2>
 
         <div class="post-meta">
@@ -193,7 +193,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-11-01 11:07:27" itemprop="dateCreated datePublished" datetime="2022-11-01T11:07:27+08:00">2022-11-01</time>
+              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -216,10 +216,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>layman</p>
+          <p>通过对TME和MKTME的认识，简单了解TDX作为可信计算的重要研究。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/11/01/%5Bmanual%5Dgit&scp/">
+              <a class="btn" href="/2023/03/27/%5BOS%5DTDX/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -243,7 +243,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/05/02/[leetcode]randnum/">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[os]tcp&kernel/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/header.jpg">
@@ -257,7 +257,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/02/%5Bleetcode%5Drandnum/" class="post-title-link" itemprop="url">【刷刷LeetCode】随机数</a>
+            <a href="/2023/03/27/%5Bos%5Dtcp&kernel/" class="post-title-link" itemprop="url">未命名</a>
         </h2>
 
         <div class="post-meta">
@@ -268,16 +268,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-05-02 17:12:23" itemprop="dateCreated datePublished" datetime="2022-05-02T17:12:23+08:00">2022-05-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
+              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
             </span>
 
           
@@ -291,15 +282,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>随机数api与例题</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/05/02/%5Bleetcode%5Drandnum/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <p>发送网络数据的时候，涉及几次内存拷贝操作？</p>
+<p>第一次，调用发送数据的系统调用的时候，内核会申请一个内核态的 sk_buff 内存，将用户待发送的数据拷贝到 sk_buff 内存，并将其加入到发送缓冲区。</p>
+<p>第二次，在使用 TCP 传输协议的情况下，从传输层进入网络层的时候，每一个 sk_buff 都会被克隆一个新的副本出来。副本 sk_buff 会被送往网络层，等它发送完的时候就会释放掉，然后原始的 sk_buff 还保留在传输层，目的是为了实现 TCP 的可靠传输，等收到这个数据包的 ACK 时，才会释放原始的 sk_buff 。</p>
+<p>第三次，当 IP 层发现 sk_buff 大于 MTU 时才需要进行。会再申请额外的 sk_buff，并将原来的 sk_buff 拷贝为多个小的 sk_buff。</p>
+<p>为了解决频繁中断带来的性能开销，Linux 内核在 2.6 版本中引入了 NAPI 机制，它是混合「中断和轮询」的方式来接收网络包，它的核心概念就是不采用中断的方式读取数据，而是首先采用中断唤醒数据接收的服务程序，然后 poll 的方法来轮询数据。</p>
+<p>因此，当有网络包到达时，会通过 DMA 技术，将网络包写入到指定的内存地址，接着网卡向 CPU 发起硬件中断，当 CPU 收到硬件中断请求后，根据中断表，调用已经注册的中断处理函数。</p>
+<p>硬件中断处理函数会做如下的事情：</p>
+<p>需要先「暂时屏蔽中断」，表示已经知道内存中有数据了，告诉网卡下次再收到数据包直接写内存就可以了，不要再通知 CPU 了，这样可以提高效率，避免 CPU 不停的被中断。<br>接着，发起「软中断」，然后恢复刚才屏蔽的中断。<br>至此，硬件中断处理函数的工作就已经完成。</p>
+<p>硬件中断处理函数做的事情很少，主要耗时的工作都交给软中断处理函数了。</p>
+<p>软中断的处理</p>
+<p>内核中的 ksoftirqd 线程专门负责软中断的处理，当 ksoftirqd 内核线程收到软中断后，就会来轮询处理数据。</p>
+<p>ksoftirqd 线程会从 Ring Buffer 中获取一个数据帧，用 sk_buff 表示，从而可以作为一个网络包交给网络协议栈进行逐层处理。</p>
+
       
     </div>
 
@@ -318,7 +313,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/04/24/[c++]move_semantics/">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[OS]kvm&qemu/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/header.jpg">
@@ -332,7 +327,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/04/24/%5Bc++%5Dmove_semantics/" class="post-title-link" itemprop="url">move函数和左值右值</a>
+            <a href="/2023/03/27/%5BOS%5Dkvm&qemu/" class="post-title-link" itemprop="url">KVM&QEMU虚拟化</a>
         </h2>
 
         <div class="post-meta">
@@ -343,16 +338,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-04-24 14:48:52" itemprop="dateCreated datePublished" datetime="2022-04-24T14:48:52+08:00">2022-04-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/c/" itemprop="url" rel="index"><span itemprop="name">c++</span></a>
-                </span>
+              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
             </span>
 
           
@@ -366,10 +352,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>左值右值与move函数</p>
+          <p>KVM&QEMU虚拟化</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/04/24/%5Bc++%5Dmove_semantics/">
+              <a class="btn" href="/2023/03/27/%5BOS%5Dkvm&qemu/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -393,7 +379,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/04/24/[OS]general/">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[OS]apic&xapic/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/header.jpg">
@@ -407,7 +393,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/04/24/%5BOS%5Dgeneral/" class="post-title-link" itemprop="url">内核之</a>
+            <a href="/2023/03/27/%5BOS%5Dapic&xapic/" class="post-title-link" itemprop="url">APIC</a>
         </h2>
 
         <div class="post-meta">
@@ -418,7 +404,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-04-24 14:48:52" itemprop="dateCreated datePublished" datetime="2022-04-24T14:48:52+08:00">2022-04-24</time>
+              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -441,10 +427,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>nothing</p>
+          <p>APIC的演进与设计思路</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/04/24/%5BOS%5Dgeneral/">
+              <a class="btn" href="/2023/03/27/%5BOS%5Dapic&xapic/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -468,7 +454,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/03/07/[leetcode]trie/">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[leetcoe]listcode/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/header.jpg">
@@ -482,7 +468,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/03/07/%5Bleetcode%5Dtrie/" class="post-title-link" itemprop="url">【刷刷LeetCode】字典树</a>
+            <a href="/2023/03/27/%5Bleetcoe%5Dlistcode/" class="post-title-link" itemprop="url">链表基础</a>
         </h2>
 
         <div class="post-meta">
@@ -493,16 +479,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-03-07 18:22:23" itemprop="dateCreated datePublished" datetime="2022-03-07T18:22:23+08:00">2022-03-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
+              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
             </span>
 
           
@@ -516,10 +493,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Trie实现与例题</p>
+          <p>链表基础</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/03/07/%5Bleetcode%5Dtrie/">
+              <a class="btn" href="/2023/03/27/%5Bleetcoe%5Dlistcode/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -543,7 +520,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/01/24/gymSeizor-2/">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[leetcode]slideWindow/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/header.jpg">
@@ -557,7 +534,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/01/24/gymSeizor-2/" class="post-title-link" itemprop="url">气膜脚本实现2.0</a>
+            <a href="/2023/03/27/%5Bleetcode%5DslideWindow/" class="post-title-link" itemprop="url">未命名</a>
         </h2>
 
         <div class="post-meta">
@@ -568,16 +545,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-01-24 12:03:52" itemprop="dateCreated datePublished" datetime="2022-01-24T12:03:52+08:00">2022-01-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
+              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
             </span>
 
           
@@ -591,10 +559,74 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>谁能拒绝运动呢？</p>
+          <hr>
+<p> title: 滑动窗口<br> date: DATE<br> tags:<br>   -<br>   -<br> categories:<br> comment: ‘true’<br> description: 滑动窗口</p>
+<hr>
+<p> <img src="https://gitee.com/crescentlove/picgo-base/raw/master/img/genshinGYlook.jpeg/"></p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-window-substring/">最小覆盖子串</a><br>简单写个题解</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">string <span class="title">minWindow</span><span class="params">(string s, string t)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//hash</span></span><br><span class="line">        unordered_map&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt; vab;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; ch : t) &#123;</span><br><span class="line">            ++vab[ch];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> resL = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> minL = INT_MAX;</span><br><span class="line">        <span class="keyword">while</span> (right &lt; s.<span class="built_in">size</span>()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (vab.<span class="built_in">find</span>(s[right]) != vab.<span class="built_in">end</span>()) vab[s[right]]--;</span><br><span class="line">            <span class="keyword">while</span> (<span class="built_in">cmp</span>(vab)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (vab.<span class="built_in">find</span>(s[left]) != vab.<span class="built_in">end</span>()) vab[s[left]]++;</span><br><span class="line">                <span class="keyword">if</span> (minL &gt; (right-left+<span class="number">1</span>)) &#123;</span><br><span class="line">                    minL = right-left+<span class="number">1</span>;</span><br><span class="line">                    resL = left;</span><br><span class="line">                &#125;</span><br><span class="line">                left++;</span><br><span class="line">            &#125;</span><br><span class="line">            right++;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> minL == INT_MAX? <span class="string">&quot;&quot;</span> : s.<span class="built_in">substr</span>(resL, minL);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(unordered_map&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt;&amp; kk)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; [a,b] : kk) &#123;</span><br><span class="line">            <span class="keyword">if</span> (b &gt; <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[CS]dma/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="DCyan">
+      <meta itemprop="description" content="做FPGA的硬件dog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCyan的小站">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/03/27/%5BCS%5Ddma/" class="post-title-link" itemprop="url">关于DMA的一点心得</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>关于DMA</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/01/24/gymSeizor-2/">
+              <a class="btn" href="/2023/03/27/%5BCS%5Ddma/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -618,7 +650,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/01/02/[c++]const/">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[c++]LRU/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/header.jpg">
@@ -632,7 +664,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/01/02/%5Bc++%5Dconst/" class="post-title-link" itemprop="url">Use const whenever possible</a>
+            <a href="/2023/03/27/%5Bc++%5DLRU/" class="post-title-link" itemprop="url">内存页面置换算法</a>
         </h2>
 
         <div class="post-meta">
@@ -643,7 +675,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-01-02 00:00:00" itemprop="dateCreated datePublished" datetime="2022-01-02T00:00:00+08:00">2022-01-02</time>
+              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -651,7 +683,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/c/" itemprop="url" rel="index"><span itemprop="name">c++</span></a>
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
                 </span>
             </span>
 
@@ -666,10 +698,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>effective C++ 条款03</p>
+          <p>内存置换算法</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/01/02/%5Bc++%5Dconst/">
+              <a class="btn" href="/2023/03/27/%5Bc++%5DLRU/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -693,7 +725,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2021/11/05/gymSeizor-1/">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[c++]iostream/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/header.jpg">
@@ -707,7 +739,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/11/05/gymSeizor-1/" class="post-title-link" itemprop="url">气膜脚本的简单实现</a>
+            <a href="/2023/03/27/%5Bc++%5Diostream/" class="post-title-link" itemprop="url">IOtest</a>
         </h2>
 
         <div class="post-meta">
@@ -718,16 +750,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-11-05 14:03:55" itemprop="dateCreated datePublished" datetime="2021-11-05T14:03:55+08:00">2021-11-05</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-                </span>
+              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
             </span>
 
           
@@ -741,10 +764,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>谁能拒绝运动呢？</p>
+          <p>IOtest</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2021/11/05/gymSeizor-1/">
+              <a class="btn" href="/2023/03/27/%5Bc++%5Diostream/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -768,7 +791,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2020/11/04/[manual]shell/">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[acm]summary/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/header.jpg">
@@ -782,7 +805,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/11/04/%5Bmanual%5Dshell/" class="post-title-link" itemprop="url">Shell命令</a>
+            <a href="/2023/03/27/%5Bacm%5Dsummary/" class="post-title-link" itemprop="url">未命名</a>
         </h2>
 
         <div class="post-meta">
@@ -793,16 +816,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-11-04 22:21:53" itemprop="dateCreated datePublished" datetime="2020-11-04T22:21:53+08:00">2020-11-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%B8%AA%E4%BA%BA%E5%90%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">个人向手册</span></a>
-                </span>
+              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
             </span>
 
           
@@ -816,90 +830,68 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>linux&server</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/11/04/%5Bmanual%5Dshell/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2020/06/19/[Hexo]build_a_blog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/header.jpg">
-      <meta itemprop="name" content="DCyan">
-      <meta itemprop="description" content="做FPGA的硬件dog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DCyan的小站">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/19/%5BHexo%5Dbuild_a_blog/" class="post-title-link" itemprop="url">基于hexo的静态博客搭建</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-06-19 20:46:32" itemprop="dateCreated datePublished" datetime="2020-06-19T20:46:32+08:00">2020-06-19</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%B8%AA%E4%BA%BA%E5%90%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">个人向手册</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>记录手册，详细还是看官方文档吧</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/06/19/%5BHexo%5Dbuild_a_blog/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h2 id="面试问题汇总"><a href="#面试问题汇总" class="headerlink" title="面试问题汇总"></a>面试问题汇总</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><ol>
+<li><code>strlen</code>和<code>sizeof</code>区别？</li>
+</ol>
+<ul>
+<li><p>首先，<code>sizeof</code>是操作符，而<code>strlen</code>是库函数。<a href="#strlen&sizeof">相关源码</a></p>
+</li>
+<li><p><code>sizeof</code> 操作符用于计算一个变量或数据类型所占用的内存字节数，<strong>它是一个编译时确定的值</strong>。而<code>strlen</code> 函数用于计算一个以 null 结尾的字符串的长度，<strong>它是一个运行时确定的值</strong>。</p>
+</li>
+<li><p>举例说明。<code>sizeof(int)</code> 返回 4，表示 <code>int</code> 类型变量占用 4 个字节的内存空间。<code>sizeof(int[10])</code> 返回 40，表示一个包含 10 个 <code>int</code> 类型元素的数组占用 40 个字节的内存空间。</p>
+<p>而<code>strlen(&quot;hello&quot;)</code> 返回 5，表示字符串 “hello” 包含 5 个字符的长度。</p>
+</li>
+</ul>
+<hr>
+<p>2. </p>
+<h3 id="OS"><a href="#OS" class="headerlink" title="OS"></a>OS</h3><ol>
+<li>如何理解进程和线程</li>
+</ol>
+<ul>
+<li><p>进程是<strong>资源分配的最小单位</strong>。每个进程都拥有自己的内存空间、代码、数据和打开的文件等资源。进程之间相互独立，彼此不会干扰。进程可以被操作系统调度，分配时间片，实现并发执行。不同进程之间可以通过进程间通信（IPC）来进行数据交换和通信。进程的创建和销毁都需要操作系统进行相应的调度和资源分配，因此进程的开销比较大。</p>
+</li>
+<li><p>线程是进程中的一个执行单元，它是 <strong>CPU 调度和执行的最小单位</strong>。多个线程可以共享同一个进程的内存空间、代码和数据等资源，因此线程之间的通信和数据共享比进程之间更加方便和高效。线程之间的切换比进程之间的切换开销小，因此多线程的程序可以更加高效地利用系统资源。但是，由于多个线程共享同一个内存空间，因此线程之间的数据共享需要进行同步和互斥，否则会出现竞态条件和死锁等问题。</p>
+</li>
+</ul>
+<hr>
+<ol start="2">
+<li><p>线程之间共享的资源（代码段、堆、静态变量、全局变量）</p>
+</li>
+<li><p>操作系统或者c++提供了那些手段保证线程安全？（线程同步和互斥的手段）</p>
+</li>
+<li><p>结合上述手段，你能实现出线程池吗？他的原理是？从任务队列中取任务如何实现同步？ </p>
+</li>
+<li><p>如何评估一个线程池预设多少线程数量？线程数量太多会有什么问题？</p>
+</li>
+<li><p>一个进程最多能产生多少线程</p>
+</li>
+<li><p>线程池区分任务类型吗？CPU密集型或者IO密集型，线程池数量的评估</p>
+</li>
+<li><p>了解协程吗？</p>
+</li>
+<li><p>线程切换的资源消耗主要在何处？</p>
+</li>
+<li><p>线程切换的监控，如何发现是线程切换比较多？</p>
+</li>
+</ol>
+<h3 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h3><ol>
+<li><p>TCP可靠的网络传输协议的机制？</p>
+</li>
+<li><p>包确实传到了， 但由于比特反转导致包错误？（检验和字段检测）</p>
+</li>
+</ol>
+<h3 id="SQL-amp-Redis"><a href="#SQL-amp-Redis" class="headerlink" title="SQL&amp;Redis"></a>SQL&amp;Redis</h3><ol>
+<li><p>k-v查找的需求，那些数据结构可以实现？哈希表，红黑树，B+树索引，Redis中的五种基本数据类型</p>
+</li>
+<li><p>B+树具体怎么实现索引？为什么非叶子节点不存数据？</p>
+</li>
+<li><p>指定一个MYSQL查询，如何判断他是否使用索引</p>
+</li>
+</ol>
+<h3 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h3><ol>
+<li>linux系统命令，看系统上有哪些网络连接，数量和状态（netstat）</li>
+</ol>
+<h3 id="相关补充"><a href="#相关补充" class="headerlink" title="相关补充"></a>相关补充</h3><h4 id="strlen-amp-sizeof"><a href="#strlen-amp-sizeof" class="headerlink" title="strlen&amp;sizeof"></a>strlen&amp;sizeof</h4>
       
     </div>
 
@@ -917,7 +909,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -987,7 +979,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1000,7 +992,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1039,7 +1031,7 @@
 <div class="copyright">
   
   &copy; 2020 – 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

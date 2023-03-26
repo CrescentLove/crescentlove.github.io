@@ -267,12 +267,12 @@ Remote--"pull"-->Workspace</pre>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git branch [new branch name]    <span class="comment">#新建分支用来保存修改点后面的commit，方便一会合进来</span></span><br><span class="line">git <span class="built_in">log</span>     <span class="comment">#查看commit信息，选择对应commit号</span></span><br><span class="line">git reset --hard [commit号]     <span class="comment">#回退到此处然后开始修改</span></span><br><span class="line">git add [changed file]</span><br><span class="line">git commit -s --amend       <span class="comment">#使用amend修改commit，保持简洁</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>不冲突的话</li>
+<li>使用cherry-pick</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#下面开始把该处修改后面的commit合进来</span></span><br><span class="line">git <span class="built_in">log</span> [new branch name]   <span class="comment">#从刚才备份的branch里找到后面的所有commit号</span></span><br><span class="line">git cherry-pick [commit号]</span><br><span class="line">git push [remote repo] [localB]:[remoteB] --force   <span class="comment">#和remote会有冲突所以直接-f强制覆盖吧</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#下面开始把该处修改后面的commit合进来</span></span><br><span class="line">git <span class="built_in">log</span> [new branch name]   <span class="comment">#从刚才备份的branch里找到后面的所有commit号</span></span><br><span class="line">git cherry-pick [commit号]</span><br><span class="line"><span class="comment">#出现冲突手动修改后继续</span></span><br><span class="line">git push [remote repo] [localB]:[remoteB] --force   <span class="comment">#和remote会有冲突所以直接-f强制覆盖吧</span></span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>冲突的话</li>
+<li>使用patch</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#将后面的commit打成patch</span></span><br><span class="line">git format-patch -p1 [commit号]</span><br><span class="line">patch -p1 &lt; [patch file]</span><br><span class="line"><span class="comment">#此时会生成冲突提示文件.orig &amp; .rej,手动修改后git add &amp; commit即可</span></span><br></pre></td></tr></table></figure>
 
@@ -326,7 +326,10 @@ Remote--"pull"-->Workspace</pre>
     <a href="/2022/05/02/%5Bleetcode%5Drandnum/" rel="prev" title="【刷刷LeetCode】随机数">
       <i class="fa fa-chevron-left"></i> 【刷刷LeetCode】随机数
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/02/%5Bleetcode%5Dpriority_queue/" rel="next" title="【刷刷LeetCode】优先级队列">
+      【刷刷LeetCode】优先级队列 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -403,7 +406,7 @@ Remote--"pull"-->Workspace</pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -416,7 +419,7 @@ Remote--"pull"-->Workspace</pre>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -455,7 +458,7 @@ Remote--"pull"-->Workspace</pre>
 <div class="copyright">
   
   &copy; 2020 – 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

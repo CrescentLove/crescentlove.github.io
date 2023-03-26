@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Y-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/16gl-Y.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"crescentlove.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"percent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="面试问题汇总c++ strlen和sizeof区别？   首先，sizeof是操作符，而strlen是库函数。相关源码  sizeof 操作符用于计算一个变量或数据类型所占用的内存字节数，它是一个编译时确定的值。而strlen 函数用于计算一个以 null 结尾的字符串的长度，它是一个运行时确定的值。  举例说明。sizeof(int) 返回 4，表示 int 类型变量占用 4 个字节的内存空间。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DCyan的小站">
+<meta property="og:url" content="https://crescentlove.gitee.io/2023/03/27/[acm]summary/index.html">
+<meta property="og:site_name" content="DCyan的小站">
+<meta property="og:description" content="面试问题汇总c++ strlen和sizeof区别？   首先，sizeof是操作符，而strlen是库函数。相关源码  sizeof 操作符用于计算一个变量或数据类型所占用的内存字节数，它是一个编译时确定的值。而strlen 函数用于计算一个以 null 结尾的字符串的长度，它是一个运行时确定的值。  举例说明。sizeof(int) 返回 4，表示 int 类型变量占用 4 个字节的内存空间。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-03-26T17:39:34.583Z">
+<meta property="article:modified_time" content="2023-03-26T17:39:34.583Z">
+<meta property="article:author" content="DCyan">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://crescentlove.gitee.io/2023/03/27/[acm]summary/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | DCyan的小站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">DCyan的小站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-demo">
+
+    <a href="/demo/" rel="section"><i class="fa fa-podcast fa-fw"></i>应用</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[acm]summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="DCyan">
+      <meta itemprop="description" content="做FPGA的硬件dog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCyan的小站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="面试问题汇总"><a href="#面试问题汇总" class="headerlink" title="面试问题汇总"></a>面试问题汇总</h2><h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><ol>
+<li><code>strlen</code>和<code>sizeof</code>区别？</li>
+</ol>
+<ul>
+<li><p>首先，<code>sizeof</code>是操作符，而<code>strlen</code>是库函数。<a href="#strlen&sizeof">相关源码</a></p>
+</li>
+<li><p><code>sizeof</code> 操作符用于计算一个变量或数据类型所占用的内存字节数，<strong>它是一个编译时确定的值</strong>。而<code>strlen</code> 函数用于计算一个以 null 结尾的字符串的长度，<strong>它是一个运行时确定的值</strong>。</p>
+</li>
+<li><p>举例说明。<code>sizeof(int)</code> 返回 4，表示 <code>int</code> 类型变量占用 4 个字节的内存空间。<code>sizeof(int[10])</code> 返回 40，表示一个包含 10 个 <code>int</code> 类型元素的数组占用 40 个字节的内存空间。</p>
+<p>而<code>strlen(&quot;hello&quot;)</code> 返回 5，表示字符串 “hello” 包含 5 个字符的长度。</p>
+</li>
+</ul>
+<hr>
+<p>2. </p>
+<h3 id="OS"><a href="#OS" class="headerlink" title="OS"></a>OS</h3><ol>
+<li>如何理解进程和线程</li>
+</ol>
+<ul>
+<li><p>进程是<strong>资源分配的最小单位</strong>。每个进程都拥有自己的内存空间、代码、数据和打开的文件等资源。进程之间相互独立，彼此不会干扰。进程可以被操作系统调度，分配时间片，实现并发执行。不同进程之间可以通过进程间通信（IPC）来进行数据交换和通信。进程的创建和销毁都需要操作系统进行相应的调度和资源分配，因此进程的开销比较大。</p>
+</li>
+<li><p>线程是进程中的一个执行单元，它是 <strong>CPU 调度和执行的最小单位</strong>。多个线程可以共享同一个进程的内存空间、代码和数据等资源，因此线程之间的通信和数据共享比进程之间更加方便和高效。线程之间的切换比进程之间的切换开销小，因此多线程的程序可以更加高效地利用系统资源。但是，由于多个线程共享同一个内存空间，因此线程之间的数据共享需要进行同步和互斥，否则会出现竞态条件和死锁等问题。</p>
+</li>
+</ul>
+<hr>
+<ol start="2">
+<li><p>线程之间共享的资源（代码段、堆、静态变量、全局变量）</p>
+</li>
+<li><p>操作系统或者c++提供了那些手段保证线程安全？（线程同步和互斥的手段）</p>
+</li>
+<li><p>结合上述手段，你能实现出线程池吗？他的原理是？从任务队列中取任务如何实现同步？ </p>
+</li>
+<li><p>如何评估一个线程池预设多少线程数量？线程数量太多会有什么问题？</p>
+</li>
+<li><p>一个进程最多能产生多少线程</p>
+</li>
+<li><p>线程池区分任务类型吗？CPU密集型或者IO密集型，线程池数量的评估</p>
+</li>
+<li><p>了解协程吗？</p>
+</li>
+<li><p>线程切换的资源消耗主要在何处？</p>
+</li>
+<li><p>线程切换的监控，如何发现是线程切换比较多？</p>
+</li>
+</ol>
+<h3 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h3><ol>
+<li><p>TCP可靠的网络传输协议的机制？</p>
+</li>
+<li><p>包确实传到了， 但由于比特反转导致包错误？（检验和字段检测）</p>
+</li>
+</ol>
+<h3 id="SQL-amp-Redis"><a href="#SQL-amp-Redis" class="headerlink" title="SQL&amp;Redis"></a>SQL&amp;Redis</h3><ol>
+<li><p>k-v查找的需求，那些数据结构可以实现？哈希表，红黑树，B+树索引，Redis中的五种基本数据类型</p>
+</li>
+<li><p>B+树具体怎么实现索引？为什么非叶子节点不存数据？</p>
+</li>
+<li><p>指定一个MYSQL查询，如何判断他是否使用索引</p>
+</li>
+</ol>
+<h3 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h3><ol>
+<li>linux系统命令，看系统上有哪些网络连接，数量和状态（netstat）</li>
+</ol>
+<h3 id="相关补充"><a href="#相关补充" class="headerlink" title="相关补充"></a>相关补充</h3><h4 id="strlen-amp-sizeof"><a href="#strlen-amp-sizeof" class="headerlink" title="strlen&amp;sizeof"></a>strlen&amp;sizeof</h4>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/03/27/%5Bacm%5Dmeituan/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/03/27/%5Bc++%5Diostream/" rel="next" title="IOtest">
+      IOtest <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+      
+      
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB"><span class="nav-number">1.</span> <span class="nav-text">面试问题汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c"><span class="nav-number">1.1.</span> <span class="nav-text">c++</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OS"><span class="nav-number">1.2.</span> <span class="nav-text">OS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C"><span class="nav-number">1.3.</span> <span class="nav-text">网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL-amp-Redis"><span class="nav-number">1.4.</span> <span class="nav-text">SQL&amp;Redis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux"><span class="nav-number">1.5.</span> <span class="nav-text">linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%A1%A5%E5%85%85"><span class="nav-number">1.6.</span> <span class="nav-text">相关补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#strlen-amp-sizeof"><span class="nav-number">1.6.1.</span> <span class="nav-text">strlen&amp;sizeof</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DCyan"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">DCyan</p>
+  <div class="site-description" itemprop="description">做FPGA的硬件dog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/crescentlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;crescentlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:markdowndir@foxmail.com" title="E-Mail → mailto:markdowndir@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      <div id= "music163player">
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=386717&auto=0&height=66"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DCyan</span>
+</div>
+<!--
+-->
+
+
+  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -221,7 +221,26 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="module-insert"><a href="#module-insert" class="headerlink" title="module insert"></a>module insert</h2><p>Linux可以进行模块化的安装，但是要注意模块的编译版本应该和内核版本一致。</p>
+        <h3 id="编译内核"><a href="#编译内核" class="headerlink" title="编译内核"></a>编译内核</h3><ol>
+<li>下载源码，安装依赖，配置内核</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 在内核根目录下有一个内核配置的.config文件，可以通过`make menuconfig`打开UI配置，或直接复制当前内核的配置</span><br><span class="line">cp -v /boot/config-$(uname -r) .config</span><br><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="2">
+<li><p>编译内核</p>
+<p> 通常要去编译两方面，内核镜像<code>vmlinuz/bzImage</code>以及内核模块<code>.ko</code></p>
+<ul>
+<li><p>编译内核镜像</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make LOCALVERSION= bzImage -j64</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译内核模块</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make modules</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<h2 id="module-insert"><a href="#module-insert" class="headerlink" title="module insert"></a>module insert</h2><p>Linux可以进行模块化的安装，但是要注意模块的编译版本应该和内核版本一致。</p>
 <h4 id="Module-c"><a href="#Module-c" class="headerlink" title="Module.c"></a>Module.c</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span>     <span class="comment">/* 引入与模块相关的宏 */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/init.h&gt;</span>        <span class="comment">/* 引入module_init() and module_exit()函数 */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/moduleparam.h&gt;</span> <span class="comment">/* 引入module_param() */</span></span></span><br></pre></td></tr></table></figure>
 
 <h4 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h4><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://kernelnewbies.org/KernelBuild">https://kernelnewbies.org/KernelBuild</a></p>
@@ -315,7 +334,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#module-insert"><span class="nav-number">1.</span> <span class="nav-text">module insert</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Module-c"><span class="nav-number">1.0.1.</span> <span class="nav-text">Module.c</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Makefile"><span class="nav-number">1.0.2.</span> <span class="nav-text">Makefile</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">2.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8"><span class="nav-number">1.</span> <span class="nav-text">编译内核</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#module-insert"><span class="nav-number"></span> <span class="nav-text">module insert</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Module-c"><span class="nav-number">0.1.</span> <span class="nav-text">Module.c</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Makefile"><span class="nav-number">0.2.</span> <span class="nav-text">Makefile</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number"></span> <span class="nav-text">参考链接</span></a></div>
       </div>
       <!--/noindex-->
 
@@ -331,7 +350,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -344,7 +363,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -383,7 +402,7 @@
 <div class="copyright">
   
   &copy; 2020 – 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
