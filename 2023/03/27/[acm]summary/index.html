@@ -221,21 +221,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="c"><a href="#c" class="headerlink" title="c++"></a>c++</h3><ol>
+        <h3 id="A"><a href="#A" class="headerlink" title="A"></a>A</h3><ol>
 <li><code>strlen</code>和<code>sizeof</code>区别？</li>
 </ol>
 <ul>
-<li><p>首先，<code>sizeof</code>是操作符，而<code>strlen</code>是库函数。<a href="#strlen&sizeof">相关源码</a></p>
-</li>
-<li><p><code>sizeof</code> 操作符用于计算一个变量或数据类型所占用的内存字节数，<strong>它是一个编译时确定的值</strong>。而<code>strlen</code> 函数用于计算一个以 null 结尾的字符串的长度，<strong>它是一个运行时确定的值</strong>。</p>
-</li>
-<li><p>举例说明。<code>sizeof(int)</code> 返回 4，表示 <code>int</code> 类型变量占用 4 个字节的内存空间。<code>sizeof(int[10])</code> 返回 40，表示一个包含 10 个 <code>int</code> 类型元素的数组占用 40 个字节的内存空间。</p>
-<p>而<code>strlen(&quot;hello&quot;)</code> 返回 5，表示字符串 “hello” 包含 5 个字符的长度。</p>
-</li>
+<li>首先，<code>sizeof</code>是操作符，而<code>strlen</code>是库函数。<a href="#strlen&sizeof">相关源码</a></li>
+<li><code>sizeof</code> 操作符用于计算一个变量或数据类型所占用的内存字节数，<strong>它是一个编译时确定的值</strong>。而<code>strlen</code> 函数用于计算一个以 null 结尾的字符串的长度，<strong>它是一个运行时确定的值</strong>。</li>
+<li>举例说明。<code>sizeof(int)</code> 返回 4，表示 <code>int</code> 类型变量占用 4 个字节的内存空间。<code>sizeof(int[10])</code> 返回 40，表示一个包含 10 个 <code>int</code> 类型元素的数组占用 40 个字节的内存空间。而<code>strlen(&quot;hello&quot;)</code> 返回 5，表示字符串 “hello” 包含 5 个字符的长度。</li>
 </ul>
 <hr>
-<p>2. </p>
-<h3 id="OS"><a href="#OS" class="headerlink" title="OS"></a>OS</h3><ol>
+<ol start="2">
 <li>如何理解进程和线程</li>
 </ol>
 <ul>
@@ -245,9 +240,15 @@
 </li>
 </ul>
 <hr>
-<ol start="2">
-<li><p>线程之间共享的资源（代码段、堆、静态变量、全局变量）</p>
-</li>
+<ol start="3">
+<li>线程之间共享的资源（代码段、堆、静态变量、全局变量）</li>
+</ol>
+<ul>
+<li>首先关于进程虚拟空间内的资源，代码段，堆内存&amp;静态变量和全局变量(数据段里)  </li>
+<li>值得注意的是还有文件描述符和信号锁互斥量等涉及到同步互斥的资源。</li>
+</ul>
+<hr>
+<ol start="3">
 <li><p>操作系统或者c++提供了那些手段保证线程安全？（线程同步和互斥的手段）</p>
 </li>
 <li><p>结合上述手段，你能实现出线程池吗？他的原理是？从任务队列中取任务如何实现同步？ </p>
@@ -256,28 +257,87 @@
 </li>
 <li><p>一个进程最多能产生多少线程</p>
 </li>
-<li><p>线程池区分任务类型吗？CPU密集型或者IO密集型，线程池数量的评估</p>
-</li>
-<li><p>了解协程吗？</p>
-</li>
-<li><p>线程切换的资源消耗主要在何处？</p>
-</li>
-<li><p>线程切换的监控，如何发现是线程切换比较多？</p>
-</li>
 </ol>
-<h3 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h3><ol>
+<ul>
+<li>既跟虚拟空间内存上限有关，也跟系统参数限制有关（threads-max&#x2F;pid-max&#x2F;max_map_count）</li>
+<li>linux下32位系统每个进程4G虚拟空间，其中3G用户空间，按照linux默认每个线程分配8M栈空间，大约能创建300个线程</li>
+<li>64位系统每个进程128T用户空间，理论上无上限，只会受到系统参数的限制（也受到物理内存的一些限制）</li>
+</ul>
+<hr>
+<ol start="7">
+<li>线程池区分任务类型吗？CPU密集型或者IO密集型，线程池数量的评估</li>
+</ol>
+<ul>
+<li>CPU密集型任务，需要大量计算，线程执行时间长，所以一般按CPU核心数的1.5-2倍</li>
+<li>IO密集型任务，需要考虑IO操作的耗时，耗时长的可以增加线程池大小，提高并发能力；耗时短的就可以减少线程池大小，避免上下文开销</li>
+</ul>
+<hr>
+<ol start="8">
+<li>了解协程吗？</li>
+</ol>
+<ul>
+<li>协程最大的优势是避免了进程和线程在切换时的内核态用户态切换（上下文切换）。</li>
+<li>一般也把协程称为用户线程，多个用户线程对应一个内核线程，由用户程序控制管理，由私有TCB块跟踪状态。</li>
+<li>因为都在一个线程下，不存在写冲突，所以不需要锁，只需要判断数据状态（待补充）。</li>
+</ul>
+<hr>
+<ol start="9">
+<li>线程切换的资源消耗主要在何处？</li>
+</ol>
+<ul>
+<li>上下文：切换时需要1.保存（切走的）2.恢复（切来的）线程上下文信息，包括寄存器，堆栈指针，程序计数器等</li>
+<li>缓存失效：切换时缓存里的数据就失效了，需要重新加载数据，建立新缓存</li>
+<li>用户态内核态切换：内核线程需要操作系统维护进程线程上下文（PCB, TCB等），切换时需要系统调用，中断处理等。</li>
+<li>任务队列的锁操作：切换时需要加解锁保证互斥同步。</li>
+</ul>
+<hr>
+<ol start="10">
+<li>线程切换的监控，如何发现是线程切换比较多？</li>
+</ol>
+<ul>
+<li>系统监控工具如top&#x2F;vmstat，性能分析工具如strace&#x2F;perf</li>
+<li>优化方式：使用线程池，异步IO，多进程+协程，避免线程阻塞。</li>
+</ul>
+<hr>
+<ol start="11">
 <li><p>TCP可靠的网络传输协议的机制？</p>
 </li>
 <li><p>包确实传到了， 但由于比特反转导致包错误？（检验和字段检测）</p>
 </li>
 </ol>
-<h3 id="SQL-amp-Redis"><a href="#SQL-amp-Redis" class="headerlink" title="SQL&amp;Redis"></a>SQL&amp;Redis</h3><ol>
-<li><p>k-v查找的需求，那些数据结构可以实现？哈希表，红黑树，B+树索引，Redis中的五种基本数据类型</p>
-</li>
-<li><p>B+树具体怎么实现索引？为什么非叶子节点不存数据？</p>
-</li>
-<li><p>指定一个MYSQL查询，如何判断他是否使用索引</p>
-</li>
+<ul>
+<li>TCP校验和：发送端会算出一个校验和，接收端算出验证值和校验和做对比，不同则需要数据重传</li>
+<li>数据冗余：考虑到校验和发生比特反转上面的方法就失效了，所以最好结合数据冗余&#x2F;数据压缩的方法</li>
+</ul>
+<hr>
+<ol start="13">
+<li>k-v查找的需求，那些数据结构可以实现？哈希表，红黑树，B+树索引，Redis中的五种基本数据类型</li>
+</ol>
+<ul>
+<li>哈希表:$O_T(1)$,但是空间复杂度高，还有哈希冲突; 红黑树:$O_T(logN)$,$O_S()$，空间复杂度高，增删之后有树的平衡操作</li>
+<li>B树&#x2F;B+树:$O_T(logN)$，消耗计算资源。（待补充）</li>
+</ul>
+<hr>
+<ol start="14">
+<li>B+树具体怎么实现索引？为什么非叶子节点不存数据？</li>
+</ol>
+<p>-<br>15. 指定一个MYSQL查询，如何判断他是否使用索引</p>
+<h3 id="B"><a href="#B" class="headerlink" title="B"></a>B</h3><ol start="4">
+<li>项目用到的什么数据库，说下mysql的事务隔离级别</li>
+<li>四个隔离级别分别解决了哪些问题</li>
+<li>读已提交和可重复读的区别</li>
+<li>可重复读解决了幻读吗？mvcc的概念</li>
+<li>快照读和当前读的区别</li>
+<li>除了insert外，还有哪些sql语句会加锁</li>
+<li>主键索引和辅助索引(二级索引) 都会加间隙锁吗</li>
+<li>你项目里用到了redis，说下你怎么用redis的，redis还有哪些具体应用场景</li>
+<li>redis的持久化有哪些方式</li>
+<li>aof和rdb分别有什么优势和缺点，实际应用场景怎么选择</li>
+<li>redis是单线程，为什么性能还这么好，说具体一点</li>
+<li>IO多路复用</li>
+<li>redis有哪些数据类型，底层用了哪些数据结构</li>
+<li>零拷贝的概念，实现方式，有什么优势</li>
+<li>除了sendfile还有哪种方式实现零拷贝(mmap)，mmap的应用场景</li>
 </ol>
 <h3 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h3><ol>
 <li>linux系统命令，看系统上有哪些网络连接，数量和状态（netstat）</li>
@@ -369,7 +429,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#c"><span class="nav-number">1.</span> <span class="nav-text">c++</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OS"><span class="nav-number">2.</span> <span class="nav-text">OS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C"><span class="nav-number">3.</span> <span class="nav-text">网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL-amp-Redis"><span class="nav-number">4.</span> <span class="nav-text">SQL&amp;Redis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux"><span class="nav-number">5.</span> <span class="nav-text">linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%A1%A5%E5%85%85"><span class="nav-number">6.</span> <span class="nav-text">相关补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#strlen-amp-sizeof"><span class="nav-number">6.1.</span> <span class="nav-text">strlen&amp;sizeof</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#A"><span class="nav-number">1.</span> <span class="nav-text">A</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B"><span class="nav-number">2.</span> <span class="nav-text">B</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux"><span class="nav-number">3.</span> <span class="nav-text">linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%A1%A5%E5%85%85"><span class="nav-number">4.</span> <span class="nav-text">相关补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#strlen-amp-sizeof"><span class="nav-number">4.1.</span> <span class="nav-text">strlen&amp;sizeof</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
