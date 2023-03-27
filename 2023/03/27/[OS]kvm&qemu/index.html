@@ -239,9 +239,13 @@
 <li><strong>页共享（Page Sharing）</strong>：因为多个guest相当于是多个qemu进程，会有很多相同内存页。KSM功能扫描相同内存页进行合并，附加标志位Copy On Write。也就是在要脏页的时候赶紧复制一份去写操作。</li>
 </ul>
 <h4 id="透明大页THP"><a href="#透明大页THP" class="headerlink" title="透明大页THP"></a>透明大页THP</h4><h3 id="一个典型的KVM调用流程"><a href="#一个典型的KVM调用流程" class="headerlink" title="一个典型的KVM调用流程"></a>一个典型的KVM调用流程</h3><ul>
-<li>guest执行特权指令<pre class="mermaid">graph LR</pre></li>
+<li>guest执行特权指令<pre class="mermaid">graph LR
+guest[guest]--"触发VMExit"-->call[执行VMCALL]
+call-->exec[VMM处理]
+exec-->resume[执行VMRESUME]
+resume--"触发VMEntry"-->guest</pre></li>
 </ul>
-<p>guest[guest]–”触发VMExit”–&gt;call[执行VMCALL]–&gt;exec[VMM处理]–&gt;resume[执行VMRESUME]–”触发VMEntry”–&gt;guest<br><strong>在VMExit和VMEntry的上下文切换时，我们也需要类似PCB&#x2F;TCB这样的控制块来保存上下文切换所需的信息，在KVM里VMX提供了VMCS结构。</strong>其中control data保存触发模式切换的事件及原因；Guest state 保存Guest运行时状态，在VMEntry时加载；Host state保存VMM运行时状态，在VMExit时加载。</p>
+<p><strong>在VMExit和VMEntry的上下文切换时，我们也需要类似PCB&#x2F;TCB这样的控制块来保存上下文切换所需的信息，在KVM里VMX提供了VMCS结构。</strong>其中control data保存触发模式切换的事件及原因；Guest state 保存Guest运行时状态，在VMEntry时加载；Host state保存VMM运行时状态，在VMExit时加载。</p>
 <h2 id="QEMU"><a href="#QEMU" class="headerlink" title="QEMU"></a>QEMU</h2><p>根据之前<a href="#%E4%B8%80%E4%B8%AA%E5%85%B8%E5%9E%8B%E7%9A%84KVM%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B">VM执行特权指令流程</a>，如果guest频繁发起IO操作请求，系统会一直触发VMExit&#x2F;VMEntry，一直在VMX root和non-root模式下切换，资源消耗大。</p>
 <p>我们可以通过virtio驱动实现IO设备半虚拟化。VM里部署前端驱动，QEMU里部署后端驱动，<strong>在这两层之间实现一个环形缓冲区virtio-ring，保存IO请求与执行信息。</strong></p>
 <ul>
