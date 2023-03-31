@@ -221,7 +221,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="A"><a href="#A" class="headerlink" title="A"></a>A</h3><ol>
+        <h3 id="美团"><a href="#美团" class="headerlink" title="美团"></a>美团</h3><ol>
 <li><code>strlen</code>和<code>sizeof</code>区别？</li>
 </ol>
 <ul>
@@ -322,25 +322,59 @@
 <li>B+树具体怎么实现索引？为什么非叶子节点不存数据？</li>
 </ol>
 <p>-<br>15. 指定一个MYSQL查询，如何判断他是否使用索引</p>
-<h3 id="B"><a href="#B" class="headerlink" title="B"></a>B</h3><ol start="4">
-<li>项目用到的什么数据库，说下mysql的事务隔离级别</li>
-<li>四个隔离级别分别解决了哪些问题</li>
-<li>读已提交和可重复读的区别</li>
-<li>可重复读解决了幻读吗？mvcc的概念</li>
-<li>快照读和当前读的区别</li>
-<li>除了insert外，还有哪些sql语句会加锁</li>
-<li>主键索引和辅助索引(二级索引) 都会加间隙锁吗</li>
-<li>你项目里用到了redis，说下你怎么用redis的，redis还有哪些具体应用场景</li>
-<li>redis的持久化有哪些方式</li>
-<li>aof和rdb分别有什么优势和缺点，实际应用场景怎么选择</li>
-<li>redis是单线程，为什么性能还这么好，说具体一点</li>
-<li>IO多路复用</li>
-<li>redis有哪些数据类型，底层用了哪些数据结构</li>
-<li>零拷贝的概念，实现方式，有什么优势</li>
-<li>除了sendfile还有哪种方式实现零拷贝(mmap)，mmap的应用场景</li>
+<h3 id="蚂蚁"><a href="#蚂蚁" class="headerlink" title="蚂蚁"></a>蚂蚁</h3><ol>
+<li>Reactor 模型（为什么用Reactor，Reactor解决了什么实际问题，假设线程池有100个线程，但有1000个用户同时使用，Reactor的具体表现，前端用户的体验是什么样的）和 Proactor模型</li>
+<li>IO多路复用的流程和原理</li>
+<li>epoll、poll、select特点和区别</li>
+<li>有没有考虑程序崩溃情景，项目程序崩溃了怎么办</li>
+<li>为什么裸写socket编程而不是使用一些成熟的协议</li>
+<li>TCP如何保证可靠传输</li>
+<li>使用TCP编程时，如果服务端程序崩溃了，那么客户端会出现什么情况（分两种情况，服务器关机挂或者服务器上进程挂）<br>11、服务器关机时，一定要等到客户端触发TCP的keepalive后客户端才会关闭吗，有什么优化方法吗<br>12、线程池的参数<br>13、线程和进程的区别（除了常规八股文以外，回答过程中牵扯到了Linux内核源码，给自己挖了坑）<br>14、你看过Linux内核源码吗？（因为怕被问源码所以赶紧回答看过一些源码解析）<br>15、线程之间共享全局变量如何协调<br>16、为什么使用条件变量时总会使用互斥锁<br>17、自己有没有碰到过C++的内存泄漏<br>18、对于大一点的项目如何快速找出C++内存泄漏的代码<br>19、C++中的虚函数<br>20、构造函数能不能是虚函数<br>21、能不能在构造函数中调用虚函数，会不会编译报错，能不能实现多态<br>22、析构函数能不能是虚函数，为什么析构函数要是虚函数<br>23、C++和python有什么区别<br>24、手撕代码：链表重排序，将1 2 3 4 5重排成1 5 2 4 3<br>25、调用new之后底层会做什么<br>26、操作系统如何分配内存，从哪里分配内存<br>27、归还内存时操作系统会做什么</li>
 </ol>
-<h3 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h3><ol>
-<li>linux系统命令，看系统上有哪些网络连接，数量和状态（netstat）</li>
+<h3 id="B"><a href="#B" class="headerlink" title="B"></a>B</h3><ol start="4">
+<li><p>项目用到的什么数据库，说下mysql的事务隔离级别</p>
+</li>
+<li><p>四个隔离级别分别解决了哪些问题</p>
+</li>
+<li><p>读已提交和可重复读的区别</p>
+</li>
+<li><p>可重复读解决了幻读吗？mvcc的概念</p>
+</li>
+<li><p>快照读和当前读的区别</p>
+</li>
+<li><p>除了insert外，还有哪些sql语句会加锁</p>
+</li>
+<li><p>主键索引和辅助索引(二级索引) 都会加间隙锁吗</p>
+</li>
+<li><p>你项目里用到了redis，说下你怎么用redis的，redis还有哪些具体应用场景</p>
+</li>
+<li><p>redis的持久化有哪些方式</p>
+</li>
+<li><p>aof和rdb分别有什么优势和缺点，实际应用场景怎么选择</p>
+</li>
+<li><p>redis是单线程，为什么性能还这么好，说具体一点</p>
+</li>
+<li><p>IO多路复用</p>
+</li>
+<li><p>redis有哪些数据类型，底层用了哪些数据结构</p>
+</li>
+<li><p>零拷贝的概念，实现方式，有什么优势</p>
+</li>
+<li><p>除了sendfile还有哪种方式实现零拷贝(mmap)，mmap的应用场景</p>
+</li>
+<li><p>linux系统命令，看系统上有哪些网络连接，数量和状态（netstat）</p>
+</li>
+</ol>
+<h3 id="快手"><a href="#快手" class="headerlink" title="快手"></a>快手</h3><ol>
+<li>常用的进程调度算法及优缺点</li>
+<li>kernel内置的CFS实现，和RR比起来有何异同&#x2F;优劣，有何调优思路</li>
+<li>实现一个简单的系统调用，如何在内核里注册一个系统调用</li>
+<li>内存分页分段优劣，多级页表？</li>
+<li>大页如何实现？有何优劣？（TLB相关），透明大页的实现。</li>
+<li>EPT怎么做内存转换？</li>
+<li>VM访问硬件时的中断过程与实现</li>
+<li>如何把网卡的数据读到VM里的</li>
+<li>内存置换算法</li>
 </ol>
 <h3 id="相关补充"><a href="#相关补充" class="headerlink" title="相关补充"></a>相关补充</h3><h4 id="strlen-amp-sizeof"><a href="#strlen-amp-sizeof" class="headerlink" title="strlen&amp;sizeof"></a>strlen&amp;sizeof</h4>
     </div>
@@ -362,12 +396,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/01/02/%5Bleetcode%5Dpriority_queue/" rel="prev" title="【刷刷LeetCode】优先级队列">
-      <i class="fa fa-chevron-left"></i> 【刷刷LeetCode】优先级队列
+    <a href="/2023/02/21/%5BOS%5DTDX/" rel="prev" title="TDX">
+      <i class="fa fa-chevron-left"></i> TDX
     </a></div>
       <div class="post-nav-item">
-    <a href="/2023/03/27/%5Bc++%5Diostream/" rel="next" title="IOtest">
-      IOtest <i class="fa fa-chevron-right"></i>
+    <a href="/2023/03/27/%5Bacm%5Dmeituan/" rel="next" title="笔试题汇总">
+      笔试题汇总 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -429,7 +463,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#A"><span class="nav-number">1.</span> <span class="nav-text">A</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B"><span class="nav-number">2.</span> <span class="nav-text">B</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux"><span class="nav-number">3.</span> <span class="nav-text">linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%A1%A5%E5%85%85"><span class="nav-number">4.</span> <span class="nav-text">相关补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#strlen-amp-sizeof"><span class="nav-number">4.1.</span> <span class="nav-text">strlen&amp;sizeof</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BE%8E%E5%9B%A2"><span class="nav-number">1.</span> <span class="nav-text">美团</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%9A%82%E8%9A%81"><span class="nav-number">2.</span> <span class="nav-text">蚂蚁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B"><span class="nav-number">3.</span> <span class="nav-text">B</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E6%89%8B"><span class="nav-number">4.</span> <span class="nav-text">快手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%A1%A5%E5%85%85"><span class="nav-number">5.</span> <span class="nav-text">相关补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#strlen-amp-sizeof"><span class="nav-number">5.1.</span> <span class="nav-text">strlen&amp;sizeof</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

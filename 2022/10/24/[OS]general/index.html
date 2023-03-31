@@ -20,22 +20,21 @@
     var CONFIG = {"hostname":"crescentlove.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"percent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="关于DMA">
+  <meta name="description" content="nothing">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于DMA的一点心得">
-<meta property="og:url" content="https://crescentlove.gitee.io/2023/03/27/[CS]dma/index.html">
+<meta property="og:title" content="内核之">
+<meta property="og:url" content="https://crescentlove.gitee.io/2022/10/24/[OS]general/index.html">
 <meta property="og:site_name" content="DCyan的小站">
-<meta property="og:description" content="关于DMA">
+<meta property="og:description" content="nothing">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://gitee.com/crescentlove/picgo-base/raw/master/img/genshinGYlook.jpeg/">
-<meta property="article:published_time" content="2023-03-26T17:39:34.680Z">
-<meta property="article:modified_time" content="2023-03-26T17:39:34.680Z">
+<meta property="article:published_time" content="2022-10-24T06:48:52.000Z">
+<meta property="article:modified_time" content="2022-10-24T06:48:52.000Z">
 <meta property="article:author" content="DCyan">
-<meta property="article:tag" content=" - linux  -">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="os">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/crescentlove/picgo-base/raw/master/img/genshinGYlook.jpeg/">
 
-<link rel="canonical" href="https://crescentlove.gitee.io/2023/03/27/[CS]dma/">
+<link rel="canonical" href="https://crescentlove.gitee.io/2022/10/24/[OS]general/">
 
 
 <script id="page-configurations">
@@ -48,7 +47,7 @@
   };
 </script>
 
-  <title>关于DMA的一点心得 | DCyan的小站</title>
+  <title>内核之 | DCyan的小站</title>
   
 
 
@@ -174,7 +173,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/03/27/[CS]dma/">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/10/24/[OS]general/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/header.jpg">
@@ -187,7 +186,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          关于DMA的一点心得
+          内核之
         </h1>
 
         <div class="post-meta">
@@ -198,11 +197,20 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2023-03-27 01:39:34" itemprop="dateCreated datePublished" datetime="2023-03-27T01:39:34+08:00">2023-03-27</time>
+              <time title="创建时间：2022-10-24 14:48:52" itemprop="dateCreated datePublished" datetime="2022-10-24T14:48:52+08:00">2022-10-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
             </span>
 
           
-            <div class="post-description">关于DMA</div>
+            <div class="post-description">nothing</div>
 
         </div>
       </header>
@@ -213,9 +221,33 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><img src="https://gitee.com/crescentlove/picgo-base/raw/master/img/genshinGYlook.jpeg/"></p>
-<h2 id="存储结构"><a href="#存储结构" class="headerlink" title="存储结构"></a>存储结构</h2><p>在介绍DMA之前，首先我们要简单了解一下计算机的存储结构，从速度最快的CPU寄存器到缓存到速度最慢的磁盘。<br>cpu缓存使用SRAM，通常分为</p>
-<h2 id="Direct-Memory-Access（DMA）"><a href="#Direct-Memory-Access（DMA）" class="headerlink" title="Direct Memory Access（DMA）"></a>Direct Memory Access（DMA）</h2>
+        <h3 id="编译内核"><a href="#编译内核" class="headerlink" title="编译内核"></a>编译内核</h3><ol>
+<li>下载源码，安装依赖，配置内核</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 在内核根目录下有一个内核配置的.config文件，可以通过`make menuconfig`打开UI配置，或直接复制当前内核的配置</span><br><span class="line">cp -v /boot/config-$(uname -r) .config</span><br><span class="line">make menuconfig</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="2">
+<li><p>编译内核</p>
+<p> 通常要去编译两方面，内核镜像<code>vmlinuz/bzImage</code>以及内核模块<code>.ko</code></p>
+<ul>
+<li><p>编译内核镜像</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make LOCALVERSION= bzImage -j64</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译内核模块</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make modules</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<h2 id="module-insert"><a href="#module-insert" class="headerlink" title="module insert"></a>module insert</h2><p>Linux可以进行模块化的安装，但是要注意模块的编译版本应该和内核版本一致。</p>
+<h4 id="Module-c"><a href="#Module-c" class="headerlink" title="Module.c"></a>Module.c</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span>     <span class="comment">/* 引入与模块相关的宏 */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/init.h&gt;</span>        <span class="comment">/* 引入module_init() and module_exit()函数 */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/moduleparam.h&gt;</span> <span class="comment">/* 引入module_param() */</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h4><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://kernelnewbies.org/KernelBuild">https://kernelnewbies.org/KernelBuild</a></p>
+<p><a target="_blank" rel="noopener" href="https://kernelnewbies.org/OutreachyfirstpatchSetup">https://kernelnewbies.org/OutreachyfirstpatchSetup</a></p>
+<p><a target="_blank" rel="noopener" href="https://kernelnewbies.org/FirstKernelPatch">https://kernelnewbies.org/FirstKernelPatch</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.linuxidc.com/Linux/2016-12/137794.htm">http://www.linuxidc.com/Linux/2016-12/137794.htm</a> <a target="_blank" rel="noopener" href="https://lkw.readthedocs.io/en/latest/doc/02_kernel_compilation.html">https://lkw.readthedocs.io/en/latest/doc/02_kernel_compilation.html</a></p>
+
     </div>
 
     
@@ -225,7 +257,8 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i>  - linux  -</a>
+              <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i> linux</a>
+              <a href="/tags/os/" rel="tag"><i class="fa fa-tag"></i> os</a>
           </div>
 
         
@@ -234,12 +267,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/03/27/%5Bc++%5DLRU/" rel="prev" title="内存页面置换算法">
-      <i class="fa fa-chevron-left"></i> 内存页面置换算法
+    <a href="/2022/10/24/%5BOS%5Dapic&xapic/" rel="prev" title="APIC">
+      <i class="fa fa-chevron-left"></i> APIC
     </a></div>
       <div class="post-nav-item">
-    <a href="/2023/03/27/%5Bleetcoe%5Dlistcode/" rel="next" title="链表基础">
-      链表基础 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/11/01/%5Bmanual%5Dgit&scp/" rel="next" title="远程开发的一点使用">
+      远程开发的一点使用 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -301,7 +334,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">存储结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Direct-Memory-Access%EF%BC%88DMA%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">Direct Memory Access（DMA）</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8"><span class="nav-number">1.</span> <span class="nav-text">编译内核</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#module-insert"><span class="nav-number"></span> <span class="nav-text">module insert</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Module-c"><span class="nav-number">0.1.</span> <span class="nav-text">Module.c</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Makefile"><span class="nav-number">0.2.</span> <span class="nav-text">Makefile</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number"></span> <span class="nav-text">参考链接</span></a></div>
       </div>
       <!--/noindex-->
 
