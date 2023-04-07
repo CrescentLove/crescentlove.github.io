@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Y-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/16gl-Y.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"crescentlove.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"percent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="谁能拒绝运动呢？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="气膜脚本的简单实现">
+<meta property="og:url" content="https://crescentlove.gitee.io/2021/11/05/demo_gymSeizor1/index.html">
+<meta property="og:site_name" content="DCyan的小站">
+<meta property="og:description" content="谁能拒绝运动呢？">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-11-05T06:03:55.000Z">
+<meta property="article:modified_time" content="2021-11-05T06:03:55.000Z">
+<meta property="article:author" content="DCyan">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="requests库">
+<meta property="article:tag" content="json">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://crescentlove.gitee.io/2021/11/05/demo_gymSeizor1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>气膜脚本的简单实现 | DCyan的小站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">DCyan的小站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-demo">
+
+    <a href="/demo/" rel="section"><i class="fa fa-podcast fa-fw"></i>应用</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2021/11/05/demo_gymSeizor1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="DCyan">
+      <meta itemprop="description" content="做FPGA的硬件dog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCyan的小站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          气膜脚本的简单实现
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-05 14:03:55" itemprop="dateCreated datePublished" datetime="2021-11-05T14:03:55+08:00">2021-11-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">谁能拒绝运动呢？</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li><input disabled type="checkbox"> 主体在【简易流程】和【用到的库】中，作为手册存档</li>
+<li><input disabled type="checkbox"> 【我需要了解什么】是个人在实现过程中觉得有用的基础知识</li>
+</ul>
+<p>需要的技能点</p>
+<ul>
+<li>requests库</li>
+<li>json库</li>
+<li>time和datetime库</li>
+<li>logger重定向</li>
+<li>……</li>
+</ul>
+<h2 id="简易流程"><a href="#简易流程" class="headerlink" title="简易流程"></a>简易流程</h2><h4 id="登录账号"><a href="#登录账号" class="headerlink" title="登录账号"></a>登录账号</h4><p>通过浏览器F12打开开发者模式，进行一次登录获得登录所需url和请求头。</p>
+<p>调用requests库的get方法<code>requests.get(url,headers=xxx,params=xxx)</code>，获得的响应体可以通过查询status_code来确定是否获得响应。</p>
+<p><code>reponse.status_code == 200</code>代表响应成功</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">loGin</span>(<span class="params">usag</span>):</span></span><br><span class="line">    st_log = <span class="number">0</span></span><br><span class="line">    localUrl = <span class="string">&#x27;https://sports.sjtu.edu.cn/pc/?&#x27;</span></span><br><span class="line">    localParam = &#123;<span class="string">&#x27;locale&#x27;</span>: <span class="string">&#x27;zh&#x27;</span>&#125;</span><br><span class="line">    </span><br><span class="line">    UserAgent = usag</span><br><span class="line">    localHeader = &#123;</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: UserAgent</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">    	loginRes = requests.get(localUrl, headers=localHeader, params=localParam)</span><br><span class="line">    	<span class="keyword">if</span> loginRes.status_code == <span class="number">200</span>:</span><br><span class="line">        	<span class="built_in">print</span>(<span class="string">&#x27;Successful--login&#x27;</span>)</span><br><span class="line">        	st_log = <span class="number">1</span></span><br><span class="line">    <span class="keyword">except</span> ConnectionError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;login.py--&#x27;</span>,e)</span><br><span class="line">    <span class="keyword">return</span> st_log</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="发送请求"><a href="#发送请求" class="headerlink" title="发送请求"></a>发送请求</h4><p>模拟名为confirmOrder的post请求，查看发现请求负载为json串：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">&quot;venTypeId&quot;</span>:<span class="string">&quot;29942202-d2ac-448e-90b7-14d3c6be19ff&quot;</span>,<span class="attr">&quot;venueId&quot;</span>:<span class="string">&quot;3b10ff47-7e83-4c21-816c-5edc257168c1&quot;</span>,<span class="attr">&quot;fieldType&quot;</span>:<span class="string">&quot;羽毛球&quot;</span>,<span class="attr">&quot;returnUrl&quot;</span>:<span class="string">&quot;https://sports.sjtu.edu.cn/#/paymentResult/1&quot;</span>,<span class="attr">&quot;scheduleDate&quot;</span>:<span class="string">&quot;2021-11-02&quot;</span>,spaces<span class="attr">&quot;:[&#123;&quot;</span>count<span class="attr">&quot;:1,&quot;</span>venuePrice<span class="attr">&quot;:&quot;</span>9<span class="attr">&quot;,&quot;</span>status<span class="attr">&quot;:1,&quot;</span>scheduleTime<span class="attr">&quot;:&quot;</span>21:<span class="number">00</span><span class="number">-22</span>:<span class="number">00</span><span class="string">&quot;,&quot;</span>subSitename<span class="string">&quot;:&quot;</span>场地<span class="number">5</span><span class="string">&quot;,&quot;</span>tensity<span class="string">&quot;:&quot;</span><span class="number">1</span><span class="string">&quot;,&quot;</span>venueNum<span class="string">&quot;:1&#125;],&quot;</span>tenSity<span class="string">&quot;:&quot;</span>紧张<span class="string">&quot;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>那么只需要模拟post请求的请求头把负载发出去即可。</p>
+<p>此处调用requests库的post方法<code>requests.post(url,headers=xxx,data=xxx)</code>，获得的响应体可以通过查询<code>status_code</code>来确定是否获得响应。</p>
+<p>【注】请求负载为json类型，得注意转换。</p>
+<p>【注】请求头里一定要包含<code>Content-Type</code>，告知服务器请求负载为json类型，字符集为<code>UTF-8</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Confirmdata = json.dumps(data)</span><br><span class="line">ConfirmUrl = <span class="string">&#x27;https://sports.sjtu.edu.cn/venue/personal/ConfirmOrder&#x27;</span></span><br><span class="line">ConHeader = &#123;</span><br><span class="line">    <span class="string">&#x27;User-Agent&#x27;</span>: UserAgent,</span><br><span class="line">    <span class="string">&#x27;Cookie&#x27;</span>: ConfirmCookie,</span><br><span class="line">    <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;application/json, text/plain, */*&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json;charset=UTF-8&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	ConRes = requests.post(ConfirmUrl, headers=FilHeader, data=Confirmdata)</span><br><span class="line">    <span class="keyword">if</span>(ConRes.json()[<span class="string">&quot;code&quot;</span>] == <span class="number">0</span>):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;success&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(e)</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="邮件提醒"><a href="#邮件提醒" class="headerlink" title="邮件提醒"></a>邮件提醒</h4><p>主要依靠smtplib和MIMEText这两个库</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    smtpObj = smtplib.SMTP()</span><br><span class="line">    <span class="comment">#连接到服务器</span></span><br><span class="line">    smtpObj.connect(mail_host,<span class="number">25</span>)</span><br><span class="line">    <span class="comment">#登录到服务器</span></span><br><span class="line">    smtpObj.login(user,_password)</span><br><span class="line">    <span class="comment">#发送</span></span><br><span class="line">    smtpObj.sendmail(</span><br><span class="line">    sender,recr,mass.as_string())</span><br><span class="line">    <span class="comment">#退出</span></span><br><span class="line">    smtpObj.quit()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;success&#x27;</span>)</span><br><span class="line"><span class="keyword">except</span> smtplib.SMTPException <span class="keyword">as</span> e:</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">&#x27;error&#x27;</span>,e) <span class="comment">#打印错误</span></span><br></pre></td></tr></table></figure>
+
+<p>用MIMEText库设定邮件体内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">message = MIMEText(<span class="string">&#x27;xxxx&#x27;</span>,<span class="string">&#x27;plain&#x27;</span>,<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"><span class="comment">#邮件主题</span></span><br><span class="line">message[<span class="string">&#x27;Subject&#x27;</span>] = Subj</span><br><span class="line"><span class="comment">#发送方信息</span></span><br><span class="line">message[<span class="string">&#x27;From&#x27;</span>] = sender</span><br><span class="line"><span class="comment">#接受方信息</span></span><br><span class="line">message[<span class="string">&#x27;To&#x27;</span>] = receivers[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="定时执行"><a href="#定时执行" class="headerlink" title="定时执行"></a>定时执行</h4><p>考虑到每天中午12点更新新日期场次，所以我们的post请求只需要在12点开始发送即可，发送太过于频繁可能会被墙。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime,time</span><br><span class="line">start = datetime.datetime.replace(datetime.datetime.now()+datetime.timedelta(days=<span class="number">0</span>), </span><br><span class="line">       hour=<span class="number">12</span>, minute=<span class="number">0</span>, second=<span class="number">0</span>)</span><br><span class="line"> delta = start - datetime.datetime.now()</span><br><span class="line"> time.sleep(delta.seconds-<span class="number">0.3</span>)</span><br></pre></td></tr></table></figure>
+
+<p>为什么是0.3呢。。。。8说了,问就是python效率低</p>
+<h2 id="用到的库"><a href="#用到的库" class="headerlink" title="用到的库"></a>用到的库</h2><h4 id="datetime"><a href="#datetime" class="headerlink" title="datetime"></a>datetime</h4><p>包含date&#x2F;time&#x2F;datetime三个核心类，分别用于日期，时间，日期&amp;时间。</p>
+<p><strong>基础的日期、时间及延迟计算</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line">datetime.date.today()</span><br><span class="line"><span class="comment"># print会显示诸如2021-10-02</span></span><br><span class="line">datetime.timedelta(days=<span class="number">7</span>)</span><br><span class="line"><span class="comment"># print会显示7days,0:00:00</span></span><br><span class="line">datetime.date.today() + datetime.timedelta(days=<span class="number">7</span>)</span><br><span class="line"><span class="comment"># print会显示2021-10-09,但是任然是一个date对象，可以通过str(datetime.date.today()+datetime.timedelta(days=7))或(xxx+xxdeltaxxx).strftime()来转字符串</span></span><br></pre></td></tr></table></figure>
+
+<p>基础的格式化方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">datetime.datetime.now().strftime(<span class="string">&quot;%Y-%m-%d&quot;</span>)</span><br><span class="line"><span class="comment"># print会显示xxxx-xx-xx,str类型</span></span><br><span class="line">datetime.datetime.now().strftime(<span class="string">&quot;%H:%M:%S&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="time"><a href="#time" class="headerlink" title="time"></a>time</h4><p>可以执行和datetime一样的显示时间功能</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">tn = time.gmtime()	<span class="comment"># 获得当前时间元组</span></span><br><span class="line">timestr = time.strftime(<span class="string">&quot;%Y%m%d %H%M%S&quot;</span>, tn)	<span class="comment"># 格式化输出字符串</span></span><br><span class="line">tn = time.strftime(timestr, <span class="string">&quot;%Y%m%d %H%M%S&quot;</span>)	<span class="comment"># 字符串转时间对象</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">time.sleep(xxx) <span class="comment"># 暂停xxx秒，可以是浮点数，如random.random()产生01之间随机数</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="json"><a href="#json" class="headerlink" title="json"></a>json</h4><p>json模块主要有四个比较重要的函数，分别是：</p>
+<ul>
+<li><code>dump</code> - 将Python对象按照JSON格式序列化到文件中</li>
+<li><code>dumps</code> - 将Python对象处理成JSON格式的字符串</li>
+<li><code>load</code> - 将文件中的JSON数据反序列化成对象</li>
+<li><code>loads</code> - 将字符串的内容反序列化成Python对象</li>
+</ul>
+<p><code>json.dumps(xx:dict)</code>将dict类型转换为json字符串（str类型）</p>
+<p><code>json.loads(xx:str)</code>将json字符串转换为dict类型</p>
+<p>post请求的负载需要是json类型，因此通过以上两个函数实现字典和json字符串的转换。</p>
+<p>【补】json另外两个常用的函数是IO操作，<code>json.dump(xx:json, xxx:file)</code> 和 <code>json.load(xx:file)</code></p>
+<h2 id="我需要了解什么"><a href="#我需要了解什么" class="headerlink" title="我需要了解什么"></a>我需要了解什么</h2><h4 id="一：文件操作"><a href="#一：文件操作" class="headerlink" title="一：文件操作"></a>一：文件操作</h4><p>通过Python内置的<code>open</code>函数，我们可以指定文件名、操作模式、编码信息等来获得操作文件的对象，接下来就可以对文件进行读写操作了。</p>
+<table>
+<thead>
+<tr>
+<th>操作模式</th>
+<th>具体含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&#39;r&#39;</code></td>
+<td>读取 （默认）</td>
+</tr>
+<tr>
+<td><code>&#39;w&#39;</code></td>
+<td>写入（会先截断之前的内容）</td>
+</tr>
+<tr>
+<td><code>&#39;x&#39;</code></td>
+<td>写入，如果文件已经存在会产生异常</td>
+</tr>
+<tr>
+<td><code>&#39;a&#39;</code></td>
+<td>追加，将内容写入到已有文件的末尾</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;xxxx.json&#x27;</span>,mode=<span class="string">&#x27;r+&#x27;</span>,enconding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> xx:</span><br><span class="line">	info = xx.read()</span><br><span class="line">	info2 = xx.readline()</span><br><span class="line">	info3 = json.load(xx)</span><br><span class="line">    xx.write(dd)</span><br></pre></td></tr></table></figure>
+
+<h4 id="二："><a href="#二：" class="headerlink" title="二："></a>二：</h4><h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>通过拼凑上面几步，就可以稳定获得新鲜的气膜羽毛球场地了，实现极其简单粗暴，复用性极差。</p>
+<p>下一步当然是封装起来，实现自定义配置，坠吼还是能有个GUI :happy:</p>
+<p>至于服务器是否会不堪其扰，招来邪恶的程序员紧急改造场馆预定系统，那就是以后的事了。</p>
+<p>bye~</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+              <a href="/tags/requests%E5%BA%93/" rel="tag"><i class="fa fa-tag"></i> requests库</a>
+              <a href="/tags/json/" rel="tag"><i class="fa fa-tag"></i> json</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/04/manual_shell/" rel="prev" title="Shell命令">
+      <i class="fa fa-chevron-left"></i> Shell命令
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/01/02/c++_const/" rel="next" title="Use const whenever possible">
+      Use const whenever possible <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+      
+      
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E6%98%93%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">简易流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%99%BB%E5%BD%95%E8%B4%A6%E5%8F%B7"><span class="nav-number">1.0.1.</span> <span class="nav-text">登录账号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82"><span class="nav-number">1.0.2.</span> <span class="nav-text">发送请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%82%AE%E4%BB%B6%E6%8F%90%E9%86%92"><span class="nav-number">1.0.3.</span> <span class="nav-text">邮件提醒</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E6%89%A7%E8%A1%8C"><span class="nav-number">1.0.4.</span> <span class="nav-text">定时执行</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E5%88%B0%E7%9A%84%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">用到的库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#datetime"><span class="nav-number">2.0.1.</span> <span class="nav-text">datetime</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#time"><span class="nav-number">2.0.2.</span> <span class="nav-text">time</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#json"><span class="nav-number">2.0.3.</span> <span class="nav-text">json</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E9%9C%80%E8%A6%81%E4%BA%86%E8%A7%A3%E4%BB%80%E4%B9%88"><span class="nav-number">3.</span> <span class="nav-text">我需要了解什么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%EF%BC%9A%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">3.0.1.</span> <span class="nav-text">一：文件操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%EF%BC%9A"><span class="nav-number">3.0.2.</span> <span class="nav-text">二：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-number">4.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DCyan"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">DCyan</p>
+  <div class="site-description" itemprop="description">做FPGA的硬件dog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/crescentlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;crescentlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:markdowndir@foxmail.com" title="E-Mail → mailto:markdowndir@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      <div id= "music163player">
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=386717&auto=0&height=66"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DCyan</span>
+</div>
+<!--
+-->
+
+
+  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

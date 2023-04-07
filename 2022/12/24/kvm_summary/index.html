@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Y-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/16gl-Y.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"crescentlove.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"percent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="KVM&amp;QEMU虚拟化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KVM&amp;QEMU虚拟化">
+<meta property="og:url" content="https://crescentlove.gitee.io/2022/12/24/kvm_summary/index.html">
+<meta property="og:site_name" content="DCyan的小站">
+<meta property="og:description" content="KVM&amp;QEMU虚拟化">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/cresclinuxentlove/picgo-base/raw/master/img/genshinGYlook.jpeg/">
+<meta property="article:published_time" content="2022-12-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-23T16:00:00.000Z">
+<meta property="article:author" content="DCyan">
+<meta property="article:tag" content=" - qemu  - kvm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/cresclinuxentlove/picgo-base/raw/master/img/genshinGYlook.jpeg/">
+
+<link rel="canonical" href="https://crescentlove.gitee.io/2022/12/24/kvm_summary/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>KVM&QEMU虚拟化 | DCyan的小站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">DCyan的小站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-demo">
+
+    <a href="/demo/" rel="section"><i class="fa fa-podcast fa-fw"></i>应用</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/12/24/kvm_summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="DCyan">
+      <meta itemprop="description" content="做FPGA的硬件dog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCyan的小站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          KVM&QEMU虚拟化
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-12-24 00:00:00" itemprop="dateCreated datePublished" datetime="2022-12-24T00:00:00+08:00">2022-12-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/kvm/" itemprop="url" rel="index"><span itemprop="name">kvm</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">KVM&QEMU虚拟化</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://gitee.com/cresclinuxentlove/picgo-base/raw/master/img/genshinGYlook.jpeg/"></p>
+<p>KVM内核实现<strong>CPU&amp;内存</strong>的虚拟化，QEMU实现IO虚拟化，通过IOCTL与KVM内核交互。</p>
+<p>一个典型的KVM架构包含以下：<br>Guest：客户机系统，包括CPU（vCPU）、内存、驱动（Console、网卡、I&#x2F;O 设备驱动等），被 KVM 置于一种受限制的 CPU 模式下运行。<br>KVM：运行在内核空间，提供CPU 和内存的虚级化，以及客户机的 I&#x2F;O 拦截。Guest 的 I&#x2F;O 被 KVM 拦截后，交给 QEMU 处理。<br>QEMU：修改过的为 KVM 虚机使用的 QEMU 代码，运行在用户空间，提供硬件 I&#x2F;O 虚拟化，通过 IOCTL &#x2F;dev&#x2F;kvm 设备和 KVM 交互。</p>
+<h2 id="KVM"><a href="#KVM" class="headerlink" title="KVM"></a>KVM</h2><p>KVM模块加载的时候，首先初始化内部的数据结构；然后KVM模块检测当前的CPU，打开 CPU控制及存取CR4的虚拟化模式开关，并通过执行VMXON指令将VMM置于VMX root；最后，KVM 模块创建特殊设备文件 <code>/dev/kvm</code> 并等待来自用户空间的指令。‘<br>这里提到的<u>VMX root</u>和<u>VMX non-root</u>模式均由Intel-VT硬件辅助虚拟化技术提供。VMM运行在根模式，guest运行在非根模式。</p>
+<h3 id="CPU虚拟化"><a href="#CPU虚拟化" class="headerlink" title="CPU虚拟化"></a>CPU虚拟化</h3><p>在KVM中每个Guest均是一个Qemu进程，而每个Guest都会被分配若干个vCPU，其中每个vCPU都是该QEMU进程下派生的一个线程。那么vCPU怎么和pCPU对应呢？</p>
+<blockquote>
+<p>pCPU（socket）对应CPU，每个CPU有多个core，开启Hyper-Threading后每个core对应两个线程。一般来说pCPU下开的线程一一对应vCPU。<u>（了解一下vCPU超分）</u></p>
+</blockquote>
+<h4 id="vCPU超分Over-Commit"><a href="#vCPU超分Over-Commit" class="headerlink" title="vCPU超分Over-Commit"></a>vCPU超分Over-Commit</h4><p>在实际场景里，服务器通常会提供QoS服务，只要能满足QoS，我们完全可以为Guest提供远超物理层面的资源，比如此处的vCPU超分：给Guest提供的vCPU总数超过pCPU的总数。</p>
+<p>常用做法：对多个单CPU的Guest提供Over-Commit。这是因为在负载不高的情况下，单CPU的Guest能够被VMM高效的调度。</p>
+<p>不推荐做法：给单个Guest提供超过pCPU总数的vCPU数量，相当于每个vCPU都在挨饿。</p>
+<h4 id="Processor-Affinity"><a href="#Processor-Affinity" class="headerlink" title="Processor Affinity"></a>Processor Affinity</h4><p>首先通常情况下，进程和线程的处理器亲和性对每个pCPU都是一致的，在linux 默认的CFS进程调度算法下，如果QEMU进程在不同pCPU间切换的话，就会有一个<strong>缓存命中失效</strong>的问题。通过把进程绑定到特定的CPU上可以有效减少这样的资源消耗。<br>当然绑定pCPU也是有弊端的，本来就不多的pCPU还被强占了几个，如果这几个Guest负载还不高的话，那浪费就太严重了。所以在使用亲和性的时候最好还是<strong>综合考虑负载均衡和缓存命中失效</strong>的资源消耗。</p>
+<h3 id="内存虚拟化"><a href="#内存虚拟化" class="headerlink" title="内存虚拟化"></a>内存虚拟化</h3><p>虚拟化技术引入后，内存地址空间更加复杂了，客户机(Guest)和宿主机(Host)都有自己的地址空间:</p>
+<ul>
+<li><strong>GVA</strong>: Guest虚拟地址</li>
+<li><strong>GPA</strong>: Guest物理地址</li>
+<li><strong>HVA</strong>: Host虚拟地址</li>
+<li><strong>HPA</strong>: Host物理地址</li>
+</ul>
+<p>显而易见，Guest负责GVA和GPA之间的转换（读写CR3）；Host负责HVA和HPA之间的转换；而GPA和HPA之间的转换，就需要虚拟化层(Hypervisor)辅助了，这个过程一般被称为内存虚拟化。</p>
+<p>为了解决GVA-GPA-HPA的转换关系，在没有硬件辅助的时代，Hypervisor通过影子页表，很巧妙的将GVA-GPA映射到GVA-HPA, 功能虽然达成，但是在很多实际场景下，如进程频繁切换，内存频繁分配释放等，性能损耗会非常大；EPT在硬件的帮助下，实现内存虚拟化简单直接，传统页表继续负责GVA-GPA, 而EPT负责GPA-HPA; 虽然内存访问延时可能会增加一些，但是大幅减少了因为页表更新带来的VMExit, 综合性价比提升巨大, 所以现代内存虚拟化，基本都被EPT统一了。</p>
+<ul>
+<li><p><strong>页表更新不需要VMExit了？</strong>是的，引入EPT后，Guest读写CR3寄存器或Guest Page Fault，执行INVLPG指令等不会触发VMExit。</p>
+<p>如果 GPA 地址为空，即缺页，则 CPU 产生缺页异常，注意，这里，如果是软件实现的方式，则会产生 VM-exit，但是EPT硬件实现方式，并不会发生 VM-exit，而是按照一般的缺页中断处理，这种情况下，也就是交给 Guest 内核的中断处理程序处理。</p>
+<p>在中断处理程序中会产生 EXIT_REASON_EPT_VIOLATION，Guest 退出，VMM 截获到该异常后，分配物理地址并建立 GVA 到 HPA 的映射，并保存到 EPT 中，这样在下次访问的时候就可以完成从 GPA 到 HPA 的转换了。</p>
+</li>
+<li><p>我们通常会用TLB缓存GPA-HPA的映射，但是切换vCPU时（相当于是切换线程，刷新缓存）TLB会被刷新，解决办法是<strong>Intel的VPID技术</strong>。把每个TLB唯一对应一个vCPU，有效减少vCPU切换对TLB的影响，【上下文切换消耗变少了】。</p>
+</li>
+</ul>
+<h4 id="影子页表"><a href="#影子页表" class="headerlink" title="影子页表"></a>影子页表</h4><p>在影子页表和EPT出现以前，即使是每次访问内存地址都需要VMM参与，软件进行多次的转换地址操作。影子页表直接做了个<code>GVA--&gt;HPA</code>的映射。</p>
+<p>要实现这样的映射，必须为 Guest 的系统页表设计一套对应的影子页表，然后将影子页表装入 Host 的 MMU 中，这样当 Guest 访问 Host 内存时，就可以根据 MMU 中的影子页表映射关系，完成 GVA 到 HPA 的直接映射。<strong>而维护这套影子页表的工作则由 VMM 来完成</strong>。</p>
+<p>由于 Guest 中的每个进程都有自己的虚拟地址空间，这就意味着 VMM 要为 Guest 中的每个进程页表都维护一套 对应的影子页表，当 Guest 进程访问内存时，才将该进程的影子页表装入 Host 的 MMU 中，完成地址转换。</p>
+<p>我们也看到，这种方式虽然减少了地址转换的次数，但本质上还是纯软件实现的，效率还是不高，而且 VMM 承担 了太多影子页表的维护工作，设计不好。</p>
+<h4 id="内存超分Over-Commit"><a href="#内存超分Over-Commit" class="headerlink" title="内存超分Over-Commit"></a>内存超分Over-Commit</h4><p>类比“虚拟内存分配远大于物理内存”&amp;“磁盘上开辟缓存区”</p>
+<ul>
+<li>内存交换（Swapping）：交换到swap分区</li>
+<li>气球（Ballooning）：virtio_balloon动态调整host和guest的内存空间</li>
+<li><strong>页共享（Page Sharing）</strong>：因为多个guest相当于是多个qemu进程，会有很多相同内存页。KSM功能扫描相同内存页进行合并，附加标志位Copy On Write。也就是在要脏页的时候赶紧复制一份去写操作。</li>
+</ul>
+<h4 id="KSM"><a href="#KSM" class="headerlink" title="KSM"></a>KSM</h4><p>展开说一下上面的页共享（Page Sharing），KSM是为KVM量身定做的内存共享技术，因为KVM里<strong>每个guest都是一个QEMU进程</strong>，且多数情况下运行相同的操作系统和程序，天然的对于每个进程而言，会有很多相同的内存页，通过KSM页共享，使得缓存命中率有效提高。</p>
+<p>实现方法：KSM使用一个或多个进程持续扫描运行中的应用进程，并共享他们相同的内存页，附加标志位COW（Copy On Write）。</p>
+<p>这又会有几个问题：</p>
+<ul>
+<li>使用KSM就需要起进程扫描，一定会占用CPU宝贵的处理时间，相当于是用CPU使用率换内存使用率。</li>
+<li>使用KSM还得能分辨出哪些内存是不经常更新的，否则会使得“COW复制新内存页供修改”的操作消耗大量内存和CPU资源。</li>
+<li>使用KSM配合内存超分需要注意swap分区大小，遇到高COW负载的时候可能物理内存会不够用。</li>
+</ul>
+<h3 id="一个典型的KVM调用流程"><a href="#一个典型的KVM调用流程" class="headerlink" title="一个典型的KVM调用流程"></a>一个典型的KVM调用流程</h3><ul>
+<li>guest执行特权指令<pre class="mermaid">graph LR
+guest[guest]--"触发VMExit"-->call[执行VMCALL]
+call-->exec[VMM处理]
+exec-->resume[执行VMRESUME]
+resume--"触发VMEntry"-->guest</pre></li>
+</ul>
+<p><strong>在VMExit和VMEntry的上下文切换时，我们也需要类似PCB&#x2F;TCB这样的控制块来保存上下文切换所需的信息，在KVM里VMX提供了VMCS结构。</strong>其中control data保存触发模式切换的事件及原因；Guest state 保存Guest运行时状态，在VMEntry时加载；Host state保存VMM运行时状态，在VMExit时加载。</p>
+<h3 id="VMExit探索"><a href="#VMExit探索" class="headerlink" title="VMExit探索"></a>VMExit探索</h3><p>kvm&#x2F;vmx&#x2F;vmx.c:7132: vmx_vcpu_run(struct kvm_vcpu *vcpu)</p>
+<p>kvm&#x2F;x86.c:10234: vcpu_enter_guest(struct kvm_vcpu *vcpu)</p>
+<h2 id="QEMU"><a href="#QEMU" class="headerlink" title="QEMU"></a>QEMU</h2><p>根据之前<a href="#%E4%B8%80%E4%B8%AA%E5%85%B8%E5%9E%8B%E7%9A%84KVM%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B">VM执行特权指令流程</a>，如果guest频繁发起IO操作请求，系统会一直触发VMExit&#x2F;VMEntry，一直在VMX root和non-root模式下切换，资源消耗大。</p>
+<p>我们可以通过virtio驱动实现IO设备半虚拟化。VM里部署前端驱动，QEMU里部署后端驱动，<strong>在这两层之间实现一个环形缓冲区virtio-ring，保存IO请求与执行信息。</strong></p>
+<ul>
+<li>网络传输优化：网络协议栈运行在内核态，那么virtio在QEMU里（用户进程）部署后端驱动处理网络请求仍然需要从用户态切换到内核态。通过在内核里加入vhost-net驱动，可以直接接管VM传递出来的网络IO操作，<strong>避免了内核态（网络栈）和用户态（QEMU）的切换。</strong></li>
+<li>云计算优化：大规模使用的OVS和CDN仍然会带来大量的内核态（网络栈）与用户态（CDN&#x2F;OVS进程）切换。通过使用vhost-user，vSwitch与DPDK可以<strong>在用户态完成网络数据包交换处理</strong>，从而大幅提升了网络虚拟化性能。</li>
+</ul>
+<p>除了上面的技术，Intel还提供了下面几种方案：</p>
+<ul>
+<li>Intel-VT硬件辅助虚拟化</li>
+<li>DPDK：结合vhost-user&amp;vSwitch，可以在用户态完成网络数据包处理</li>
+<li>SPDK：结合UIO和PMD，通过一个VRing绕开KVM和QEMU<strong>实现用户态进行存储管理。</strong>（UIO实现了除少部分共性驱动在内核态，其他大多数设备IO在用户态）</li>
+</ul>
+<h2 id="更多值得一看的技术"><a href="#更多值得一看的技术" class="headerlink" title="更多值得一看的技术"></a>更多值得一看的技术</h2><h3 id="SPDK"><a href="#SPDK" class="headerlink" title="SPDK"></a>SPDK</h3><p>spdk的基石是用户态（<code>user space</code>）、轮询（<code>polled-mode</code>）、异步（<code>asynchronous</code>）、无锁（<code>lockless</code>）的NVMe驱动</p>
+<ol>
+<li><p>将存储用到的驱动转移到<strong>用户态</strong>，从而避免系统调用带来的性能损耗，顺便可以直接使用用户态内存落盘实现<strong>零拷贝</strong></p>
+</li>
+<li><p>使用polling模式</p>
+</li>
+<li><ol>
+<li>轮询硬件队列，而不像之前那样使用中断模式，中断模式带来了不稳定的性能和延时的提升</li>
+<li>任何业务都可以在spdk的线程中将轮询函数注册为poller，注册之后该函数会在spdk中周期性的执行，避免了<code>epoll</code>等事件通知机制造成的overhead。</li>
+<li>独占一个core，不允许有进程上下文切换</li>
+</ol>
+</li>
+<li><p>避免在IO链路上使用锁。使用无锁队列传递消息&#x2F;IO</p>
+</li>
+<li><ol>
+<li>spdk设计的主要目标之一就随着使用硬件（e.g. SSD，NIC，CPU）的增多而获得性能的线性提升，为了达到这目的，spdk的设计者就必须消除使用更多的系统资源带来的overhead，如：更多的线程、进程间通信，访问更多的存储硬件、网卡带来的性能损耗。</li>
+<li>为了降低这种性能开销，spdk引入了无锁队列，使用lock-free编程，从而避免锁带来的性能损耗。</li>
+<li>spdk的无锁队列主要依赖的dpdk的实现，其本质是使用cas（<code>compare and swap</code>）实现了多生产者多消费者FIFO队列。有关无锁队列的实现可以看<a href="https://link.zhihu.com/?target=https://blog.csdn.net/chen98765432101/article/details/69367633">这篇文章</a></li>
+</ol>
+</li>
+</ol>
+<p>进程上下文切换原因：</p>
+<ul>
+<li>cpu时间片耗尽</li>
+<li>进程在系统资源不足（比如内存不足）时，要等到资源满足后才可以运行，这个时候进程也会被挂起，并由系统调度其他进程运行。</li>
+<li>进程主动调用sleep等函数让出cpu使用权。</li>
+<li>当有优先级更高的进程运行时，为了保证高优先级进程的运行，当前进程会被挂起，由高优先级进程来运行。</li>
+<li>硬件中断会导致CPU上的进程被挂起，转而执行内核的中断服务程序。</li>
+</ul>
+<h3 id="透明大页THP"><a href="#透明大页THP" class="headerlink" title="透明大页THP"></a>透明大页THP</h3><h4 id="大页"><a href="#大页" class="headerlink" title="大页"></a>大页</h4><p>通过在内核编译的时候使能CONFIG_HUGETLBFS和CONFIG_HUGETLB_PAGE，能够支持2M、1G的大页。</p>
+<p>优点：</p>
+<ul>
+<li>使用大页使得页表数量变少，占用的内存也变少了</li>
+<li>页表够大，cover住的内存也比较多，地址转换少了（储存地址转换信息的CPU缓存消耗变少），所以TLB缓存失效也变少了。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>大页必须在使用前准备好，一般是linux启动时初始化大页池（后期因为内存碎片多的原因可能无法成功分配大页）（如果没用到不就白白占用物理内存了么，很僵硬）</li>
+<li>大页必须常驻物理内存，不允许swap，也不允许ballooning</li>
+<li>需要使用root权限挂载hugetlbfs大页系统，应用程序必须显式使用大页（mmap、shmget调用）</li>
+</ul>
+<h4 id="透明大页"><a href="#透明大页" class="headerlink" title="透明大页"></a>透明大页</h4><p>针对大页的缺点，首先THP对所有应用透明（躺平由操作系统为内存管理费劲），其次THP是可交换的（swap的时候会分散成4KB小页），最后，内核线程khugepaged会在内存充裕的时候不断扫描，把常规物理页装换到透明大页中（仅匿名内存）。</p>
+<h4 id="简单的test一下"><a href="#简单的test一下" class="headerlink" title="简单的test一下"></a>简单的test一下</h4><p>在<code>sys/kernel/mm/hugepages/</code>目录下可以看到2MB和1GB大页的配置信息，比如大页池容量&#x2F;保留下未分配的大页数&#x2F;大页池里空闲大页数&#x2F;允许的over-commit大页数等等，也可以通过<code>echo </code>直接把参数写入配置。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看初始化的大页池容量</span></span><br><span class="line">cat sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages</span><br><span class="line">echo 8 &gt; sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages</span><br><span class="line">cat sys/kernel/mm/transparent_hugepage/enabled</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="test"><a href="#test" class="headerlink" title="test"></a>test</h2><p>首先是一个QEMU启动脚本，解析一下参数设置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>然后是一个简单的kvm启动与状态。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;err.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/kvm.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ioctl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> kvm, vmfd, vcpufd, ret;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">uint8_t</span> code[] = &#123;</span><br><span class="line">        <span class="number">0xba</span>, <span class="number">0xf8</span>, <span class="number">0x03</span>, <span class="comment">/* mov $0x3f8, %dx */</span></span><br><span class="line">        <span class="number">0x00</span>, <span class="number">0xd8</span>,       <span class="comment">/* add %bl, %al */</span></span><br><span class="line">        <span class="number">0x04</span>, <span class="string">&#x27;0&#x27;</span>,        <span class="comment">/* add $&#x27;0&#x27;, %al */</span></span><br><span class="line">        <span class="number">0xee</span>,             <span class="comment">/* out %al, (%dx) */</span></span><br><span class="line">        <span class="number">0xb0</span>, <span class="string">&#x27;\n&#x27;</span>,       <span class="comment">/* mov $&#x27;\n&#x27;, %al */</span></span><br><span class="line">        <span class="number">0xee</span>,             <span class="comment">/* out %al, (%dx) */</span></span><br><span class="line">        <span class="number">0xf4</span>,             <span class="comment">/* hlt */</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">uint8_t</span> *mem;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kvm_sregs</span> <span class="title">sregs</span>;</span></span><br><span class="line">    <span class="keyword">size_t</span> mmap_size;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kvm_run</span> *<span class="title">run</span>;</span></span><br><span class="line"></span><br><span class="line">    kvm = open(<span class="string">&quot;/dev/kvm&quot;</span>, O_RDWR | O_CLOEXEC);</span><br><span class="line">    <span class="keyword">if</span> (kvm == <span class="number">-1</span>)</span><br><span class="line">        err(<span class="number">1</span>, <span class="string">&quot;/dev/kvm&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Make sure we have the stable version of the API */</span></span><br><span class="line">    ret = ioctl(kvm, KVM_GET_API_VERSION, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">-1</span>)</span><br><span class="line">        err(<span class="number">1</span>, <span class="string">&quot;KVM_GET_API_VERSION&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (ret != <span class="number">12</span>)</span><br><span class="line">        errx(<span class="number">1</span>, <span class="string">&quot;KVM_GET_API_VERSION %d, expected 12&quot;</span>, ret);</span><br><span class="line"></span><br><span class="line">    vmfd = ioctl(kvm, KVM_CREATE_VM, (<span class="keyword">unsigned</span> <span class="keyword">long</span>)<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (vmfd == <span class="number">-1</span>)</span><br><span class="line">        err(<span class="number">1</span>, <span class="string">&quot;KVM_CREATE_VM&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Allocate one aligned page of guest memory to hold the code. */</span></span><br><span class="line">    mem = mmap(<span class="literal">NULL</span>, <span class="number">0x1000</span>, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, <span class="number">-1</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (!mem)</span><br><span class="line">        err(<span class="number">1</span>, <span class="string">&quot;allocating guest memory&quot;</span>);</span><br><span class="line">    <span class="built_in">memcpy</span>(mem, code, <span class="keyword">sizeof</span>(code));</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Map it to the second page frame (to avoid the real-mode IDT at 0). */</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kvm_userspace_memory_region</span> <span class="title">region</span> =</span> &#123;</span><br><span class="line">        .slot = <span class="number">0</span>,</span><br><span class="line">        .guest_phys_addr = <span class="number">0x1000</span>,</span><br><span class="line">        .memory_size = <span class="number">0x1000</span>,</span><br><span class="line">        .userspace_addr = (<span class="keyword">uint64_t</span>)mem,</span><br><span class="line">    &#125;;</span><br><span class="line">    ret = ioctl(vmfd, KVM_SET_USER_MEMORY_REGION, &amp;region);</span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">-1</span>)</span><br><span class="line">        err(<span class="number">1</span>, <span class="string">&quot;KVM_SET_USER_MEMORY_REGION&quot;</span>);</span><br><span class="line"></span><br><span class="line">    vcpufd = ioctl(vmfd, KVM_CREATE_VCPU, (<span class="keyword">unsigned</span> <span class="keyword">long</span>)<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (vcpufd == <span class="number">-1</span>)</span><br><span class="line">        err(<span class="number">1</span>, <span class="string">&quot;KVM_CREATE_VCPU&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Map the shared kvm_run structure and following data. */</span></span><br><span class="line">    ret = ioctl(kvm, KVM_GET_VCPU_MMAP_SIZE, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">-1</span>)</span><br><span class="line">        err(<span class="number">1</span>, <span class="string">&quot;KVM_GET_VCPU_MMAP_SIZE&quot;</span>);</span><br><span class="line">    mmap_size = ret;</span><br><span class="line">    <span class="keyword">if</span> (mmap_size &lt; <span class="keyword">sizeof</span>(*run))</span><br><span class="line">        errx(<span class="number">1</span>, <span class="string">&quot;KVM_GET_VCPU_MMAP_SIZE unexpectedly small&quot;</span>);</span><br><span class="line">    run = mmap(<span class="literal">NULL</span>, mmap_size, PROT_READ | PROT_WRITE, MAP_SHARED, vcpufd, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (!run)</span><br><span class="line">        err(<span class="number">1</span>, <span class="string">&quot;mmap vcpu&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize CS to point at 0, via a read-modify-write of sregs. */</span></span><br><span class="line">    ret = ioctl(vcpufd, KVM_GET_SREGS, &amp;sregs);</span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">-1</span>)</span><br><span class="line">        err(<span class="number">1</span>, <span class="string">&quot;KVM_GET_SREGS&quot;</span>);</span><br><span class="line">    sregs.cs.base = <span class="number">0</span>;</span><br><span class="line">    sregs.cs.selector = <span class="number">0</span>;</span><br><span class="line">    ret = ioctl(vcpufd, KVM_SET_SREGS, &amp;sregs);</span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">-1</span>)</span><br><span class="line">        err(<span class="number">1</span>, <span class="string">&quot;KVM_SET_SREGS&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize registers: instruction pointer for our code, addends, and</span></span><br><span class="line"><span class="comment">     * initial flags required by x86 architecture. */</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kvm_regs</span> <span class="title">regs</span> =</span> &#123;</span><br><span class="line">        .rip = <span class="number">0x1000</span>,</span><br><span class="line">        .rax = <span class="number">2</span>,</span><br><span class="line">        .rbx = <span class="number">2</span>,</span><br><span class="line">        .rflags = <span class="number">0x2</span>,</span><br><span class="line">    &#125;;</span><br><span class="line">    ret = ioctl(vcpufd, KVM_SET_REGS, &amp;regs);</span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="number">-1</span>)</span><br><span class="line">        err(<span class="number">1</span>, <span class="string">&quot;KVM_SET_REGS&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Repeatedly run code and handle VM exits. */</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        ret = ioctl(vcpufd, KVM_RUN, <span class="literal">NULL</span>);</span><br><span class="line">        <span class="keyword">if</span> (ret == <span class="number">-1</span>)</span><br><span class="line">            err(<span class="number">1</span>, <span class="string">&quot;KVM_RUN&quot;</span>);</span><br><span class="line">        <span class="keyword">switch</span> (run-&gt;exit_reason) &#123;</span><br><span class="line">        <span class="keyword">case</span> KVM_EXIT_HLT:</span><br><span class="line">            <span class="built_in">puts</span>(<span class="string">&quot;KVM_EXIT_HLT&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">case</span> KVM_EXIT_IO:</span><br><span class="line">            <span class="keyword">if</span> (run-&gt;io.direction == KVM_EXIT_IO_OUT &amp;&amp; run-&gt;io.size == <span class="number">1</span> &amp;&amp; run-&gt;io.port == <span class="number">0x3f8</span> &amp;&amp; run-&gt;io.count == <span class="number">1</span>)</span><br><span class="line">                <span class="built_in">putchar</span>(*(((<span class="keyword">char</span> *)run) + run-&gt;io.data_offset));</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                errx(<span class="number">1</span>, <span class="string">&quot;unhandled KVM_EXIT_IO&quot;</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> KVM_EXIT_FAIL_ENTRY:</span><br><span class="line">            errx(<span class="number">1</span>, <span class="string">&quot;KVM_EXIT_FAIL_ENTRY: hardware_entry_failure_reason = 0x%llx&quot;</span>,</span><br><span class="line">                 (<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span>)run-&gt;fail_entry.hardware_entry_failure_reason);</span><br><span class="line">        <span class="keyword">case</span> KVM_EXIT_INTERNAL_ERROR:</span><br><span class="line">            errx(<span class="number">1</span>, <span class="string">&quot;KVM_EXIT_INTERNAL_ERROR: suberror = 0x%x&quot;</span>, run-&gt;internal.suberror);</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            errx(<span class="number">1</span>, <span class="string">&quot;exit_reason = 0x%x&quot;</span>, run-&gt;exit_reason);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="接下来看源码的方向"><a href="#接下来看源码的方向" class="headerlink" title="接下来看源码的方向"></a>接下来看源码的方向</h2><p>Arch目录下，实现了包括时钟源的模拟、LAPIC的实现及与底层硬件直接相关的MMU的实现。而Virt目录下则主要是与硬件体系结构不直接相关的部分，包括虚拟IO地址的映射管理、虚拟机内存映射管理及虚拟机中断注入相关的处理等。</p>
+<table>
+<thead>
+<tr>
+<th>VM 、VCPU、虚拟内存及虚拟IO设备等的创建、初始化与管理调用</th>
+<th>Virt&#x2F;Kvm_main</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>coalesced_mmio</td>
+<td>Virt&#x2F; coalesced_mmio</td>
+</tr>
+<tr>
+<td>VM中断请求的接收与处理的基本操作</td>
+<td>Virt&#x2F;Irq_common</td>
+</tr>
+<tr>
+<td>文件系统模拟IO操作涉及的数据结构</td>
+<td>Virt&#x2F;Eventfd</td>
+</tr>
+<tr>
+<td>虚拟机直接使用物理设备问题</td>
+<td>Virt&#x2F;iommu</td>
+</tr>
+<tr>
+<td>时钟源的模拟</td>
+<td>Arch&#x2F;x86&#x2F;kvm&#x2F;I8254</td>
+</tr>
+<tr>
+<td>中断控制器的模拟</td>
+<td>Arch&#x2F;x86&#x2F;kvm&#x2F;I8259 Lapic Irq</td>
+</tr>
+<tr>
+<td>定时时器的模拟</td>
+<td>Arch&#x2F;x86&#x2F;kvm&#x2F; Timer</td>
+</tr>
+<tr>
+<td>内存管理</td>
+<td>Arch&#x2F;x86&#x2F;kvm&#x2F;mmu</td>
+</tr>
+</tbody></table>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>大多数优化都是基于减少用户态内核态切换&#x2F;上下文切换带来的资源损耗。</p>
+<h2 id="补充知识"><a href="#补充知识" class="headerlink" title="补充知识"></a>补充知识</h2><h3 id="特权等级"><a href="#特权等级" class="headerlink" title="特权等级"></a>特权等级</h3><p>x86架构的操作系统直接运行在硬件上，分为内核态和用户态。指定了4种特权级别的运行状态Ring0 - Ring3，其中<strong>Ring 0是内核态，运行OS内核</strong>，权限最高，可执行特权指令（对系统资源进行管理与分配等）或执行敏感指令（如读写时钟、控制中断、修改内存页表、访问地址重定位系统，以及所有IO指令等）。<strong>Ring3是用户态，运行用户应用程序</strong>，只能执行非特权指令；需要执行特权或敏感的特权指令时通过系统调用方式从Ring3用户态切换到Ring0内核态，内核完成相关操作后再切换返回。Ring 1、Ring2保留使用。<br>在KVM里，当guest执行特权指令时，触发VMExit到VMM，处理完后再触发VMEntry回到guest。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/105499858">KVM</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/qemu-kvm/" rel="tag"><i class="fa fa-tag"></i>  - qemu  - kvm</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/24/%5BOS%5Dgeneral/" rel="prev" title="内核之">
+      <i class="fa fa-chevron-left"></i> 内核之
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/02/21/linux_TDX/" rel="next" title="TDX">
+      TDX <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+      
+      
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#KVM"><span class="nav-number">1.</span> <span class="nav-text">KVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="nav-number">1.1.</span> <span class="nav-text">CPU虚拟化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#vCPU%E8%B6%85%E5%88%86Over-Commit"><span class="nav-number">1.1.1.</span> <span class="nav-text">vCPU超分Over-Commit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Processor-Affinity"><span class="nav-number">1.1.2.</span> <span class="nav-text">Processor Affinity</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="nav-number">1.2.</span> <span class="nav-text">内存虚拟化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BD%B1%E5%AD%90%E9%A1%B5%E8%A1%A8"><span class="nav-number">1.2.1.</span> <span class="nav-text">影子页表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E8%B6%85%E5%88%86Over-Commit"><span class="nav-number">1.2.2.</span> <span class="nav-text">内存超分Over-Commit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#KSM"><span class="nav-number">1.2.3.</span> <span class="nav-text">KSM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%85%B8%E5%9E%8B%E7%9A%84KVM%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">一个典型的KVM调用流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VMExit%E6%8E%A2%E7%B4%A2"><span class="nav-number">1.4.</span> <span class="nav-text">VMExit探索</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QEMU"><span class="nav-number">2.</span> <span class="nav-text">QEMU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E5%80%BC%E5%BE%97%E4%B8%80%E7%9C%8B%E7%9A%84%E6%8A%80%E6%9C%AF"><span class="nav-number">3.</span> <span class="nav-text">更多值得一看的技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SPDK"><span class="nav-number">3.1.</span> <span class="nav-text">SPDK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%8F%E6%98%8E%E5%A4%A7%E9%A1%B5THP"><span class="nav-number">3.2.</span> <span class="nav-text">透明大页THP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%A7%E9%A1%B5"><span class="nav-number">3.2.1.</span> <span class="nav-text">大页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%8F%E6%98%8E%E5%A4%A7%E9%A1%B5"><span class="nav-number">3.2.2.</span> <span class="nav-text">透明大页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84test%E4%B8%80%E4%B8%8B"><span class="nav-number">3.2.3.</span> <span class="nav-text">简单的test一下</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test"><span class="nav-number">4.</span> <span class="nav-text">test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E4%B8%8B%E6%9D%A5%E7%9C%8B%E6%BA%90%E7%A0%81%E7%9A%84%E6%96%B9%E5%90%91"><span class="nav-number">5.</span> <span class="nav-text">接下来看源码的方向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-number">6.</span> <span class="nav-text">Summary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%E7%9F%A5%E8%AF%86"><span class="nav-number">7.</span> <span class="nav-text">补充知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%9D%83%E7%AD%89%E7%BA%A7"><span class="nav-number">7.1.</span> <span class="nav-text">特权等级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">8.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DCyan"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">DCyan</p>
+  <div class="site-description" itemprop="description">做FPGA的硬件dog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/crescentlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;crescentlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:markdowndir@foxmail.com" title="E-Mail → mailto:markdowndir@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      <div id= "music163player">
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=386717&auto=0&height=66"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DCyan</span>
+</div>
+<!--
+-->
+
+
+  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

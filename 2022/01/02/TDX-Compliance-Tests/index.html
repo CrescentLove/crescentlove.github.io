@@ -227,6 +227,8 @@
 <p>因为CR&#x2F;MSR&#x2F;CPUID中都包含着CPU运行调试监测等等相关特性的开关，所以我会尝试读写这些敏感bit，验证是否按照VMM的要求初始化，以及是否可以被修改。首先关于读写这些特殊的寄存器，我使用了内联汇编，，通过_ASM_EXTABLE_TYPE_REG将异常handle住，并且最后输出出来；但是内联汇编的过程中有些转储err的寄存器（eax）并不能确定，已经前期调试过程中会有各种意想不到的异常，我又使用了kprobe和kretprobe，针对性的探测我关心的一些函数和指令运行；最后封装成模块，加载到kernel上，通过挂载debugfs实现了日志的输出。</p>
 <p>MSR:一系列用于控制CPU运行、功能开关、调试、跟踪程序执行、监测CPU性能等方面的寄存器。</p>
 <p>每个MSR寄存器都会有一个相应的ID，即MSR Index，或者也叫作MSR寄存器地址，当执行RDMSR或者WRMSR指令的时候，只要提供MSR Index就能让CPU知道目标MSR寄存器。</p>
+<p>IA32_XSS: </p>
+<p>IA32_XFD: extended feature disable(扩展特性禁用功能)</p>
 <p>xsaveopt指令是xsave的优化版,常用于kernel在进程切换的时候保存进程使用fpu寄存器现场,主要分3个域 X87 SSE AVX AVX512</p>
 <p>1.SDM指令功能描述(XSAVEOPT)<br>实现一个完整或者部分的xsave,将相应寄存器的值存储在目的操作数中. EDX:EAX作为隐式参数是一个指令mask,功能是和XCR0做一个逻辑and操作得到结果是RFBM.<br>XINUSE的描述在第一卷13.6章节给出,总的说就是硬件来检查CPU内部的几个域的寄存器是否都是初始化的值,如果是初始化的值就是在初始化状态(init optimization);如果不是初始化的值就认为是在使用状态(modified optimization)<br>xsaveopt当RFBM[i] 和XINUES[i]都为1时会执行对特定域的保存操作.<br>xstate_bv的值是save域起始的低512个字节 这个字节会在xrstor和xsaveopt中被使用<br>xsaveopt的操作中如果域被RFBM指定 则会用XINUSE更新xstate_bv相应域中的值<br>xsaveopt不会修改legacy region的 511:464部分的内容</p>
 <p>伪代码：</p>
@@ -336,14 +338,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
