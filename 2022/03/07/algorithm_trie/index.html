@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Y-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/16gl-Y.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"crescentlove.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"percent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Trie实现与例题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【刷刷LeetCode】字典树">
+<meta property="og:url" content="https://crescentlove.gitee.io/2022/03/07/algorithm_trie/index.html">
+<meta property="og:site_name" content="DCyan的小站">
+<meta property="og:description" content="Trie实现与例题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/crescentlove/picgo-base/raw/master/img/genshinGYlook.jpeg/">
+<meta property="article:published_time" content="2022-03-07T10:22:23.000Z">
+<meta property="article:modified_time" content="2022-03-07T10:22:23.000Z">
+<meta property="article:author" content="DCyan">
+<meta property="article:tag" content="c++">
+<meta property="article:tag" content="Trie">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/crescentlove/picgo-base/raw/master/img/genshinGYlook.jpeg/">
+
+<link rel="canonical" href="https://crescentlove.gitee.io/2022/03/07/algorithm_trie/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【刷刷LeetCode】字典树 | DCyan的小站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">DCyan的小站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-demo">
+
+    <a href="/demo/" rel="section"><i class="fa fa-podcast fa-fw"></i>应用</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/03/07/algorithm_trie/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="DCyan">
+      <meta itemprop="description" content="做FPGA的硬件dog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCyan的小站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【刷刷LeetCode】字典树
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-07 18:22:23" itemprop="dateCreated datePublished" datetime="2022-03-07T18:22:23+08:00">2022-03-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">Trie实现与例题</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://gitee.com/crescentlove/picgo-base/raw/master/img/genshinGYlook.jpeg/"></p>
+<h2 id="字典树"><a href="#字典树" class="headerlink" title="字典树"></a>字典树</h2><p>是一种用于快速检索的多叉树结构，如英文字母的字典树是一个26叉树，数字的字典树是一个10叉树。</p>
+<h2 id="Implement-Trie"><a href="#Implement-Trie" class="headerlink" title="Implement Trie"></a>Implement Trie</h2><h3 id="Initial初始化一个数据结构"><a href="#Initial初始化一个数据结构" class="headerlink" title="Initial初始化一个数据结构"></a>Initial初始化一个数据结构</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Trie</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	vector&lt;Trie*&gt; children;	<span class="comment">//字典树每个节点的子树(节点数代表单词里某字母下一位的可能选择)</span></span><br><span class="line">	<span class="keyword">bool</span> isEnd;				<span class="comment">//根节点到当前节点是否为一个单词</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">Trie</span>(): <span class="built_in">children</span>(<span class="number">26</span>), <span class="built_in">isEnd</span>(<span class="literal">false</span>) &#123;&#125;	<span class="comment">//构造函数设定子树的节点数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span>&#123;</span></span><br><span class="line">    <span class="keyword">bool</span> isEnd;</span><br><span class="line">    Node* children[<span class="number">26</span>];</span><br><span class="line">    <span class="built_in">Node</span>():<span class="built_in">isEnd</span>(<span class="literal">false</span>)&#123;</span><br><span class="line">        <span class="built_in">memset</span>(children,<span class="number">0</span>,<span class="keyword">sizeof</span> children);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//类中</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Trie</span> &#123;</span></span><br><span class="line">	<span class="built_in">Trie</span>() : <span class="built_in">pool</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        pool[<span class="number">0</span>] = <span class="keyword">new</span> Node;		<span class="comment">//设定根节点，表示单词的首字母（后缀树即为tail的字母）</span></span><br><span class="line">    &#125;</span><br><span class="line">    ~<span class="built_in">Trie</span>()&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp;&amp;t:pool)&#123;		<span class="comment">//析构里防止泄露</span></span><br><span class="line">            <span class="keyword">delete</span> t;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    vector&lt;Node*&gt;pool;<span class="comment">//用池来管理字典树每一个存在的Node</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>扩展：<a href="#memset">memset</a>，<a href="#%E6%8A%98%E5%8F%A0%E5%BC%95%E7%94%A8">折叠引用</a></p>
+<h3 id="实现一个类"><a href="#实现一个类" class="headerlink" title="实现一个类"></a>实现一个类</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Trie</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    vector&lt;Trie*&gt; children;		</span><br><span class="line">    <span class="keyword">bool</span> isEnd;					</span><br><span class="line"></span><br><span class="line">    <span class="function">Trie* <span class="title">searchPrefix</span><span class="params">(string prefix)</span> </span>&#123;</span><br><span class="line">        Trie* node = <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">char</span> ch : prefix) &#123;</span><br><span class="line">            ch -= <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">            <span class="keyword">if</span> (node-&gt;children[ch] == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            node = node-&gt;children[ch];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Trie</span>() : <span class="built_in">children</span>(<span class="number">26</span>), <span class="built_in">isEnd</span>(<span class="literal">false</span>) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(string word)</span> </span>&#123;</span><br><span class="line">        Trie* node = <span class="keyword">this</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">char</span> ch : word) &#123;</span><br><span class="line">            ch -= <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">            <span class="keyword">if</span> (node-&gt;children[ch] == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">                node-&gt;children[ch] = <span class="keyword">new</span> <span class="built_in">Trie</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            node = node-&gt;children[ch];</span><br><span class="line">        &#125;</span><br><span class="line">        node-&gt;isEnd = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">search</span><span class="params">(string word)</span> </span>&#123;</span><br><span class="line">        Trie* node = <span class="keyword">this</span>-&gt;<span class="built_in">searchPrefix</span>(word);</span><br><span class="line">        <span class="keyword">return</span> node != <span class="literal">nullptr</span> &amp;&amp; node-&gt;isEnd;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">startsWith</span><span class="params">(string prefix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>-&gt;<span class="built_in">searchPrefix</span>(prefix) != <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="实现一个结构"><a href="#实现一个结构" class="headerlink" title="实现一个结构"></a>实现一个结构</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span>&#123;</span></span><br><span class="line">    <span class="keyword">bool</span> isEnd;</span><br><span class="line">    Node* children[<span class="number">26</span>];</span><br><span class="line">    <span class="built_in">Node</span>():<span class="built_in">isEnd</span>(<span class="literal">false</span>)&#123;</span><br><span class="line">        <span class="built_in">memset</span>(children,<span class="number">0</span>,<span class="keyword">sizeof</span> children);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Trie</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    vector&lt;Node*&gt;pool;</span><br><span class="line">    <span class="function">Node* <span class="title">searchPrefix</span><span class="params">(string prefix)</span> </span>&#123;</span><br><span class="line">        Node* node = pool[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">char</span> ch : prefix) &#123;</span><br><span class="line">            ch -= <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">            <span class="keyword">if</span> (node-&gt;children[ch] == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            node = node-&gt;children[ch];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Trie</span>() : <span class="built_in">pool</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        pool[<span class="number">0</span>] = <span class="keyword">new</span> Node;</span><br><span class="line">    &#125;</span><br><span class="line">    ~<span class="built_in">Trie</span>()&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp;&amp;t:pool)&#123;</span><br><span class="line">            <span class="keyword">delete</span> t;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//每次入新的表需要把它们加入到内存池，方便最后析构函数的清理</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(string word)</span> </span>&#123;</span><br><span class="line">        Node* node = pool[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">char</span> ch : word) &#123;</span><br><span class="line">            ch -= <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">            <span class="keyword">if</span> (node-&gt;children[ch] == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">                node-&gt;children[ch] = <span class="keyword">new</span> Node;</span><br><span class="line">                pool.<span class="built_in">emplace_back</span>(node-&gt;children[ch]);</span><br><span class="line">            &#125;</span><br><span class="line">            node = node-&gt;children[ch];</span><br><span class="line">        &#125;</span><br><span class="line">        node-&gt;isEnd = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">search</span><span class="params">(string word)</span> </span>&#123;</span><br><span class="line">        Node* node = <span class="keyword">this</span>-&gt;<span class="built_in">searchPrefix</span>(word);</span><br><span class="line">        <span class="keyword">return</span> node != <span class="literal">nullptr</span> &amp;&amp; node-&gt;isEnd;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">startsWith</span><span class="params">(string prefix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>-&gt;<span class="built_in">searchPrefix</span>(prefix) != <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="leetcode字典树题集"><a href="#leetcode字典树题集" class="headerlink" title="leetcode字典树题集"></a>leetcode字典树题集</h3><h4 id="前缀树"><a href="#前缀树" class="headerlink" title="前缀树"></a>前缀树</h4><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/implement-trie-prefix-tree/">208. 实现 Trie (前缀树)</a></p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/implement-magic-dictionary/">676. 实现一个魔法字典</a></p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/re-space-lcci/">面试题 17.13. 恢复空格</a></p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/design-add-and-search-words-data-structure/">211. 添加与搜索单词 - 数据结构设计</a></p>
+<h4 id="后缀树"><a href="#后缀树" class="headerlink" title="后缀树"></a>后缀树</h4><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/short-encoding-of-words/">820. 单词的压缩编码</a></p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/prefix-and-suffix-search/">745. 前缀和后缀搜索</a></p>
+<h3 id="memset"><a href="#memset" class="headerlink" title="memset"></a>memset</h3><h3 id="折叠引用"><a href="#折叠引用" class="headerlink" title="折叠引用"></a>折叠引用</h3>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"><i class="fa fa-tag"></i> c++</a>
+              <a href="/tags/Trie/" rel="tag"><i class="fa fa-tag"></i> Trie</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/24/demo_gymSeizor2/" rel="prev" title="气膜脚本实现2.0">
+      <i class="fa fa-chevron-left"></i> 气膜脚本实现2.0
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/04/24/hardware_dma/" rel="next" title="关于DMA的一点心得">
+      关于DMA的一点心得 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+      
+      
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E5%85%B8%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text">字典树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implement-Trie"><span class="nav-number">2.</span> <span class="nav-text">Implement Trie</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Initial%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">Initial初始化一个数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%B1%BB"><span class="nav-number">2.2.</span> <span class="nav-text">实现一个类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%BB%93%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">实现一个结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">3.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#leetcode%E5%AD%97%E5%85%B8%E6%A0%91%E9%A2%98%E9%9B%86"><span class="nav-number">3.1.</span> <span class="nav-text">leetcode字典树题集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E7%BC%80%E6%A0%91"><span class="nav-number">3.1.1.</span> <span class="nav-text">前缀树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8E%E7%BC%80%E6%A0%91"><span class="nav-number">3.1.2.</span> <span class="nav-text">后缀树</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#memset"><span class="nav-number">3.2.</span> <span class="nav-text">memset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%98%E5%8F%A0%E5%BC%95%E7%94%A8"><span class="nav-number">3.3.</span> <span class="nav-text">折叠引用</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DCyan"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">DCyan</p>
+  <div class="site-description" itemprop="description">做FPGA的硬件dog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/crescentlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;crescentlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:markdowndir@foxmail.com" title="E-Mail → mailto:markdowndir@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      <div id= "music163player">
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=386717&auto=0&height=66"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DCyan</span>
+</div>
+<!--
+-->
+
+
+  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

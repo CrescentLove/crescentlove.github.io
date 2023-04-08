@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/Y-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/16gl-Y.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"crescentlove.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"percent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="阅读笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSAVE Feature Set">
+<meta property="og:url" content="https://crescentlove.gitee.io/2022/05/02/XSAVE/index.html">
+<meta property="og:site_name" content="DCyan的小站">
+<meta property="og:description" content="阅读笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-02T09:12:22.000Z">
+<meta property="article:modified_time" content="2022-05-02T09:12:22.000Z">
+<meta property="article:author" content="DCyan">
+<meta property="article:tag" content="c++">
+<meta property="article:tag" content="xsave">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://crescentlove.gitee.io/2022/05/02/XSAVE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>XSAVE Feature Set | DCyan的小站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">DCyan的小站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-demo">
+
+    <a href="/demo/" rel="section"><i class="fa fa-podcast fa-fw"></i>应用</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2022/05/02/XSAVE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="DCyan">
+      <meta itemprop="description" content="做FPGA的硬件dog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DCyan的小站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          XSAVE Feature Set
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-02 17:12:22" itemprop="dateCreated datePublished" datetime="2022-05-02T17:12:22+08:00">2022-05-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Arch/" itemprop="url" rel="index"><span itemprop="name">Arch</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">阅读笔记</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>XSAVE指令集包含8条指令</p>
+<p>按照功能划分：</p>
+<ul>
+<li><p>XGETBV&#x2F;XSETBV读写XCR0，XCR0用于控制XSAVE指令集操作</p>
+</li>
+<li><p>XSAVE&#x2F;XSAVEOPT&#x2F;XSAVEC&#x2F;XSAVES 将处理器状态保存到内存中</p>
+</li>
+<li><p>XRSTOR&#x2F;XRSTORS将处理器状态从内存写回到处理器。</p>
+</li>
+</ul>
+<p>按特权等级划分：</p>
+<ul>
+<li>XGETBV&#x2F;XSAVE&#x2F;XSAVEOPT&#x2F;XSAVEC&#x2F;XRSTOR可以在任意特权等级下使用</li>
+<li>XSETBV&#x2F;XSAVES&#x2F;XRSTORS只有在特权等级0下才能使同（CPL&#x3D;0）</li>
+</ul>
+<p>另外XSAVES&#x2F;XRSTORS还受到IA32_XSS(0x0DA0)的控制。</p>
+<blockquote>
+<p> Operation of the instructions is  based on state-component bitmaps that have the same format as XCR0 and as the IA32_XSS MSR: each bit  corresponds to a state component.</p>
+</blockquote>
+<blockquote>
+<p>The XSAVE feature set organizes the state components of the XSAVE-supported features using state-component  bitmaps.</p>
+</blockquote>
+<p>state-component是有user&#x2F;supervisor之分的，上文按特权等级划分的XSAVE指令集，只有XSETBV&#x2F;XSAVES&#x2F;XRSTORS可以对supervisor state components进行控制。对应到控制state-component的64位bitmap里：</p>
+<blockquote>
+<p>Some state components are <strong>user state components</strong>, and they can be managed by the entire XSAVE feature set.<br>Other state components are <strong>supervisor state components</strong>, and they can be managed only by XSAVES and XRSTORS. The state components corresponding to bit 9, to bits 18:17, and to bits in the range 7:0 are user state components; those corresponding to bit 8, to bits in the range 13:10, and to bits 16:14 are supervisor state components.</p>
+</blockquote>
+<p>通用的bitmaps使用方法是通过instruction mask(EDX:EAX)</p>
+<blockquote>
+<p>The XSAVE feature set uses state-component bitmaps in multiple ways. Most of the instructions use an implicit  operand (in EDX:EAX), called the <strong>instruction mask</strong>, which is the state-component bitmap that specifies the state  components on which the instruction operates.</p>
+</blockquote>
+<p>但是要注意XCR0和IA32_XSS对XSAVE feature set的控制作用。</p>
+<p>同样也是分为user&#x2F;supervisor权限进行控制</p>
+<blockquote>
+<p><strong>Extended control register</strong> XCR0 contains a state-component bitmap that specifies the <strong>user state components</strong> that  software has enabled the XSAVE feature set to manage. If the bit corresponding to a state component is clear in  XCR0, instructions in the XSAVE feature set will not operate on that state component, regardless of the value of the  instruction mask.</p>
+</blockquote>
+<blockquote>
+<p>The IA32_XSS MSR (index DA0H) contains a state-component bitmap that specifies the <strong>supervisor state components</strong> that software has enabled XSAVES and XRSTORS to manage (XSAVE, XSAVEC, XSAVEOPT, and XRSTOR  cannot manage supervisor state components). If the bit corresponding to a state component is clear in the  IA32_XSS MSR, XSAVES and XRSTORS will not operate on that state component, regardless of the value of the  instruction mask.</p>
+</blockquote>
+<p>整理一下逻辑就是：XSAVE指令集可以通过state-component bitmaps(也就是instruction mask)去定义控制一些state-component的状态，但是XSAVE指令集的功能是由XCR0（user space）和IA32_XSS（kernel space）来控制的，这三者的bitmap都是64位，如果XCR0&#x2F;IA32_XSS没有开启相关功能，则XSAVE指令集对应instruction mask中即使set bit&#x3D;1也是无效的</p>
+<blockquote>
+<p>If an XSAVE-enabled feature has not been fully enabled in XCR0, execution of any instruction defined for that feature causes an invalid-opcode exception (#UD).</p>
+</blockquote>
+<p>这里主要是区分XSAVE-supported features和只是由XSAVE管理而不是XSAVE-supported的功能</p>
+<blockquote>
+<p>As will be explained in Section 13.3, the XSAVE feature set is enabled only if CR4.OSXSAVE[bit 18] &#x3D; 1. If  CR4.OSXSAVE &#x3D; 0, the processor treats XSAVE-enabled state features and their state components as if all bits in  XCR0 were clear; the state components cannot be modified and the features’ instructions cannot be executed. The state components for x87 state, for SSE state, for PT state, for PKRU state, for PASID state, for CET state, for  HDC state, for UINTR state, for LBR state, and for HWP state are XSAVE-managed but the corresponding features  are not XSAVE-enabled. Processors allow modification of this state, as well as execution of x87 FPU instructions  and SSE instructions and use of Intel Processor Trace, protection keys, the ENQCMD instruction and the  IA32_PASID MSR, CET, hardware duty cycling, user interrupts, LBRs, and hardware P-states, regardless of the  value of CR4.OSXSAVE and XCR0.</p>
+</blockquote>
+<h3 id="CPU-SUPPORT"><a href="#CPU-SUPPORT" class="headerlink" title="CPU SUPPORT"></a>CPU SUPPORT</h3><p>CPUID(0x1):ECX[26] 是XSAVE指令集support开关</p>
+<ul>
+<li>bit&#x3D;0：XSAVE指令集8条指令都不被支持，function 0DH不能使用</li>
+<li>bit&#x3D;1：支持XGETBV&#x2F;XSETBV&#x2F;XSAVE&#x2F;XRSTOR，同时CR4.OSXSAVE可以set为1。</li>
+</ul>
+<p>function 0DH</p>
+<ul>
+<li>sub-function 0<ul>
+<li>EDX:EAX中EAX[0](x87 state),EAX[1](SSE state),其他位枚举其他的component。</li>
+<li>EBX枚举XCR0相关components所需的XSAVE指令大小</li>
+</ul>
+</li>
+<li>sub-function 1<ul>
+<li>EAX[0]&#x3D;1 使能XSAVEOPT，否则使用XSAVEOPT导致#UD</li>
+<li>EAX[3]&#x3D;1 使能XSAVES&#x2F;XRSTORS&#x2F;IA32_XSS_MSR，否则使用XSAVES&#x2F;XRSTORS导致#UD，RDMSR&#x2F;WRMSR IA32_XSS会导致GP。processor使能EAX[3]会同时使能EAX[1]</li>
+<li>EAX[4]&#x3D;1 使能XFD</li>
+</ul>
+</li>
+</ul>
+<p>通过使用CPUID.(EAX&#x3D;0DH,ECX&#x3D;0)或CPUID.(EAX&#x3D;0DH,ECX&#x3D;1)来使用Function 0DH</p>
+<blockquote>
+<p>In summary, the XSAVE feature set supports state component i (0 ≤ i &lt; 63) if one of the following  is true: (1) i &lt; 32 and CPUID.(EAX&#x3D;0DH,ECX&#x3D;0):EAX[i] &#x3D; 1; (2) i ≥ 32 and  CPUID.(EAX&#x3D;0DH,ECX&#x3D;0):EAX[i–32] &#x3D; 1; (3) i &lt; 32 and CPUID.(EAX&#x3D;0DH,ECX&#x3D;1):ECX[i] &#x3D; 1;  or (4) i ≥ 32 and CPUID.(EAX&#x3D;0DH,ECX&#x3D;1):EDX[i–32] &#x3D; 1. The XSAVE feature set supports user  state component i if (1) or (2) holds; if (3) or (4) holds, state component i is a supervisor state  component and support is limited to XSAVES and XRSTORS.</p>
+</blockquote>
+<p>ENABLING THE XSAVE FEATURE SET AND XSAVE-ENABLED FEATURES</p>
+<blockquote>
+<p>Software enables the XSAVE feature set by setting CR4.OSXSAVE[bit 18] to 1 (e.g., with the MOV to CR4 instruction). If this bit is 0, execution of any of XGETBV, XRSTOR, XRSTORS, XSAVE, XSAVEC, XSAVEOPT, XSAVES, and XSETBV causes an invalid-opcode exception (#UD).</p>
+</blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_31504167/article/details/100762630">x86权限比较规则（CPL&#x2F;DPL&#x2F;RPL）_好喝不过一点点的博客-CSDN博客</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"><i class="fa fa-tag"></i> c++</a>
+              <a href="/tags/xsave/" rel="tag"><i class="fa fa-tag"></i> xsave</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/02/algorithm_priority_queue/" rel="prev" title="【刷刷LeetCode】优先级队列">
+      <i class="fa fa-chevron-left"></i> 【刷刷LeetCode】优先级队列
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/02/algorithm_randnum/" rel="next" title="【刷刷LeetCode】随机数">
+      【刷刷LeetCode】随机数 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+      
+      
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU-SUPPORT"><span class="nav-number">1.</span> <span class="nav-text">CPU SUPPORT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number"></span> <span class="nav-text">参考资料</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="DCyan"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">DCyan</p>
+  <div class="site-description" itemprop="description">做FPGA的硬件dog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/crescentlove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;crescentlove" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:markdowndir@foxmail.com" title="E-Mail → mailto:markdowndir@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      <div id= "music163player">
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=386717&auto=0&height=66"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">DCyan</span>
+</div>
+<!--
+-->
+
+
+  <script src='https://unpkg.com/mermaid@/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
