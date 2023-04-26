@@ -23,16 +23,16 @@
   <meta name="description" content="通过对TME和MKTME的认识，简单了解TDX作为可信计算的重要研究。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TDX">
-<meta property="og:url" content="https://crescentlove.gitee.io/2023/02/21/linux_TDX/index.html">
+<meta property="og:url" content="https://crescentlove.gitee.io/2023/02/21/tdx_summary/index.html">
 <meta property="og:site_name" content="DCyan的小站">
 <meta property="og:description" content="通过对TME和MKTME的认识，简单了解TDX作为可信计算的重要研究。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gitee.com/crescentlove/picgo-base/raw/master/img/genshinGYlook.jpeg/">
-<meta property="og:image" content="https://crescentlove.gitee.io/2023/02/21/linux_TDX/mktme.png">
-<meta property="og:image" content="https://crescentlove.gitee.io/2023/02/21/linux_TDX/VMM.png">
-<meta property="og:image" content="https://crescentlove.gitee.io/2023/02/21/linux_TDX/arch.png">
-<meta property="og:image" content="https://crescentlove.gitee.io/2023/02/21/linux_TDX/keygen.png">
-<meta property="og:image" content="https://crescentlove.gitee.io/2023/02/21/linux_TDX/attacks.png">
+<meta property="og:image" content="https://crescentlove.gitee.io/2023/02/21/tdx_summary/mktme.png">
+<meta property="og:image" content="https://crescentlove.gitee.io/2023/02/21/tdx_summary/VMM.png">
+<meta property="og:image" content="https://crescentlove.gitee.io/2023/02/21/tdx_summary/arch.png">
+<meta property="og:image" content="https://crescentlove.gitee.io/2023/02/21/tdx_summary/keygen.png">
+<meta property="og:image" content="https://crescentlove.gitee.io/2023/02/21/tdx_summary/attacks.png">
 <meta property="article:published_time" content="2023-02-20T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-02-20T16:00:00.000Z">
 <meta property="article:author" content="DCyan">
@@ -40,7 +40,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://gitee.com/crescentlove/picgo-base/raw/master/img/genshinGYlook.jpeg/">
 
-<link rel="canonical" href="https://crescentlove.gitee.io/2023/02/21/linux_TDX/">
+<link rel="canonical" href="https://crescentlove.gitee.io/2023/02/21/tdx_summary/">
 
 
 <script id="page-configurations">
@@ -179,7 +179,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/02/21/linux_TDX/">
+    <link itemprop="mainEntityOfPage" href="https://crescentlove.gitee.io/2023/02/21/tdx_summary/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/header.jpg">
@@ -238,12 +238,10 @@
 <h2 id="MKTME"><a href="#MKTME" class="headerlink" title="MKTME"></a>MKTME</h2><p>Multi-Key Total Memory Encryption，顾名思义，是在TME基础上加入了多密钥的机制。</p>
 <h3 id="为何需要Multi-Key"><a href="#为何需要Multi-Key" class="headerlink" title="为何需要Multi-Key?"></a>为何需要Multi-Key?</h3><p>TME透明是把双刃剑，只由内存控制器保存密钥&#x2F;加解密数据，但是不会做任何甄别，CPU&#x2F;缓存&#x2F;寄存器&#x2F;QPI等等只能无条件相信内存控制器加解密数据是安全的。</p>
 <ul>
-<li>如</li>
-<li></li>
-<li>果单个VM被测信道攻击攻破，那所有的VM都将暴露在风险之下。</li>
+<li>如果单个VM被测信道攻击攻破，那所有的VM都将暴露在风险之下。</li>
 <li>TME只用了一把密钥，不支持在系统里划分出多个基于加密密钥构建的加密内存domain，粒度不够细分，使用场景不够广泛</li>
 </ul>
-<p><img src="/2023/02/21/linux_TDX/mktme.png"></p>
+<p><img src="/2023/02/21/tdx_summary/mktme.png"></p>
 <p>在这个示例中：</p>
 <ul>
 <li>Hypervisor使用KeyID 0 (即TME定义的平台密钥)来访问所有的加密内存</li>
@@ -253,7 +251,7 @@
 <li>VM1和VM2可以使用KeyID 3来访问两个VM共享的加密内存</li>
 </ul>
 <p>这里有个大问题，KeyID1&#x2F;2都是VMM分配给VM的，也就是说MKTME的安全性完全依赖于KVM Hypervisor&#x2F;VMM，如果VMM被攻破，那所有的VM都暴露在风险之下。放大到粗粒度的OS层面也是如此。</p>
-<p>另一方面，TME&#x2F;MKTME只提供了数据加密的能力，不提供数据完整性保护（MAC&#x2F;HMAC技术），软件使用错误的KeyID访问加密内存、或直接篡改加密内存中的内容都是可行的。同时，经过AES解密后送入CPU的数据都是明文的，有泄露风险。<br><img src="/2023/02/21/linux_TDX/VMM.png"></p>
+<p>另一方面，TME&#x2F;MKTME只提供了数据加密的能力，不提供数据完整性保护（MAC&#x2F;HMAC技术），软件使用错误的KeyID访问加密内存、或直接篡改加密内存中的内容都是可行的。同时，经过AES解密后送入CPU的数据都是明文的，有泄露风险。<br><img src="/2023/02/21/tdx_summary/VMM.png"></p>
 <blockquote>
 <p>ME和MKTME防范的攻击路径是从恶意VM实例到Hypervisor。更具体来说，只要攻击者无法跨域安全域（指从guest ring0到host ring0）且在软件采用了正确配置的情况下，TME和MKTME就能够抵御恶意VM实例对Host或其他VM实例的数据泄露攻击；但前提是租户必须信任CSP（即Hypervisor和host所能提供的安全性，同时CSP不会作恶）和Intel CPU。</p>
 </blockquote>
@@ -269,7 +267,7 @@
 <li>软件集合： TXD module &#x2F; Intel authenticated code module &#x2F; Intel quoting enclave</li>
 </ul>
 <p>注意到，TDX扩展了VMX指令，增加了SEAMCALL&#x2F;SEAMRET&#x2F;TDCALL指令；又引入安全仲裁模式（Secure-Arbitration Mode, SEAM），在其中通过TDX Module来管理众多TD guest（见下图）。</p>
-<p><img src="/2023/02/21/linux_TDX/arch.png" alt="image-20230323222914253"></p>
+<p><img src="/2023/02/21/tdx_summary/arch.png" alt="image-20230323222914253"></p>
 <p>TD运行在SEAM的non-root模式下，TDX module运行在SEAM的root模式下，通过调用SEAM call可以让CPU进入SEAM root模式，并且加载TDX module。</p>
 <p><u>（root模式和non-root模式类比KVM，KVM是依赖于硬件辅助的全虚拟化，VMM运行在VMX root模式，guest运行在VMX non-root模式下。）</u></p>
 <h3 id="对MKTME的增强"><a href="#对MKTME的增强" class="headerlink" title="对MKTME的增强"></a>对MKTME的增强</h3><ul>
@@ -281,7 +279,7 @@
 <li>MKTME会从Hypervisior侧被攻破：</li>
 </ul>
 <p>由单独隔离的SEAM模块来做中间件，KeyID均由运行在SEAM模式下的TDX模块通过 <code>PCONFIG</code> 指令来控制。如图，注意到这里的shared memory和private memory，是由GPA（guest physical address）的最高位来标识的。</p>
-<p><img src="/2023/02/21/linux_TDX/keygen.png" alt="image-20230325213846437"></p>
+<p><img src="/2023/02/21/tdx_summary/keygen.png" alt="image-20230325213846437"></p>
 <blockquote>
 <p>Attempting to access a private KeyID  by software outside the SEAM mode would cause a page-fault exception. Similarly, DMA from devices using a  private KeyID would be aborted.</p>
 </blockquote>
@@ -295,7 +293,7 @@
 <li><p>TME&#x2F;MKTME&#x2F;TDX对于软硬两端攻击的防御力</p>
 </li>
 </ul>
-<p><img src="/2023/02/21/linux_TDX/attacks.png" alt="image-20230325225802540"></p>
+<p><img src="/2023/02/21/tdx_summary/attacks.png" alt="image-20230325225802540"></p>
 <h3 id="一些问题"><a href="#一些问题" class="headerlink" title="一些问题"></a>一些问题</h3><p><strong>Q:</strong> Intel TDX只有<strong>四个实体</strong>是在信任域中，TDX module&#x2F;TDX ACM&#x2F;Enclave&#x2F;CPU。VMM，甚至BIOS&#x2F;SMM这些模块都统统划入不信任域，那么，问题来了，TDX是如何让VMM既能管理内存资源，又不能访问里面的数据的呢？</p>
 <p><strong>A:</strong> 还是上面那张图，TDX MODULE提供了VMM建&#x2F;销毁&#x2F;执行TD的接口（通过SEAMCALL和SEAMRET），另一方面呢，TDX MODULE负责管理MKTME分配的KeyID，将VMM和keyID&#x2F;MSR&#x2F;寄存器上下文等资源隔离开。</p>
 <h3 id="背景Index"><a href="#背景Index" class="headerlink" title="背景Index"></a>背景Index</h3><p>现代多任务操作系统设计，一般进程之间使用不同的虚拟地址空间相互隔离, 在实现上：</p>
@@ -417,7 +415,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -430,7 +428,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
